@@ -1,0 +1,2 @@
+run_number,keywords,num_keywords_used,hypothesis_index,hypothesis_text,outer_loop_iteration,hypothesis_approved,num_turns_to_approve,num_turns_to_autoapprove,timestamp
+1,"heart valve replacement, cognitive flexibility",2,1,Patients who undergo heart valve replacement show reduced cognitive flexibility compared to matched controls.,1,1,True,1,2,2025-09-26 11:07:11

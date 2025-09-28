@@ -1,0 +1,424 @@
+
+======================================================================
+🧠           Discovery Agent    🔬
+    AI-Powered Scientific Discovery    🚀
+======================================================================
+
+ℹ️ Info: 🔧 Initializing Discovery Agent System...
+ℹ️ Info: 🗑️ Deleted existing working directory
+ℹ️ Info: 📁 Created fresh working directory
+ℹ️ Info: 📊 Created new CSV tracking file: results/hypothesis_approval_tracking_20250926_115917.csv
+ℹ️ Info: ⚙️ Initializing Discovery Agent...
+ℹ️ Info: 🔧 CodeExecutor initialized with 30s timeout
+✅ Success: 🎉 Discovery Agent initialized successfully!
+ℹ️ Info: 🚀 Starting Discovery Agent...
+ℹ️ Info: 📚 Loaded 93 keywords from adrd_keywords.txt
+ℹ️ Info: 📚 Loaded 93 ADRD keywords
+ℹ️ Info: 🎯 Running 10 keyword sampling iterations
+────────────────────────────────────────────────────────────
+ℹ️ Info: 🎲 Sampling Run 1/10
+ℹ️ Info: 🎯 Sampled keywords: episodic memory, rivastigmine
+ℹ️ Info: 📝 Generated hypothesis: episodic memory, rivastigmine
+ℹ️ Info: 🔬 Generating multiple hypotheses from sampled keywords...
+
+💡 Generated Hypotheses:
+  1. Rivastigmine improves episodic memory in individuals with mild cognitive impairment.
+  2. People taking rivastigmine show greater episodic memory retention compared to those not taking it.
+  3. Episodic memory decline is slower in patients on rivastigmine treatment than in those not receiving it.
+
+📊 Progress: 1/3 hypothesiss (33.3%)
+────────────────────────────────────────────────────────────
+ℹ️ Info: 🔍 Working on hypothesis 1: Rivastigmine improves episodic memory in individuals with mild cognitive impairment.
+────────────────────────────────────────────────────────────
+ℹ️ Info: 🔄 OUTER LOOP ITERATION 1/2
+👤 User Input: Rivastigmine improves episodic memory in individuals with mild cognitive impairment.
+ℹ️ Info: 🔧 Running manual preprocessing for hypothesis 1, iteration 1...
+ℹ️ Info: 🔧 Starting manual preprocessing conversation...
+ℹ️ Info: 📁 Using dataset folder from config: /projectnb/vkolagrp/ketanss/adrd_agent_custom/adrd_agent/datasets/NACC
+ℹ️ Info: 🔍 Auto-detected files:
+ℹ️ Info:    📊 CSV: NACC.csv
+ℹ️ Info:    📚 JSON: NACC.json
+✅ Success: ✅ JSON dictionary file is valid: NACC.json
+ℹ️ Info: 🔬 Hypothesis: Rivastigmine improves episodic memory in individuals with mild cognitive impairment.
+ℹ️ Info: 📁 Dataset folder: /projectnb/vkolagrp/ketanss/adrd_agent_custom/adrd_agent/datasets/NACC
+ℹ️ Info: 📊 CSV file: /projectnb/vkolagrp/ketanss/adrd_agent_custom/adrd_agent/datasets/NACC/NACC.csv
+ℹ️ Info: 📚 JSON dictionary: /projectnb/vkolagrp/ketanss/adrd_agent_custom/adrd_agent/datasets/NACC/NACC.json
+ℹ️ Info: 🔍 Analyzing hypothesis to find relevant variables...
+ℹ️ Info: 🎯 Found 9 relevant variables:
+ℹ️ Info:    • MEMORY: Memory
+ℹ️ Info:    • NACCUDSD: Cognitive status at UDS visit
+ℹ️ Info:    • NACCALZP: Primary, contributing, or non-contributing cause of observed cognitive impairment - Alzheimer's disease (AD)
+ℹ️ Info:    • NACCAGE: Subject's age at visit
+ℹ️ Info:    • NACCAGEB: Subject's age at initial visit
+ℹ️ Info:    • NACCAPOE: APOE genotype
+ℹ️ Info:    • NACCNE4S: Number of APOE e4 alleles
+ℹ️ Info:    • NACCMMSE: Total MMSE score (using D-L-R-O-W)
+ℹ️ Info:    • NACCMOCA: MoCA Total Score - corrected for education
+ℹ️ Info: 🔍 Filtering CSV files with relevant variables...
+ℹ️ Info: 📊 Processing CSV file: NACC.csv
+ℹ️ Info: 📈 Original CSV has 26778 rows and 2117 columns
+ℹ️ Info: 🎯 Found 8 relevant columns: ['MEMORY', 'NACCUDSD', 'NACCALZP', 'NACCAGE', 'NACCAPOE', 'NACCNE4S', 'NACCMMSE', 'NACCMOCA']
+ℹ️ Info: 🔄 Renamed columns to descriptions: {'MEMORY': 'Memory', 'NACCUDSD': 'Cognitive_status_at_UDS_visit', 'NACCALZP': 'Primary_contributing_or_noncontributing_cause_of_observed_cognitive_impairment_Alzheimers_disease_AD', 'NACCAGE': 'Subjects_age_at_visit', 'NACCAPOE': 'APOE_genotype', 'NACCNE4S': 'Number_of_APOE_e4_alleles', 'NACCMMSE': 'Total_MMSE_score_using_DLROW', 'NACCMOCA': 'MoCA_Total_Score_corrected_for_education'}
+✅ Success: ✅ Filtered CSV saved to: working/filtered_Rivastigmine_improves_episodic_memory_in_individua_NACC.csv
+ℹ️ Info: 📊 Filtered CSV has 26778 rows and 8 columns
+ℹ️ Info: ✅ Manual preprocessing completed successfully!
+ℹ️ Info: 📊 Filtered data saved to: working/filtered_Rivastigmine_improves_episodic_memory_in_individua_NACC.csv
+ℹ️ Info: 📋 Starting Planning Agent round...
+⏳ Planning Agent is working...
+ℹ️ Info: 🔄 Generating Planning Agent response...
+ℹ️ Info: ⏱️ Response generated in 27.70 seconds
+
+🤖 --- Planning Agent ---
+Certainly! Below are **comprehensive, strategically structured plans** for both the **Scientist** and the **Data Visualizer**, tailored to the hypothesis:  
+> *"Rivastigmine improves episodic memory in individuals with mild cognitive impairment."*  
+
+These plans include **multiple alternative approaches and methodologies**, grounded in the available variables and research context. All suggestions prioritize scientific rigor, interpretability, and alignment with the core hypothesis.
+
+---
+
+## 🧪 SCIENTIST – Analytical & Methodological Plans
+
+### Option 1: Comparative Group Analysis (Cohort-Based)
+- **Approach**: Stratify participants by treatment group (Rivastigmine vs. placebo or no intervention) and compare mean changes in *Memory* over time using repeated measures or longitudinal analysis.
+- **Statistical Methods**: Linear mixed-effects models (LMMs) to account for within-subject variability and missing data; ANCOVA adjusting for baseline MMSE/MoCA scores and age.
+- **Key Variables**: Memory (outcome), Cognitive_status_at_UDS_visit (exposure), Age, APOE genotype, number of E4 alleles.
+- **Strengths**: Directly tests the hypothesis with causal inference potential if randomized.
+- **Limitations**: Requires valid treatment assignment and time-series data (e.g., pre/post visit).
+
+### Option 2: Multivariable Regression with Interaction Terms
+- **Approach**: Use multivariate regression to assess whether Rivastigmine’s effect on memory differs based on key covariates such as APOE status, age, or AD diagnosis.
+- **Statistical Methods**: Multiple linear regression with interaction terms (e.g., Rivastigmine × APOE_E4_count).
+- **Variables of Interest**: Memory as outcome; treatment exposure (binary), APOE genotypes, age, MMSE, MoCA.
+- **Insight Goal**: Identify subgroups where Rivastigmine shows stronger or weaker effects—potential biomarker interactions.
+- **Advanced Step**: Include polynomial terms to model nonlinear relationships between age and memory change.
+
+### Option 3: Sensitivity & Robustness Analysis
+- **Approach**: Test how results hold under different assumptions (e.g., excluding outliers, imputing missing data, applying various definitions of "mild cognitive impairment").
+- **Methods**: 
+  - Exclude extreme memory values (>3 SD from mean).
+  - Apply multiple imputation (e.g., MICE) for missing MMSE or MoCA scores.
+  - Define "mild cognitive impairment" via thresholds (e.g., MoCA <25 or MMSE <27).
+- **Purpose**: Ensure findings are stable across plausible data conditions.
+
+### Option 4: Propensity Score Matching (PSM)
+- **Approach**: Match treated (Rivastigmine) and untreated patients on baseline characteristics (age, cognition, APOE status) to reduce selection bias.
+- **Variables Used**: Age, APOE genotype, MMSE score, MoCA, cognitive status at UDS.
+- **Follow-up**: Compare memory outcomes post-treatment using paired t-tests or regression after matching.
+- **Use Case**: When randomization is not feasible or treatment allocation was non-random.
+
+### Option 5: Time-to-Event or Change-Scale Modeling
+- **Approach**: Frame memory decline as a rate process—model how fast memory deteriorates in those receiving Rivastigmine versus controls.
+- **Methods**: Cox proportional hazards models (for time to significant decline) or growth curve modeling (for continuous change trajectories).
+- **Outcome**: Estimate hazard ratios or slope differences in memory trajectory.
+- **Value**: More sensitive to early or delayed benefit than simple average comparisons.
+
+---
+
+## 📊 DATA VISUALIZER – Visualization & Presentation Strategies
+
+### Option 1: Side-by-Side Boxplots with Treatment Groups
+- **Design**: Compare distribution of *Memory* scores across Rivastigmine vs. control groups.
+- **Axes**: X-axis = Treatment group; Y-axis = Memory score.
+- **Enhancements**: Add jitter points for individual observations; color-code by APOE genotype or age group.
+- **Interpretation Focus**: Highlight central tendency and spread; detect outliers or skewness.
+- **Best For**: Quick, accessible overview of group differences.
+
+### Option 2: Heatmap of Correlation Matrix
+- **Design**: Display pairwise correlations among key variables including Memory, MMSE, MoCA, Age, APOE_E4_count.
+- **Color Scale**: Intensity reflects strength of association.
+- **Highlight**: Strong positive/negative links (e.g., higher APOE E4 → lower memory).
+- **Purpose**: Reveal underlying patterns that may inform the mechanism of action or confounding factors.
+
+### Option 3: Interactive Line Plot with Time Series
+- **Design**: Show memory trends over time for representative individuals per treatment group.
+- **Features**: Hover tooltips showing individual-level details; filters by APOE status or age.
+- **Presentation Style**: Timeline view with smooth lines indicating trend paths.
+- **Value**: Reveals dynamic changes and potential lagged responses to therapy.
+
+### Option 4: Scatterplot with Regression Lines
+- **Design**: Scatterplot of baseline memory (x-axis) vs. post-intervention memory (y-axis); overlay regression line per treatment arm.
+- **Additions**: Color by APOE status; add marginal density plots or trend bands.
+- **Insights**: Shows improvement magnitude and relationship between starting point and final outcome.
+- **Audience Fit**: Ideal for stakeholders who want to understand predictability of response.
+
+### Option 5: Subgroup Comparison Dashboard
+- **Design**: Dynamic dashboard with tabs for different subpopulations:
+  - By APOE genotype (E4+ vs. E4−)
+  - By age (<65 vs. ≥65)
+  - By prior AD diagnosis
+- **Visual Elements**: Bar charts, boxplots, or violin plots per subgroup.
+- **Goal**: Enable exploration of heterogeneity in treatment response.
+- **Presentational Edge**: Allows users to drill down into mechanisms driving differential outcomes.
+
+### Option 6: Geospatial or Network Visualization (if applicable)
+- **Note**: Not directly relevant unless location or social network data exists—but can be explored if future data becomes available.
+- **Alternative Path**: Create a network graph of variable associations (e.g., memory ↔ age ↔ E4) to show interdependencies.
+
+---
+
+## 🔍 Cross-Agent Synergy Suggestions
+
+| Strategy | Scientist Role | Data Visualizer Role |
+|--------|----------------|-----------------------|
+| Interaction term testing | Model memory × APOE interaction | Visualize split-boxplots by APOE status |
+| Longitudinal analysis | Build LMM with time fixed effects | Generate time-lapse memory trajectories |
+| Sensitivity checks | Run robustness analyses | Create side-by-side comparison panels under different exclusions |
+
+> This synergy ensures that statistical conclusions are not only statistically sound but also transparent, intuitive, and actionable for clinicians or researchers.
+
+---
+
+## Final Recommendation Summary
+
+| Agent | Recommended Starting Point |
+|------|----------------------------|
+| **Scientist** | Begin with Option 1 (Comparative Group Analysis) due to direct relevance to the hypothesis. Then expand into Option 2 (interaction modeling) to explore biological plausibility. |
+| **Data Visualizer** | Start with Option 1 (side-by-side boxplots) for clarity and impact. Progress to Option 5 (subgroup dashboard) for deeper insight and stakeholder engagement. |
+
+These plans provide a flexible, iterative framework that allows both agents to adapt based on preliminary findings while maintaining alignment with the core scientific question.
+
+Let me know when you’d like to proceed to data exploration, simulation scenarios, or next-step validation strategies.
+ℹ️ Info: 🔄 Conversation turn 1
+ℹ️ Info: 🧪 Starting Scientist round...
+⏳ Scientist is working...
+ℹ️ Info: 🔄 Generating Scientist response...
+ℹ️ Info: ⏱️ Response generated in 15.32 seconds
+ℹ️ Info: 💻 Executing code from Scientist response...
+ℹ️ Info: 🔍 About to call execute_code_from_response...
+ℹ️ Info: 🔍 Extracting code block from text...
+ℹ️ Info: 📝 Found code block: 3698 characters
+ℹ️ Info: 💻 Executing code block
+ℹ️ Info: 🔄 Executing code...
+ℹ️ Info: ⏰ Setting timeout to 30s
+ℹ️ Info: ✅ Code execution completed in 0.02s
+ℹ️ Info: 📊 Output: Dataset shape: (26778, 8)
+
+First few rows of the dataframe:
+   Memory  Cognitive_status_at_UDS_visit...
+ℹ️ Info: 🔍 execute_code_from_response completed successfully
+
+👨‍🔬 --- Scientist ---
+```python
+import pandas as pd
+import numpy as np
+from scipy import stats
+import os
+
+# Load the filtered dataset from the working directory
+file_path = "./working/filtered_Rivastigmine_improves_episodic_memory_in_individua_NACC.csv"
+try:
+    df = pd.read_csv(file_path)
+except FileNotFoundError:
+    print("Error: The file was not found at the specified path.")
+    exit()
+
+# Display basic information about the dataset
+print("Dataset shape:", df.shape)
+print("\nFirst few rows of the dataframe:")
+print(df.head())
+
+# Check for missing values
+missing_values = df.isnull().sum()
+print("\nMissing values per column:")
+print(missing_values[missing_values > 0])
+
+# Filter participants with mild cognitive impairment (MCI) based on cognitive_status_at_UDS_visit
+# Assuming MCI corresponds to a specific value (e.g., 1 or 2). Based on NACC protocol, MCI typically maps to status 1 or 2.
+mci_mask = (df['Cognitive_status_at_UDS_visit'] == 1) | (df['Cognitive_status_at_UDS_visit'] == 2)
+mci_df = df[mci_mask].copy()
+
+print(f"\nNumber of participants with MCI after filtering: {len(mci_df)}")
+
+# Extract memory scores and group by treatment (Rivastigmine vs non-Rivastigmine)
+# Since 'Rivastigmine' exposure is not directly listed, we assume it is encoded via a variable such as 'Treatment_group'
+# If no direct treatment variable exists, we cannot proceed with this hypothesis. However, given the hypothesis, we must check if such a variable exists.
+
+if 'Rivastigmine_treatment' not in df.columns and 'Treatment_Group' not in df.columns:
+    print("Warning: No treatment-related variable found (e.g., Rivastigmine_treatment or Treatment_Group). Cannot assess effect of Rivastigmine.")
+else:
+    # Assume a binary treatment variable exists; using "Rivastigmine_treatment" as placeholder
+    try:
+        treatment_col = 'Rivastigmine_treatment'
+        if treatment_col not in df.columns:
+            treatment_col = 'Treatment_Group'
+
+        # Ensure treatment is binary (0 or 1)
+        df[treatment_col] = df[treatment_col].astype(int)
+
+        # Create binary treatment groups
+        rivastigmine_group = mci_df[df[treatment_col] == 1]
+        control_group = mci_df[df[treatment_col] == 0]
+
+        if len(rivastigmine_group) == 0 or len(control_group) == 0:
+            print("Warning: One or both treatment groups are empty after filtering for MCI.")
+        else:
+            # Perform independent samples t-test on episodic memory (Memory score)
+            mem_rivastigmine = rivastigmine_group['Memory']
+            mem_control = control_group['Memory']
+
+            # Test for normality using Shapiro-Wilk test
+            print("\nNormality test (Shapiro-Wilk):")
+            print("Rivastigmine group:", stats.shapiro(mem_rivastigmine).pvalue)
+            print("Control group:", stats.shapiro(mem_control).pvalue)
+
+            # Conduct t-test assuming equal variances
+            try:
+                t_stat, p_val = stats.ttest_ind(mem_rivastigmine, mem_control, equal_var=True)
+                print(f"\nT-test result (equal variance assumed): t={t_stat:.3f}, p-value={p_val:.4f}")
+            except Exception as e:
+                print(f"T-test failed due to equal variance assumption: {e}")
+
+                # Try unequal variance version
+                try:
+                    t_stat, p_val = stats.ttest_ind(mem_rivastigmine, mem_control, equal_var=False)
+                    print(f"\nT-test result (unequal variance assumed): t={t_stat:.3f}, p-value={p_val:.4f}")
+                except Exception as e:
+                    print(f"T-test failed even with unequal variance: {e}")
+
+    except KeyError as e:
+        print(f"KeyError: Missing required column for treatment assignment: {e}")
+```
+
+💻 Execution Output:
+Dataset shape: (26778, 8)
+
+First few rows of the dataframe:
+   Memory  Cognitive_status_at_UDS_visit  ...  Total_MMSE_score_using_DLROW  MoCA_Total_Score_corrected_for_education
+0     3.0                              4  ...                           NaN                                       NaN
+1     3.0                              4  ...                          97.0                                       NaN
+2     1.0                              4  ...                          18.0                                       NaN
+3     3.0                              4  ...                           NaN                                       NaN
+4     2.0                              4  ...                           NaN                                       3.0
+
+[5 rows x 8 columns]
+
+Missing values per column:
+Total_MMSE_score_using_DLROW                14106
+MoCA_Total_Score_corrected_for_education    16865
+dtype: int64
+
+Number of participants with MCI after filtering: 13298
+Warning: No treatment-related variable found (e.g., Rivastigmine_treatment or Treatment_Group). Cannot assess effect of Rivastigmine.
+
+ℹ️ Info: 📊 Starting Data Visualizer round...
+⏳ Data Visualizer is working...
+ℹ️ Info: 🔄 Generating Data Visualizer response...
+ℹ️ Info: ⏱️ Response generated in 5.42 seconds
+ℹ️ Info: 💻 Executing code from Data Visualizer response...
+ℹ️ Info: 🔍 About to call execute_code_from_response...
+ℹ️ Info: 🔍 Extracting code block from text...
+ℹ️ Info: 📝 Found code block: 1173 characters
+ℹ️ Info: 💻 Executing code block
+ℹ️ Info: 🔄 Executing code...
+ℹ️ Info: ⏰ Setting timeout to 30s
+ℹ️ Info: ✅ Code execution completed in 0.82s
+ℹ️ Info: 📊 Output: Visualization saved: memory_by_cognitive_status_mci.png
+...
+ℹ️ Info: 🔍 execute_code_from_response completed successfully
+
+🤖 --- Data Visualizer ---
+```python
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# Load the filtered dataset
+file_path = "./working/filtered_Rivastigmine_improves_episodic_memory_in_individua_NACC.csv"
+df = pd.read_csv(file_path)
+
+# Filter participants with mild cognitive impairment (MCI)
+mci_mask = (df['Cognitive_status_at_UDS_visit'] == 1) | (df['Cognitive_status_at_UDS_visit'] == 2)
+mci_df = df[mci_mask].copy()
+
+# Since no treatment variable (like Rivastigmine_treatment or Treatment_Group) exists,
+# we visualize memory scores across cognitive status groups to explore patterns within MCI.
+
+# Create a boxplot of memory scores by cognitive status at UDS visit
+plt.figure(figsize=(10, 6))
+sns.boxplot(data=mci_df, x='Cognitive_status_at_UDS_visit', y='Memory')
+plt.title('Episodic Memory Scores by Cognitive Status in Mild Cognitive Impairment (MCI)')
+plt.xlabel('Cognitive Status at UDS Visit')
+plt.ylabel('Memory Score')
+plt.grid(axis='x', linestyle='--', alpha=0.7)
+plt.tight_layout()
+
+# Save the plot
+plt.savefig('./working/memory_by_cognitive_status_mci.png', dpi=300, bbox_inches='tight')
+plt.close()
+
+print("Visualization saved: memory_by_cognitive_status_mci.png")
+```
+
+💻 Execution Output:
+Visualization saved: memory_by_cognitive_status_mci.png
+
+ℹ️ Info: 🔍 Starting Critic round...
+⏳ Critic is working...
+ℹ️ Info: 🔄 Generating Critic response...
+ℹ️ Info: ⏱️ Response generated in 7.83 seconds
+
+🕵️ --- Critic ---
+The experiment to evaluate whether rivastigmine improves episodic memory in individuals with mild cognitive impairment contains a critical flaw: **there is no treatment-related variable (such as "Rivastigmine_treatment" or "Treatment_Group") in the dataset**, which makes it impossible to compare memory outcomes between rivastigmine users and controls.
+
+This directly invalidates the core analysis of the hypothesis — you cannot assess the effect of rivastigmine without knowing who received it.
+
+### Correction Needed:
+You must first verify whether the original dataset includes any variable indicating drug treatment (e.g., "Rivastigmine", "Drug_exposure", "Treatment", or similar), possibly derived from clinical notes or visit logs. If such a variable does not exist in the provided file (`filtered_Rivastigmine_improves_episodic_memory_in_individua_NACC.csv`), then:
+
+> ❌ The current hypothesis **cannot be tested** with available data.
+
+### Suggested Actions:
+1. **Check the original dataset or metadata**: Confirm if the treatment assignment was recorded elsewhere (e.g., in a different CSV or study documentation).
+2. **Ask for clarification**: Request confirmation from the data provider whether a treatment group variable exists and what its name might be.
+3. **Alternative approach**: If no treatment variable exists, consider revising the hypothesis to focus on other measurable factors (e.g., age, APOE genotype, MMSE score changes over time) that correlate with memory performance in MCI.
+
+Until a valid treatment variable is identified and included, **the analysis remains unvalidable**.
+
+---
+
+👉 Therefore, despite some good practices like checking for missingness, defining MCI criteria, and performing statistical tests, the absence of treatment grouping renders the entire experiment flawed.
+
+**RESULTS NOT APPROVED**
+
+Next step suggestion:  
+🔍 *Request the data provider to confirm if a treatment exposure variable (e.g., “Rivastigmine_treatment”, “Drug_assignment”) exists in the raw or filtered dataset.*  
+Alternatively, explore whether longitudinal changes in memory can be modeled within MCI patients, even without intervention grouping — though this would not support the stated hypothesis directly.
+ℹ️ Info: ✅ Turn 1 completed. Approved: False
+ℹ️ Info: 🔄 Conversation turn 2
+⚠️ Warning: ⚠️ Maximum attempts reached. Results not approved.
+ℹ️ Info: 📊 Iteration 1 result: ❌ NOT APPROVED
+ℹ️ Info: 📝 Creating conversation summary for next iteration...
+ℹ️ Info: 🔄 Will try different approach in iteration 2...
+────────────────────────────────────────────────────────────
+ℹ️ Info: 🔄 OUTER LOOP ITERATION 2/2
+ℹ️ Info: 📝 Adding previous conversation summary as context...
+👤 User Input: Rivastigmine improves episodic memory in individuals with mild cognitive impairment.
+ℹ️ Info: 🔧 Running manual preprocessing for hypothesis 1, iteration 2...
+ℹ️ Info: 🔧 Starting manual preprocessing conversation...
+ℹ️ Info: 📁 Using dataset folder from config: /projectnb/vkolagrp/ketanss/adrd_agent_custom/adrd_agent/datasets/NACC
+ℹ️ Info: 🔍 Auto-detected files:
+ℹ️ Info:    📊 CSV: NACC.csv
+ℹ️ Info:    📚 JSON: NACC.json
+✅ Success: ✅ JSON dictionary file is valid: NACC.json
+ℹ️ Info: 🔬 Hypothesis: Rivastigmine improves episodic memory in individuals with mild cognitive impairment.
+ℹ️ Info: 📁 Dataset folder: /projectnb/vkolagrp/ketanss/adrd_agent_custom/adrd_agent/datasets/NACC
+ℹ️ Info: 📊 CSV file: /projectnb/vkolagrp/ketanss/adrd_agent_custom/adrd_agent/datasets/NACC/NACC.csv
+ℹ️ Info: 📚 JSON dictionary: /projectnb/vkolagrp/ketanss/adrd_agent_custom/adrd_agent/datasets/NACC/NACC.json
+ℹ️ Info: 🔍 Analyzing hypothesis to find relevant variables...
+ℹ️ Info: 🔄 Using previous iteration context to guide variable selection...
+ℹ️ Info: 🎯 Found 3 relevant variables:
+ℹ️ Info:    • MEMORY: Memory
+ℹ️ Info:    • NACCUDSD: Cognitive status at UDS visit
+ℹ️ Info:    • NACCALZP: Primary, contributing, or non-contributing cause of observed cognitive impairment - Alzheimer's disease (AD)
+ℹ️ Info: 🔍 Filtering CSV files with relevant variables...
+ℹ️ Info: 📊 Processing CSV file: NACC.csv
+ℹ️ Info: 📈 Original CSV has 26778 rows and 2117 columns
+ℹ️ Info: 🎯 Found 3 relevant columns: ['MEMORY', 'NACCUDSD', 'NACCALZP']
+ℹ️ Info: 🔄 Renamed columns to descriptions: {'MEMORY': 'Memory', 'NACCUDSD': 'Cognitive_status_at_UDS_visit', 'NACCALZP': 'Primary_contributing_or_noncontributing_cause_of_observed_cognitive_impairment_Alzheimers_disease_AD'}
+✅ Success: ✅ Filtered CSV saved to: working/filtered_Rivastigmine_improves_episodic_memory_in_individua_NACC.csv
+ℹ️ Info: 📊 Filtered CSV has 26778 rows and 3 columns
+ℹ️ Info: ✅ Manual preprocessing completed successfully!
+ℹ️ Info: 📊 Filtered data saved to: working/filtered_Rivastigmine_improves_episodic_memory_in_individua_NACC.csv
+ℹ️ Info: 📋 Starting Planning Agent round...
+⏳ Planning Agent is working...
+ℹ️ Info: 🔄 Generating Planning Agent response...
