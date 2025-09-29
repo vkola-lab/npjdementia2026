@@ -1,1 +1,1 @@
-# Feed the filtering function along with the summary of the previous conversation, the variables chosen in the previous iterations, and say that none worked
+# make the pipeline work with more than one dataset

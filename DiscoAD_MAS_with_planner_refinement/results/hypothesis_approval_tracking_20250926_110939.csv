@@ -1,2 +1,0 @@
-run_number,keywords,num_keywords_used,hypothesis_index,hypothesis_text,outer_loop_iteration,hypothesis_approved,num_turns_to_approve,num_turns_to_autoapprove,timestamp
-1,"hypertension, Stroop",2,1,Hypertension is negatively associated with Stroop interference scores.,1,1,True,1,2,2025-09-26 11:11:00
