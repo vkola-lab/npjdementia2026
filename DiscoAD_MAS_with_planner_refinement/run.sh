@@ -25,7 +25,7 @@ MAX_TOKENS=16384
 
 # Agent behavior
 MAX_CONVERSATION_LENGTH=7
-AUTO_APPROVE_AFTER=1
+AUTO_APPROVE_AFTER=2
 OUTER_LOOP_ITERATIONS=2
 
 # User input configuration - Edit these values for your specific analysis
@@ -43,7 +43,7 @@ VERBOSE=true  # Set to "true" for detailed output, "false" for quiet mode
 # ------------------------------------------------------------------------------
 
 # Change to the DiscoAD_MAS directory
-cd /projectnb/vkolagrp/ketanss/adrd_agent_custom/adrd_agent/DiscoAD_MAS_with_planner_refinement
+cd /projectnb/vkolagrp/ketanss/adrd_agent_custom/DiscoADRD/DiscoAD_MAS_with_planner_refinement
 
 # nvidia-smi
 module load miniconda

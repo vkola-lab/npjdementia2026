@@ -70,6 +70,59 @@ class DiscoveryAgentSystem:
             ui.print_error(str(e), "initialization")
             raise
     
+    def _generate_filename_with_config(self, base_name: str, extension: str = "", include_timestamp: bool = True) -> str:
+        """
+        Generate a filename that includes important config variables.
+        
+        Args:
+            base_name (str): Base name for the file
+            extension (str): File extension (e.g., '.csv', '.json')
+            include_timestamp (bool): Whether to include timestamp in filename
+            
+        Returns:
+            str: Generated filename with config variables
+        """
+        import datetime
+        
+        # Get important config variables
+        config_parts = []
+        
+        # Model name (shortened)
+        model_short = self.config.model_name.split('/')[-1].replace('-', '_') if hasattr(self.config, 'model_name') else 'unknown'
+        config_parts.append(f"model_{model_short}")
+        
+        # Hypothesis mode
+        if hasattr(self.config, 'hypothesis_mode'):
+            config_parts.append(f"mode_{self.config.hypothesis_mode}")
+        
+        # Number of keywords
+        if hasattr(self.config, 'num_keywords'):
+            config_parts.append(f"kw_{self.config.num_keywords}")
+        
+        # Number of sampling runs
+        if hasattr(self.config, 'num_sampling_runs'):
+            config_parts.append(f"runs_{self.config.num_sampling_runs}")
+        
+        # Outer loop iterations
+        if hasattr(self.config, 'outer_loop_iterations'):
+            config_parts.append(f"outer_{self.config.outer_loop_iterations}")
+        
+        # Auto approve after attempts
+        if hasattr(self.config, 'auto_approve_after_attempts'):
+            config_parts.append(f"auto_{self.config.auto_approve_after_attempts}")
+        
+        # Join config parts
+        config_str = "_".join(config_parts)
+        
+        # Add timestamp if requested
+        if include_timestamp:
+            timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+            filename = f"{base_name}_{config_str}_{timestamp}{extension}"
+        else:
+            filename = f"{base_name}_{config_str}{extension}"
+        
+        return filename
+
     def _cleanup_working_directory(self, recreate=True):
         """Clean up the working directory and optionally recreate it."""
         import shutil
@@ -117,9 +170,8 @@ class DiscoveryAgentSystem:
         # Use relative results directory (created in config.py)
         results_dir = Path("results")
         
-        # Generate timestamp-based filename
-        timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
-        csv_filename = f"hypothesis_approval_tracking_{timestamp}.csv"
+        # Generate filename with config variables
+        csv_filename = self._generate_filename_with_config("hypothesis_approval_tracking", ".csv")
         self.csv_file_path = results_dir / csv_filename
         
         # Create new CSV file with headers
@@ -473,21 +525,28 @@ class DiscoveryAgentSystem:
                         if return_success:
                             conversation_manager.add_agent_response(agent_name, response, code_output)
                             return False
+
                     elif isinstance(execution_result, str):
                         # Handle string error case
                         code_output = execution_result
+                        ui.print_agent_response(agent_name, response, code_output)
                         ui.print_warning(f"⚠️ Code execution error: {execution_result}")
+                        
                         if return_success:
                             conversation_manager.add_agent_response(agent_name, response, code_output)
                             return False
+
                     elif isinstance(execution_result, dict):
                         # Handle dictionary result
                         executed_code = execution_result.get("code", "")
                         if execution_result.get("success", False):
                             code_output = execution_result.get("output", "")
+
                             if execution_result.get("error"):
                                 code_output += f"\nWarnings: {execution_result['error']}"
+                                ui.print_agent_response(agent_name, response, code_output)
                                 ui.print_warning("⚠️ Code execution had warnings, but continuing...")
+
                             if return_success:
                                 conversation_manager.add_agent_response(agent_name, response, code_output)
 
@@ -495,6 +554,8 @@ class DiscoveryAgentSystem:
                             code_output = f"Error: {execution_result.get('error', 'Unknown error')}"
                             ui.print_warning(f"⚠️ Code execution returned an error output: {code_output}")
                             ui.print_warning("⚠️ But continuing...")
+                            ui.print_agent_response(agent_name, response, code_output)
+
                             if return_success:
                                 conversation_manager.add_agent_response(agent_name, response, code_output)
                                 return False
@@ -784,12 +845,12 @@ class DiscoveryAgentSystem:
             working_dir = Path("working")
             working_dir.mkdir(exist_ok=True)
             
-            # Create a safe filename based on hypothesis
-            safe_hypothesis = "".join(c for c in hypothesis[:50] if c.isalnum() or c in (' ', '-', '_')).rstrip()
-            safe_hypothesis = safe_hypothesis.replace(' ', '_')
+            # # Create a safe filename based on hypothesis
+            # safe_hypothesis = "".join(c for c in hypothesis[:50] if c.isalnum() or c in (' ', '-', '_')).rstrip()
+            # safe_hypothesis = safe_hypothesis.replace(' ', '_')
             
             # Save filtered CSV to .working directory
-            output_filename = f"filtered_{safe_hypothesis}_{csv_file}"
+            output_filename = f"filtered_dataset.csv"
             output_path = working_dir / output_filename
             
             filtered_df.to_csv(output_path, index=False)
