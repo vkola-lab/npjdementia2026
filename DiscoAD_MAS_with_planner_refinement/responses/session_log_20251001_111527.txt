@@ -7,7 +7,7 @@
 ℹ️ Info: 🔧 Initializing Discovery Agent System...
 ℹ️ Info: 🗑️ Deleted existing working directory
 ℹ️ Info: 📁 Created fresh working directory
-ℹ️ Info: 📊 Created new CSV tracking file: results/hypothesis_approval_tracking_20250926_111637.csv
+ℹ️ Info: 📊 Created new CSV tracking file: results/hypothesis_approval_tracking_model_Qwen3_4B_Instruct_2507_mode_generate_kw_2_runs_10_outer_2_auto_2_20251001_111527.csv
 ℹ️ Info: ⚙️ Initializing Discovery Agent...
 ℹ️ Info: 🔧 CodeExecutor initialized with 30s timeout
 ✅ Success: 🎉 Discovery Agent initialized successfully!
@@ -17,23 +17,22 @@
 ℹ️ Info: 🎯 Running 10 keyword sampling iterations
 ────────────────────────────────────────────────────────────
 ℹ️ Info: 🎲 Sampling Run 1/10
-ℹ️ Info: 🎯 Sampled keywords: marital status, inflammation, diet
-ℹ️ Info: 📝 Generated hypothesis: marital status, inflammation, diet
+ℹ️ Info: 🎯 Sampled keywords: cardiovascular disease, benzodiazepines
+ℹ️ Info: 📝 Generated hypothesis: cardiovascular disease, benzodiazepines
 ℹ️ Info: 🔬 Generating multiple hypotheses from sampled keywords...
 
 💡 Generated Hypotheses:
-  1. Married individuals have lower levels of inflammation than unmarried individuals.
-  2. A high-fiber diet is associated with reduced inflammation.
-  3. Unmarried individuals exhibit higher levels of inflammation compared to married individuals.
-  4. Adherence to an anti-inflammatory diet is linked to lower inflammatory markers.
-  5. Individuals with a healthy diet show lower inflammation levels regardless of marital status.
+  1. Individuals with cardiovascular disease are more likely to be prescribed benzodiazepines than those without cardiovascular disease.
+  2. Benzodiazepine use is associated with an increased risk of cardiovascular events.
+  3. People who take benzodiazepines have a higher prevalence of cardiovascular disease compared to non-users.
+  4. Long-term benzodiazepine use is linked to worse cardiovascular health outcomes in older adults.
 
-📊 Progress: 1/5 hypothesiss (20.0%)
+📊 Progress: 1/4 hypothesiss (25.0%)
 ────────────────────────────────────────────────────────────
-ℹ️ Info: 🔍 Working on hypothesis 1: Married individuals have lower levels of inflammation than unmarried individuals.
+ℹ️ Info: 🔍 Working on hypothesis 1: Individuals with cardiovascular disease are more likely to be prescribed benzodiazepines than those without cardiovascular disease.
 ────────────────────────────────────────────────────────────
 ℹ️ Info: 🔄 OUTER LOOP ITERATION 1/2
-👤 User Input: Married individuals have lower levels of inflammation than unmarried individuals.
+👤 User Input: Individuals with cardiovascular disease are more likely to be prescribed benzodiazepines than those without cardiovascular disease.
 ℹ️ Info: 🔧 Running manual preprocessing for hypothesis 1, iteration 1...
 ℹ️ Info: 🔧 Starting manual preprocessing conversation...
 ℹ️ Info: 📁 Using dataset folder from config: /projectnb/vkolagrp/ketanss/adrd_agent_custom/adrd_agent/datasets/NACC
@@ -41,8 +40,23 @@
 ℹ️ Info:    📊 CSV: NACC.csv
 ℹ️ Info:    📚 JSON: NACC.json
 ✅ Success: ✅ JSON dictionary file is valid: NACC.json
-ℹ️ Info: 🔬 Hypothesis: Married individuals have lower levels of inflammation than unmarried individuals.
+ℹ️ Info: 🔬 Hypothesis: Individuals with cardiovascular disease are more likely to be prescribed benzodiazepines than those without cardiovascular disease.
 ℹ️ Info: 📁 Dataset folder: /projectnb/vkolagrp/ketanss/adrd_agent_custom/adrd_agent/datasets/NACC
 ℹ️ Info: 📊 CSV file: /projectnb/vkolagrp/ketanss/adrd_agent_custom/adrd_agent/datasets/NACC/NACC.csv
 ℹ️ Info: 📚 JSON dictionary: /projectnb/vkolagrp/ketanss/adrd_agent_custom/adrd_agent/datasets/NACC/NACC.json
 ℹ️ Info: 🔍 Analyzing hypothesis to find relevant variables...
+ℹ️ Info: 🎯 Found 2 relevant variables:
+ℹ️ Info:    • CVOTHR: Other cardiovascular disease
+ℹ️ Info:    • NACCAANX: Reported current use of an anxiolytic, sedative, or hypnotic agent
+ℹ️ Info: 🔍 Filtering CSV files with relevant variables...
+ℹ️ Info: 📊 Processing CSV file: NACC.csv
+ℹ️ Info: 📈 Original CSV has 26778 rows and 2117 columns
+ℹ️ Info: 🎯 Found 2 relevant columns: ['CVOTHR', 'NACCAANX']
+ℹ️ Info: 🔄 Renamed columns to descriptions: {'CVOTHR': 'Other_cardiovascular_disease', 'NACCAANX': 'Reported_current_use_of_an_anxiolytic_sedative_or_hypnotic_agent'}
+✅ Success: ✅ Filtered CSV saved to: working/filtered_dataset.csv
+ℹ️ Info: 📊 Filtered CSV has 26778 rows and 2 columns
+ℹ️ Info: ✅ Manual preprocessing completed successfully!
+ℹ️ Info: 📊 Filtered data saved to: working/filtered_dataset.csv
+ℹ️ Info: 📋 Starting Planning Agent round...
+⏳ Planning Agent is working...
+ℹ️ Info: 🔄 Generating Planning Agent response...

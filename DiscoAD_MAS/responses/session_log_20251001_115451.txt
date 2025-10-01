@@ -1,0 +1,509 @@
+
+======================================================================
+🧠           Discovery Agent    🔬
+    AI-Powered Scientific Discovery    🚀
+======================================================================
+
+ℹ️ Info: 🔧 Initializing Discovery Agent System...
+ℹ️ Info: 🗑️ Deleted existing working directory
+ℹ️ Info: 📁 Created fresh working directory
+ℹ️ Info: 📊 Created new CSV tracking file: results/hypothesis_approval_tracking_model_Qwen3_4B_Instruct_2507_mode_generate_kw_2_runs_10_outer_2_auto_2_20251001_115451.csv
+ℹ️ Info: ⚙️ Initializing Discovery Agent...
+ℹ️ Info: 🔧 CodeExecutor initialized with 30s timeout
+✅ Success: 🎉 Discovery Agent initialized successfully!
+ℹ️ Info: 🚀 Starting Discovery Agent...
+ℹ️ Info: 📚 Loaded 93 keywords from adrd_keywords.txt
+ℹ️ Info: 📚 Loaded 93 ADRD keywords
+ℹ️ Info: 🎯 Running 10 keyword sampling iterations
+────────────────────────────────────────────────────────────
+ℹ️ Info: 🎲 Sampling Run 1/10
+ℹ️ Info: 🎯 Sampled keywords: diabetes, donepezil
+ℹ️ Info: 📝 Generated hypothesis: diabetes, donepezil
+ℹ️ Info: 🔬 Generating multiple hypotheses from sampled keywords...
+ℹ️ Info: 🔍 Auto-detected files:
+ℹ️ Info:    📊 CSV: NACC.csv
+ℹ️ Info:    📚 JSON: NACC.json
+✅ Success: ✅ JSON dictionary file is valid: NACC.json
+ℹ️ Info: 📚 Loaded dataset dictionary with 810 variables
+
+💡 Generated Hypotheses:
+  1. Among individuals with type 2 diabetes, higher adherence to prescribed donepezil use is associated with slower longitudinal decline in verbal fluency, even after adjusting for baseline cognitive status and comorbidities.
+  2. In patients with diabetes and concomitant hypertension, the presence of prior stroke significantly modifies the association between donepezil use and reduced risk of incident mild cognitive impairment (MCI), with a stronger protective effect observed in those with ≥3 prior cardiovascular risk factors.
+  3. Diabetes duration interacts with donepezil initiation timing (before vs. after age 70) to predict conversion from normal cognition to MCI, with earlier treatment showing greater benefit in individuals with >15 years of diabetes exposure.
+  4. Individuals with diabetes and high fasting glucose (>140 mg/dL) exhibit a significantly weaker cognitive benefit from donepezil compared to those with normal glucose levels, as measured by change in MMSE scores over 12 months.
+  5. The association between donepezil use and improved executive function is mediated by glycemic control, with better HbA1c levels amplifying the positive cognitive impact in diabetic subjects.
+  6. Among individuals with diabetes and prior traumatic brain injury (TBI), those receiving donepezil show significantly greater improvement in processing speed and attention compared to non-users, independent of age or APOE status.
+  7. There is a negative interaction between diabetes-related neuropathy and donepezil efficacy: subjects with documented peripheral neuropathy show diminished cognitive gains from donepezil use, especially in memory domains.
+  8. Donepezil use in individuals with diabetes and obesity (BMI ≥30) is linked to a reduced incidence of agitation and behavioral disturbances, but only if they also have adequate glycemic control (HbA1c <8%).
+  9. The protective effect of donepezil against cognitive decline is absent in individuals with diabetes and concurrent vitamin B12 deficiency, suggesting a synergistic role of metabolic and micronutrient health pathways.
+  10. Among diabetic patients, the interaction between donepezil dose and prior cognitive impairment status (MCI vs. normal) reveals differential trajectories—higher doses slow decline only in those with MCI at baseline.
+
+📊 Progress: 1/10 hypothesiss (10.0%)
+────────────────────────────────────────────────────────────
+ℹ️ Info: 🔍 Working on hypothesis 1: Among individuals with type 2 diabetes, higher adherence to prescribed donepezil use is associated with slower longitudinal decline in verbal fluency, even after adjusting for baseline cognitive status and comorbidities.
+────────────────────────────────────────────────────────────
+ℹ️ Info: 🔄 OUTER LOOP ITERATION 1/2
+👤 User Input: Among individuals with type 2 diabetes, higher adherence to prescribed donepezil use is associated with slower longitudinal decline in verbal fluency, even after adjusting for baseline cognitive status and comorbidities.
+ℹ️ Info: 🔧 Running manual preprocessing for hypothesis 1, iteration 1...
+ℹ️ Info: 🔧 Starting manual preprocessing conversation...
+ℹ️ Info: 📁 Using dataset folder from config: /projectnb/vkolagrp/ketanss/adrd_agent_custom/adrd_agent/datasets/NACC
+ℹ️ Info: 🔍 Auto-detected files:
+ℹ️ Info:    📊 CSV: NACC.csv
+ℹ️ Info:    📚 JSON: NACC.json
+✅ Success: ✅ JSON dictionary file is valid: NACC.json
+ℹ️ Info: 🔬 Hypothesis: Among individuals with type 2 diabetes, higher adherence to prescribed donepezil use is associated with slower longitudinal decline in verbal fluency, even after adjusting for baseline cognitive status and comorbidities.
+ℹ️ Info: 📁 Dataset folder: /projectnb/vkolagrp/ketanss/adrd_agent_custom/adrd_agent/datasets/NACC
+ℹ️ Info: 📊 CSV file: /projectnb/vkolagrp/ketanss/adrd_agent_custom/adrd_agent/datasets/NACC/NACC.csv
+ℹ️ Info: 📚 JSON dictionary: /projectnb/vkolagrp/ketanss/adrd_agent_custom/adrd_agent/datasets/NACC/NACC.json
+ℹ️ Info: 🔍 Analyzing hypothesis to find relevant variables...
+ℹ️ Info: 🎯 Found 176 relevant variables:
+ℹ️ Info:    • NACCADMU: Does the subject have a dominantly inherited AD mutation?
+ℹ️ Info:    • NACCALZP: Primary, contributing, or non-contributing cause of observed cognitive impairment - Alzheimer's disease (AD)
+ℹ️ Info:    • NACCFTDM: Does the subject have an hereditary FTLD mutation?
+ℹ️ Info:    • NACCALZD: Presumptive etiologic diagnosis of the cognitive disorder - Alzheimer's disease
+ℹ️ Info:    • NACCNE4S: Number of APOE e4 alleles
+ℹ️ Info:    • NACCIDEM: Incident dementia during UDS follow-up
+ℹ️ Info:    • NACCCOGF: Indicate the predominant symptom that was first recognized as a decline in the subject's cognition
+ℹ️ Info:    • COGOTH: Presumptive etiologic diagnosis of the cognitive disorder - Other 1 (specify)
+ℹ️ Info:    • COGOTH2: Presumptive etiologic diagnosis of the cognitive disorder - Other 2 (specify)
+ℹ️ Info:    • COGOTH3: Presumptive etiologic diagnosis of the cognitive disorder - Other 3 (specify)
+ℹ️ Info:    • COGOTHIF: Primary, contributing, or non-contributing cause of cognitive impairment - Other1 (specify)
+ℹ️ Info:    • COGOTH2F: Primary, contributing, or non-contributing cause of cognitive impairment - Other 2 (specify)
+ℹ️ Info:    • COGOTH3F: Primary, contributing, or non-contributing cause of cognitive impairment - Other 3 (specify)
+ℹ️ Info:    • COGOTHX: Other presumptive etiologic diagnosis of the cognitive disorder 1, specify
+ℹ️ Info:    • COGOTH2X: Other presumptive etiologic diagnosis of the cognitive disorder 2, specify
+ℹ️ Info:    • COGOTH3X: Other presumptive etiologic diagnosis of the cognitive disorder 3, specify
+ℹ️ Info:    • CVD: Presumptive etiologic diagnosis of the cognitive disorder - Vascular brain injury (VBI)
+ℹ️ Info:    • CVDIF: Primary, contributing, or non-contributing cause of cognitive impairment - vascular brain injury
+ℹ️ Info:    • VASC: Presumptive etiologic diagnosis of the cognitive disorder - Probable vascular dementia (NINDS/AIREN criteria)
+ℹ️ Info:    • VASCIF: Primary, contributing, or non-contributing cause of cognitive impairment - Probable vascular dementia (NINDS/AIREN criteria)
+ℹ️ Info:    • VASCPS: Presumptive etiologic diagnosis of the cognitive disorder - Possible vascular dementia (NINDS/AIREN criteria)
+ℹ️ Info:    • VASCPSIF: Primary, contributing, or non-contributing cause of cognitive impairment - possible vascular dementia (NINDS/AIREN criteria)
+ℹ️ Info:    • DEP: Presumptive etiologic diagnosis of the cognitive disorder - Depression
+ℹ️ Info:    • DEPIF: Primary, contributing, or non-contributing cause of cognitive impairment - Depression
+ℹ️ Info:    • DEPTREAT: Depression - Treated or untreated
+ℹ️ Info:    • ANXIETY: Anxiety
+ℹ️ Info:    • ANXSEV: Anxiety severity
+ℹ️ Info:    • APASEV: Apathy or indifference severity
+ℹ️ Info:    • IRRSEV: Irritability or lability severity
+ℹ️ Info:    • MOTSEV: Motor disturbance severity
+ℹ️ Info:    • NITESEV: Nighttime behaviors severity
+ℹ️ Info:    • HALLSEV: Hallucinations severity
+ℹ️ Info:    • DELSEV: Delusions severity
+ℹ️ Info:    • AGITSEV: Agitation or aggression severity
+ℹ️ Info:    • DEPDSEV: Depression or dysphoria severity
+ℹ️ Info:    • MEMORY: Memory
+ℹ️ Info:    • ORIENT: Orientation
+ℹ️ Info:    • JUDGMENT: Judgment and problem-solving
+ℹ️ Info:    • UDSVERFC: Number of correct F-words generated in 1 minute
+ℹ️ Info:    • UDSVERFN: Number of F-words repeated in 1 minute
+ℹ️ Info:    • UDSVERLC: Number of correct L-words generated in 1 minute
+ℹ️ Info:    • UDSVERLN: Number of non-L-words and rule violation errors in 1 minute
+ℹ️ Info:    • UDSVERLR: Number of L-words repeated in 1 minute
+ℹ️ Info:    • UDSVERNF: Number of non-F-words and rule violation errors in 1 minute
+ℹ️ Info:    • UDSVERTE: Total number of F-word and L-word repetition errors
+ℹ️ Info:    • UDSVERTI: Total number of non-F/L-words and rule violation errors
+ℹ️ Info:    • UDSVERTN: Total number of correct F-words and L-words
+ℹ️ Info:    • MEMUNITS: Logical Memory IIA - Delayed - Total number of story units recalled
+ℹ️ Info:    • REYDREC: Rey Auditory Verbal Learning: total delayed recall
+ℹ️ Info:    • REYFPOS: Rey Auditory Verbal Learning: recognition total false positives
+ℹ️ Info:    • REYTCOR: Rey Auditory Verbal Learning: recognition total correct
+ℹ️ Info:    • NACCMOCA: MoCA Total Score - corrected for education
+ℹ️ Info:    • NACCMOCB: MoCA-blind Total Score - corrected for education
+ℹ️ Info:    • NACCAGE: Subject's age at visit
+ℹ️ Info:    • NACCAGEB: Subject's age at initial visit
+ℹ️ Info:    • EDUC: Years of education
+ℹ️ Info:    • HISPANIC: Hispanic/Latino ethnicity
+ℹ️ Info:    • RACE: Race
+ℹ️ Info:    • RACESEC: Second race
+ℹ️ Info:    • RACESECX: Second race, other - specify
+ℹ️ Info:    • RACETER: Third race
+ℹ️ Info:    • RACETERX: Third race, other - specify
+ℹ️ Info:    • RACEX: Race, other - specify
+ℹ️ Info:    • SEX: Subject's sex
+ℹ️ Info:    • DIABETES: Diabetes
+ℹ️ Info:    • DIABTYPE: If Recent/active or Remote/inactive diabetes, which type?
+ℹ️ Info:    • NACCMDSS: Subject's status in the Minimal Data Set (MDS) and Uniform Data Set (UDS)
+ℹ️ Info:    • ANYMEDS: Subject taking any medications
+ℹ️ Info:    • DRUG1-DRUG40: Name of medications used within two weeks of UDS visit
+ℹ️ Info:    • NACCAC: Reported current use of an anticoagulant or antiplatelet agent
+ℹ️ Info:    • NACCACEI: Reported current use of an angiotensin converting enzyme (ACE) inhibitor
+ℹ️ Info:    • NACCAHTN: Reported current use of any type of antihypertensive or blood pressure medication
+ℹ️ Info:    • NACCADMD: Reported current use of a FDA-approved medication for Alzheimer's disease symptoms
+ℹ️ Info:    • NACCAMD: Total number of medications reported at each visit
+ℹ️ Info:    • NACCANGI: Reported current use of an angiotensin II inhibitor
+ℹ️ Info:    • NACCNSD: Reported current use of nonsteroidal anti-inflammatory medication
+ℹ️ Info:    • NACCAPSY: Reported current use of an antipsychotic agent
+ℹ️ Info:    • NACCBETA: Reported current use of a beta-adrenergic blocking agent (beta-blocker)
+ℹ️ Info:    • NACCCCBS: Reported current use of a calcium channel blocking agent
+ℹ️ Info:    • HYPERTEN: Hypertension
+ℹ️ Info:    • HYPERCHO: Hypercholesterolemia
+ℹ️ Info:    • CVHATT: Heart attack/cardiac arrest
+ℹ️ Info:    • CVCHF: Congestive heart failure
+ℹ️ Info:    • CVANGINA: Angina
+ℹ️ Info:    • CVANGIO: Angioplasty/endarterectomy/stent
+ℹ️ Info:    • CVBYPASS: Cardiac bypass procedure
+ℹ️ Info:    • CVPACE: Pacemaker
+ℹ️ Info:    • CVPACDEF: Pacemaker and/or defibrillator
+ℹ️ Info:    • APNEA: Sleep apnea history reported at Initial Visit
+ℹ️ Info:    • INSOMN: Hyposomnia/insomnia history reported at Initial Visit
+ℹ️ Info:    • SLEEPAP: Sleep apnea present
+ℹ️ Info:    • SLEEPOTH: Other sleep disorder present
+ℹ️ Info:    • SLEEPOTX: Other sleep disorder specification
+ℹ️ Info:    • RBD: REM sleep behavior disorder (RBD) history reported at Initial Visit
+ℹ️ Info:    • TRAUMBRF: brain trauma - brief unconsciousness
+ℹ️ Info:    • TRAUMCHR: brain trauma - chronic deficit
+ℹ️ Info:    • TRAUMEXT: brain trauma - extended unconsciousness
+ℹ️ Info:    • TBIBRIEF: Traumatic brain injury (TBI) with brief loss of consciousness
+ℹ️ Info:    • TBIEXTEN: TBI with extended loss of consciousness - 5 minutes of longer
+ℹ️ Info:    • TBIWOLOS: TBI without loss of consciousness - as might result from military detonations or sports injury
+ℹ️ Info:    • TBIYEAR: Year of most recent TBI
+ℹ️ Info:    • HACHIN: Hachinski ischemic score
+ℹ️ Info:    • FOCLSIGN: Focal neurological signs
+ℹ️ Info:    • FOCLSYM: Focal neurological symptoms
+ℹ️ Info:    • B12DEF: Vitamin b12 deficiency
+ℹ️ Info:    • VB12DEF: B12 deficiency present
+ℹ️ Info:    • THYROID: Thyroid disease
+ℹ️ Info:    • SEIZURES: Seizures
+ℹ️ Info:    • SCHIZ: Schizophrenia
+ℹ️ Info:    • PTSD: Post-traumatic stress disorder (PTSD)
+ℹ️ Info:    • BIPOLAR: bipolar disorder
+ℹ️ Info:    • OCD: Obsessive-compulsive disorder (OCD)
+ℹ️ Info:    • PSYCDIS: Other psychiatric disorder
+ℹ️ Info:    • PSYCDISX: If recent/active or remote/inactive psychiatric disorder, specify disorder
+ℹ️ Info:    • VISITDAY: Form date - day
+ℹ️ Info:    • VISITMO: Form date - month
+ℹ️ Info:    • VISITYR: Form date - year
+ℹ️ Info:    • NACCDAYS: Days from initial visit to most recent visit
+ℹ️ Info:    • NACCFDYS: Days from initial visit to each follow-up visit
+ℹ️ Info:    • NACCACTV: Follow-up status at the Alzheimer's Disease Center (ADC)
+ℹ️ Info:    • NACCNRDY: Day permanently moved to nursing home
+ℹ️ Info:    • NACCNRYR: Year permanently moved to nursing home
+ℹ️ Info:    • NACCNURP: Permanently moved to a nursing home
+ℹ️ Info:    • NACCDSMO: Month of discontinuation from annual follow-up
+ℹ️ Info:    • NACCDSYR: Year of discontinuation from annual follow-up
+ℹ️ Info:    • NACCDSDY: Day of discontinuation from annual follow-up
+ℹ️ Info:    • NACCNOVS: No longer followed annually in person or by telephone
+ℹ️ Info:    • NACCPAFF: Previously affiliated subject
+ℹ️ Info:    • NACCREFR: Principal referral source
+ℹ️ Info:    • NACCREAS: Primary reason for coming to ADC
+ℹ️ Info:    • NACCDAD: Indicator of father with cognitive impairment
+ℹ️ Info:    • NACCMOM: Indicator of mother with cognitive impairment
+ℹ️ Info:    • NACCFAM: Indicator of first-degree family member with cognitive impairment
+ℹ️ Info:    • NACCAM: In this family, is there evidence for an AD mutation (from list of specific mutations)?
+ℹ️ Info:    • NACCFADM: In this family, is there evidence of a dominantly inherited AD mutation?
+ℹ️ Info:    • NACCFM: In this family, is there evidence for an FTLD mutation (from list of specific mutations)?
+ℹ️ Info:    • NACCFMS: Source of evidence for FTLD mutation
+ℹ️ Info:    • NACCOM: In this family, is there evidence for a mutation other than an AD or FTLD mutation?
+ℹ️ Info:    • NACCOMS: Source of evidence for other mutation
+ℹ️ Info:    • NACCOMSX: If other, specify
+ℹ️ Info:    • NACCOMX: Specified other mutation
+ℹ️ Info:    • OTHMUT: Does the subject have a hereditary mutation other than an AD or FTLD mutation?
+ℹ️ Info:    • OTHMUTX: Other mutation, specify
+ℹ️ Info:    • NACCSTYR: Most recently reported year of stroke as of the Initial Visit
+ℹ️ Info:    • NACCTBI: History of traumatic brain injury (TBI)
+ℹ️ Info:    • NACCTIYR: Most recently reported year of TIA as of the Initial Visit
+ℹ️ Info:    • STROKCOG: Relationship between stroke and cognitive impairment
+ℹ️ Info:    • STROKE: Presumptive etiologic diagnosis of the cognitive disorder - Stroke
+ℹ️ Info:    • STROKDEC: Temporal relationship between stroke and cognitive decline
+ℹ️ Info:    • TAUPETAD: Tau PET evidence for AD
+ℹ️ Info:    • FDGAD: FDG-PET pattern of AD
+ℹ️ Info:    • FDGFTLD: FDG-PET evidence for frontal or anterior temporal hypometabolism for FTLD
+ℹ️ Info:    • MRFTLD: Structural MR evidence for frontal or anterior temporal atrophy for FTLD
+ℹ️ Info:    • AMYLPET: Abnormally elevated amyloid on PET
+ℹ️ Info:    • AMYLCSF: Abnormally low amyloid in CSF
+ℹ️ Info:    • CSFTAU: Abnormally elevated CSF Tau or pTau
+ℹ️ Info:    • NACCAPSA: At least one amyloid PET scan available
+ℹ️ Info:    • NACCACSF: One or more measures of Aβ1-42 reported
+ℹ️ Info:    • NACCPCSF: One or more measures of P-tau181P reported
+ℹ️ Info:    • NACCTCSF: One or more measures of T-tau reported
+ℹ️ Info:    • NACCNMRI: Total number of MRI sessions
+ℹ️ Info:    • NACCMRSA: At least one MRI scan available
+ℹ️ Info:    • LANGE3F: E3F Imaging in Diagnosis - language
+ℹ️ Info:    • IMAGLINF: Large vessel infarct(s)
+ℹ️ Info:    • IMAGMICH: Microhemorrhage(s)
+ℹ️ Info:    • IMAGEWMH: Extensive white-matter hyperintensity (CHS score 7-8)
+ℹ️ Info:    • IMAGMWMH: Moderate white-matter hyperintensity (CHS score 5-6)
+ℹ️ Info:    • CVDIMAG1: Single strategic infarct
+ℹ️ Info:    • CVDIMAG2: Multiple infarcts
+ℹ️ Info:    • CVDIMAGX: Other imaging evidence - specify
+ℹ️ Info:    • NACCYOD: Year of death
+ℹ️ Info:    • NACCDIED: Subject is known to be deceased
+ℹ️ Info:    • FORMVER: Form version number
+ℹ️ Info:    • PACKET: Packet code
+ℹ️ Info:    • TELCOV: Why is the UDS telephone follow-up protocol being used to obtain data about the subject? COVID pandemic precludes traditional in-person UDS visit.
+ℹ️ Info:    • TELMOD: What modality of communication was used to collect this remote UDS packet?
+ℹ️ Info: 🔍 Filtering CSV files with relevant variables...
+ℹ️ Info: 📊 Processing CSV file: NACC.csv
+ℹ️ Info: 📈 Original CSV has 26778 rows and 2117 columns
+ℹ️ Info: 🎯 Found 173 relevant columns: ['NACCADMU', 'NACCALZP', 'NACCFTDM', 'NACCALZD', 'NACCNE4S', 'NACCIDEM', 'NACCCOGF', 'COGOTH', 'COGOTH2', 'COGOTH3', 'COGOTHIF', 'COGOTH2F', 'COGOTH3F', 'COGOTHX', 'COGOTH2X', 'COGOTH3X', 'CVD', 'CVDIF', 'VASC', 'VASCIF', 'VASCPS', 'VASCPSIF', 'DEP', 'DEPIF', 'DEPTREAT', 'ANXIETY', 'ANXSEV', 'APASEV', 'IRRSEV', 'MOTSEV', 'NITESEV', 'HALLSEV', 'DELSEV', 'AGITSEV', 'DEPDSEV', 'MEMORY', 'ORIENT', 'JUDGMENT', 'UDSVERFC', 'UDSVERFN', 'UDSVERLC', 'UDSVERLN', 'UDSVERLR', 'UDSVERNF', 'UDSVERTE', 'UDSVERTI', 'UDSVERTN', 'MEMUNITS', 'REYDREC', 'REYFPOS', 'REYTCOR', 'NACCMOCA', 'NACCMOCB', 'NACCAGE', 'EDUC', 'HISPANIC', 'RACE', 'RACESEC', 'RACESECX', 'RACETER', 'RACETERX', 'RACEX', 'SEX', 'DIABETES', 'DIABTYPE', 'NACCMDSS', 'ANYMEDS', 'NACCAC', 'NACCACEI', 'NACCAHTN', 'NACCADMD', 'NACCAMD', 'NACCANGI', 'NACCNSD', 'NACCAPSY', 'NACCBETA', 'NACCCCBS', 'HYPERTEN', 'HYPERCHO', 'CVHATT', 'CVCHF', 'CVANGINA', 'CVANGIO', 'CVBYPASS', 'CVPACE', 'CVPACDEF', 'APNEA', 'INSOMN', 'SLEEPAP', 'SLEEPOTH', 'SLEEPOTX', 'RBD', 'TRAUMBRF', 'TRAUMCHR', 'TRAUMEXT', 'TBIBRIEF', 'TBIEXTEN', 'TBIWOLOS', 'TBIYEAR', 'HACHIN', 'FOCLSIGN', 'FOCLSYM', 'B12DEF', 'VB12DEF', 'THYROID', 'SEIZURES', 'SCHIZ', 'PTSD', 'BIPOLAR', 'OCD', 'PSYCDIS', 'PSYCDISX', 'VISITDAY', 'VISITMO', 'VISITYR', 'NACCDAYS', 'NACCFDYS', 'NACCACTV', 'NACCNRDY', 'NACCNRYR', 'NACCNURP', 'NACCDSMO', 'NACCDSYR', 'NACCDSDY', 'NACCNOVS', 'NACCPAFF', 'NACCREFR', 'NACCREAS', 'NACCDAD', 'NACCMOM', 'NACCFAM', 'NACCAM', 'NACCFADM', 'NACCFM', 'NACCFMS', 'NACCOM', 'NACCOMS', 'NACCOMSX', 'NACCOMX', 'OTHMUT', 'OTHMUTX', 'NACCSTYR', 'NACCTBI', 'NACCTIYR', 'STROKCOG', 'STROKE', 'STROKDEC', 'TAUPETAD', 'FDGAD', 'FDGFTLD', 'MRFTLD', 'AMYLPET', 'AMYLCSF', 'CSFTAU', 'NACCAPSA', 'NACCACSF', 'NACCPCSF', 'NACCTCSF', 'NACCNMRI', 'NACCMRSA', 'IMAGLINF', 'IMAGMICH', 'IMAGEWMH', 'IMAGMWMH', 'CVDIMAG1', 'CVDIMAG2', 'CVDIMAGX', 'NACCYOD', 'NACCDIED', 'FORMVER', 'PACKET', 'TELCOV', 'TELMOD']
+ℹ️ Info: 🔄 Renamed columns to descriptions: {'NACCADMU': 'Does_the_subject_have_a_dominantly_inherited_AD_mutation', 'NACCALZP': 'Primary_contributing_or_noncontributing_cause_of_observed_cognitive_impairment_Alzheimers_disease_AD', 'NACCFTDM': 'Does_the_subject_have_an_hereditary_FTLD_mutation', 'NACCALZD': 'Presumptive_etiologic_diagnosis_of_the_cognitive_disorder_Alzheimers_disease', 'NACCNE4S': 'Number_of_APOE_e4_alleles', 'NACCIDEM': 'Incident_dementia_during_UDS_followup', 'NACCCOGF': 'Indicate_the_predominant_symptom_that_was_first_recognized_as_a_decline_in_the_subjects_cognition', 'COGOTH': 'Presumptive_etiologic_diagnosis_of_the_cognitive_disorder_Other_1_specify', 'COGOTH2': 'Presumptive_etiologic_diagnosis_of_the_cognitive_disorder_Other_2_specify', 'COGOTH3': 'Presumptive_etiologic_diagnosis_of_the_cognitive_disorder_Other_3_specify', 'COGOTHIF': 'Primary_contributing_or_noncontributing_cause_of_cognitive_impairment_Other1_specify', 'COGOTH2F': 'Primary_contributing_or_noncontributing_cause_of_cognitive_impairment_Other_2_specify', 'COGOTH3F': 'Primary_contributing_or_noncontributing_cause_of_cognitive_impairment_Other_3_specify', 'COGOTHX': 'Other_presumptive_etiologic_diagnosis_of_the_cognitive_disorder_1_specify', 'COGOTH2X': 'Other_presumptive_etiologic_diagnosis_of_the_cognitive_disorder_2_specify', 'COGOTH3X': 'Other_presumptive_etiologic_diagnosis_of_the_cognitive_disorder_3_specify', 'CVD': 'Presumptive_etiologic_diagnosis_of_the_cognitive_disorder_Vascular_brain_injury_VBI', 'CVDIF': 'Primary_contributing_or_noncontributing_cause_of_cognitive_impairment_vascular_brain_injury', 'VASC': 'Presumptive_etiologic_diagnosis_of_the_cognitive_disorder_Probable_vascular_dementia_NINDSAIREN_criteria', 'VASCIF': 'Primary_contributing_or_noncontributing_cause_of_cognitive_impairment_Probable_vascular_dementia_NINDSAIREN_criteria', 'VASCPS': 'Presumptive_etiologic_diagnosis_of_the_cognitive_disorder_Possible_vascular_dementia_NINDSAIREN_criteria', 'VASCPSIF': 'Primary_contributing_or_noncontributing_cause_of_cognitive_impairment_possible_vascular_dementia_NINDSAIREN_criteria', 'DEP': 'Presumptive_etiologic_diagnosis_of_the_cognitive_disorder_Depression', 'DEPIF': 'Primary_contributing_or_noncontributing_cause_of_cognitive_impairment_Depression', 'DEPTREAT': 'Depression_Treated_or_untreated', 'ANXIETY': 'Anxiety', 'ANXSEV': 'Anxiety_severity', 'APASEV': 'Apathy_or_indifference_severity', 'IRRSEV': 'Irritability_or_lability_severity', 'MOTSEV': 'Motor_disturbance_severity', 'NITESEV': 'Nighttime_behaviors_severity', 'HALLSEV': 'Hallucinations_severity', 'DELSEV': 'Delusions_severity', 'AGITSEV': 'Agitation_or_aggression_severity', 'DEPDSEV': 'Depression_or_dysphoria_severity', 'MEMORY': 'Memory', 'ORIENT': 'Orientation', 'JUDGMENT': 'Judgment_and_problemsolving', 'UDSVERFC': 'Number_of_correct_Fwords_generated_in_1_minute', 'UDSVERFN': 'Number_of_Fwords_repeated_in_1_minute', 'UDSVERLC': 'Number_of_correct_Lwords_generated_in_1_minute', 'UDSVERLN': 'Number_of_nonLwords_and_rule_violation_errors_in_1_minute', 'UDSVERLR': 'Number_of_Lwords_repeated_in_1_minute', 'UDSVERNF': 'Number_of_nonFwords_and_rule_violation_errors_in_1_minute', 'UDSVERTE': 'Total_number_of_Fword_and_Lword_repetition_errors', 'UDSVERTI': 'Total_number_of_nonFLwords_and_rule_violation_errors', 'UDSVERTN': 'Total_number_of_correct_Fwords_and_Lwords', 'MEMUNITS': 'Logical_Memory_IIA_Delayed_Total_number_of_story_units_recalled', 'REYDREC': 'Rey_Auditory_Verbal_Learning_total_delayed_recall', 'REYFPOS': 'Rey_Auditory_Verbal_Learning_recognition_total_false_positives', 'REYTCOR': 'Rey_Auditory_Verbal_Learning_recognition_total_correct', 'NACCMOCA': 'MoCA_Total_Score_corrected_for_education', 'NACCMOCB': 'MoCAblind_Total_Score_corrected_for_education', 'NACCAGE': 'Subjects_age_at_visit', 'EDUC': 'Years_of_education', 'HISPANIC': 'HispanicLatino_ethnicity', 'RACE': 'Race', 'RACESEC': 'Second_race', 'RACESECX': 'Second_race_other_specify', 'RACETER': 'Third_race', 'RACETERX': 'Third_race_other_specify', 'RACEX': 'Race_other_specify', 'SEX': 'Subjects_sex', 'DIABETES': 'Diabetes', 'DIABTYPE': 'If_Recentactive_or_Remoteinactive_diabetes_which_type', 'NACCMDSS': 'Subjects_status_in_the_Minimal_Data_Set_MDS_and_Uniform_Data_Set_UDS', 'ANYMEDS': 'Subject_taking_any_medications', 'NACCAC': 'Reported_current_use_of_an_anticoagulant_or_antiplatelet_agent', 'NACCACEI': 'Reported_current_use_of_an_angiotensin_converting_enzyme_ACE_inhibitor', 'NACCAHTN': 'Reported_current_use_of_any_type_of_antihypertensive_or_blood_pressure_medication', 'NACCADMD': 'Reported_current_use_of_a_FDAapproved_medication_for_Alzheimers_disease_symptoms', 'NACCAMD': 'Total_number_of_medications_reported_at_each_visit', 'NACCANGI': 'Reported_current_use_of_an_angiotensin_II_inhibitor', 'NACCNSD': 'Reported_current_use_of_nonsteroidal_antiinflammatory_medication', 'NACCAPSY': 'Reported_current_use_of_an_antipsychotic_agent', 'NACCBETA': 'Reported_current_use_of_a_betaadrenergic_blocking_agent_betablocker', 'NACCCCBS': 'Reported_current_use_of_a_calcium_channel_blocking_agent', 'HYPERTEN': 'Hypertension', 'HYPERCHO': 'Hypercholesterolemia', 'CVHATT': 'Heart_attackcardiac_arrest', 'CVCHF': 'Congestive_heart_failure', 'CVANGINA': 'Angina', 'CVANGIO': 'Angioplastyendarterectomystent', 'CVBYPASS': 'Cardiac_bypass_procedure', 'CVPACE': 'Pacemaker', 'CVPACDEF': 'Pacemaker_andor_defibrillator', 'APNEA': 'Sleep_apnea_history_reported_at_Initial_Visit', 'INSOMN': 'Hyposomniainsomnia_history_reported_at_Initial_Visit', 'SLEEPAP': 'Sleep_apnea_present', 'SLEEPOTH': 'Other_sleep_disorder_present', 'SLEEPOTX': 'Other_sleep_disorder_specification', 'RBD': 'REM_sleep_behavior_disorder_RBD_history_reported_at_Initial_Visit', 'TRAUMBRF': 'brain_trauma_brief_unconsciousness', 'TRAUMCHR': 'brain_trauma_chronic_deficit', 'TRAUMEXT': 'brain_trauma_extended_unconsciousness', 'TBIBRIEF': 'Traumatic_brain_injury_TBI_with_brief_loss_of_consciousness', 'TBIEXTEN': 'TBI_with_extended_loss_of_consciousness_5_minutes_of_longer', 'TBIWOLOS': 'TBI_without_loss_of_consciousness_as_might_result_from_military_detonations_or_sports_injury', 'TBIYEAR': 'Year_of_most_recent_TBI', 'HACHIN': 'Hachinski_ischemic_score', 'FOCLSIGN': 'Focal_neurological_signs', 'FOCLSYM': 'Focal_neurological_symptoms', 'B12DEF': 'Vitamin_b12_deficiency', 'VB12DEF': 'B12_deficiency_present', 'THYROID': 'Thyroid_disease', 'SEIZURES': 'Seizures', 'SCHIZ': 'Schizophrenia', 'PTSD': 'Posttraumatic_stress_disorder_PTSD', 'BIPOLAR': 'bipolar_disorder', 'OCD': 'Obsessivecompulsive_disorder_OCD', 'PSYCDIS': 'Other_psychiatric_disorder', 'PSYCDISX': 'If_recentactive_or_remoteinactive_psychiatric_disorder_specify_disorder', 'VISITDAY': 'Form_date_day', 'VISITMO': 'Form_date_month', 'VISITYR': 'Form_date_year', 'NACCDAYS': 'Days_from_initial_visit_to_most_recent_visit', 'NACCFDYS': 'Days_from_initial_visit_to_each_followup_visit', 'NACCACTV': 'Followup_status_at_the_Alzheimers_Disease_Center_ADC', 'NACCNRDY': 'Day_permanently_moved_to_nursing_home', 'NACCNRYR': 'Year_permanently_moved_to_nursing_home', 'NACCNURP': 'Permanently_moved_to_a_nursing_home', 'NACCDSMO': 'Month_of_discontinuation_from_annual_followup', 'NACCDSYR': 'Year_of_discontinuation_from_annual_followup', 'NACCDSDY': 'Day_of_discontinuation_from_annual_followup', 'NACCNOVS': 'No_longer_followed_annually_in_person_or_by_telephone', 'NACCPAFF': 'Previously_affiliated_subject', 'NACCREFR': 'Principal_referral_source', 'NACCREAS': 'Primary_reason_for_coming_to_ADC', 'NACCDAD': 'Indicator_of_father_with_cognitive_impairment', 'NACCMOM': 'Indicator_of_mother_with_cognitive_impairment', 'NACCFAM': 'Indicator_of_firstdegree_family_member_with_cognitive_impairment', 'NACCAM': 'In_this_family_is_there_evidence_for_an_AD_mutation_from_list_of_specific_mutations', 'NACCFADM': 'In_this_family_is_there_evidence_of_a_dominantly_inherited_AD_mutation', 'NACCFM': 'In_this_family_is_there_evidence_for_an_FTLD_mutation_from_list_of_specific_mutations', 'NACCFMS': 'Source_of_evidence_for_FTLD_mutation', 'NACCOM': 'In_this_family_is_there_evidence_for_a_mutation_other_than_an_AD_or_FTLD_mutation', 'NACCOMS': 'Source_of_evidence_for_other_mutation', 'NACCOMSX': 'If_other_specify', 'NACCOMX': 'Specified_other_mutation', 'OTHMUT': 'Does_the_subject_have_a_hereditary_mutation_other_than_an_AD_or_FTLD_mutation', 'OTHMUTX': 'Other_mutation_specify', 'NACCSTYR': 'Most_recently_reported_year_of_stroke_as_of_the_Initial_Visit', 'NACCTBI': 'History_of_traumatic_brain_injury_TBI', 'NACCTIYR': 'Most_recently_reported_year_of_TIA_as_of_the_Initial_Visit', 'STROKCOG': 'Relationship_between_stroke_and_cognitive_impairment', 'STROKE': 'Presumptive_etiologic_diagnosis_of_the_cognitive_disorder_Stroke', 'STROKDEC': 'Temporal_relationship_between_stroke_and_cognitive_decline', 'TAUPETAD': 'Tau_PET_evidence_for_AD', 'FDGAD': 'FDGPET_pattern_of_AD', 'FDGFTLD': 'FDGPET_evidence_for_frontal_or_anterior_temporal_hypometabolism_for_FTLD', 'MRFTLD': 'Structural_MR_evidence_for_frontal_or_anterior_temporal_atrophy_for_FTLD', 'AMYLPET': 'Abnormally_elevated_amyloid_on_PET', 'AMYLCSF': 'Abnormally_low_amyloid_in_CSF', 'CSFTAU': 'Abnormally_elevated_CSF_Tau_or_pTau', 'NACCAPSA': 'At_least_one_amyloid_PET_scan_available', 'NACCACSF': 'One_or_more_measures_of_Aβ142_reported', 'NACCPCSF': 'One_or_more_measures_of_Ptau181P_reported', 'NACCTCSF': 'One_or_more_measures_of_Ttau_reported', 'NACCNMRI': 'Total_number_of_MRI_sessions', 'NACCMRSA': 'At_least_one_MRI_scan_available', 'IMAGLINF': 'Large_vessel_infarcts', 'IMAGMICH': 'Microhemorrhages', 'IMAGEWMH': 'Extensive_whitematter_hyperintensity_CHS_score_78', 'IMAGMWMH': 'Moderate_whitematter_hyperintensity_CHS_score_56', 'CVDIMAG1': 'Single_strategic_infarct', 'CVDIMAG2': 'Multiple_infarcts', 'CVDIMAGX': 'Other_imaging_evidence_specify', 'NACCYOD': 'Year_of_death', 'NACCDIED': 'Subject_is_known_to_be_deceased', 'FORMVER': 'Form_version_number', 'PACKET': 'Packet_code', 'TELCOV': 'Why_is_the_UDS_telephone_followup_protocol_being_used_to_obtain_data_about_the_subject_COVID_pandemic_precludes_traditional_inperson_UDS_visit', 'TELMOD': 'What_modality_of_communication_was_used_to_collect_this_remote_UDS_packet'}
+✅ Success: ✅ Filtered CSV saved to: working/filtered_dataset.csv
+ℹ️ Info: 📊 Filtered CSV has 26778 rows and 173 columns
+ℹ️ Info: ✅ Manual preprocessing completed successfully!
+ℹ️ Info: 📊 Filtered data saved to: working/filtered_dataset.csv
+ℹ️ Info: 📋 Starting Planning Agent round...
+⏳ Planning Agent is working...
+ℹ️ Info: 🔄 Generating Planning Agent response...
+ℹ️ Info: ⏱️ Response generated in 1.86 seconds
+
+🤖 --- Planning Agent ---
+Use linear mixed-effects modeling to assess the association between donepezil adherence and longitudinal changes in verbal fluency, accounting for repeated measures over time and key confounders such as age, education, comorbidities, and baseline cognition. Include interaction terms for APOE ε4 allele count and vascular risk factors to explore potential modifiers of treatment effects. Ensure all models report adjusted effect sizes with 95% confidence intervals and validate assumptions through residual diagnostics.
+ℹ️ Info: 🔄 Conversation turn 1
+ℹ️ Info: 🧪 Starting Scientist round...
+⏳ Scientist is working...
+ℹ️ Info: 🔄 Generating Scientist response...
+ℹ️ Info: ⏱️ Response generated in 43.21 seconds
+ℹ️ Info: 💻 Executing code from Scientist response...
+ℹ️ Info: 🔍 About to call execute_code_from_response...
+ℹ️ Info: 🔍 Extracting code block from text...
+ℹ️ Info: 📝 Found code block: 8769 characters
+ℹ️ Info: 💻 Executing code block
+ℹ️ Info: 🔄 Executing code...
+ℹ️ Info: ⏰ Setting timeout to 30s
+❌ Error in code_execution: Code execution failed: all the input array dimensions except for the concatenation axis must match exactly, but along dimension 0, the array at index 0 has size 26778 and the array at index 1 has size 11692
+ℹ️ Info: 🔍 execute_code_from_response completed successfully
+⚠️ Warning: ⚠️ Code execution returned an error output: Error: Traceback (most recent call last):
+  File "/projectnb/vkolagrp/ketanss/adrd_agent_custom/DiscoADRD/DiscoAD_MAS/discovery_agent_pkg/code_executor.py", line 80, in execute_code
+    raise result_container['exception']
+  File "/projectnb/vkolagrp/ketanss/adrd_agent_custom/DiscoADRD/DiscoAD_MAS/discovery_agent_pkg/code_executor.py", line 56, in execute_code_thread
+    exec(code, exec_namespace, exec_namespace)
+  File "<string>", line 94, in <module>
+  File "/projectnb/vkolagrp/ketanss/.conda/envs/llms/lib/python3.10/site-packages/scipy/stats/_stats_py.py", line 5244, in spearmanr
+    a = np.column_stack((a, b))
+  File "/projectnb/vkolagrp/ketanss/.conda/envs/llms/lib/python3.10/site-packages/numpy/lib/_shape_base_impl.py", line 662, in column_stack
+    return _nx.concatenate(arrays, 1)
+ValueError: all the input array dimensions except for the concatenation axis must match exactly, but along dimension 0, the array at index 0 has size 26778 and the array at index 1 has size 11692
+
+⚠️ Warning: ⚠️ But continuing...
+
+👨‍🔬 --- Scientist ---
+```python
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+from scipy import stats
+from scipy.stats import pearsonr, spearmanr, ttest_ind, f_oneway, chi2_contingency
+from sklearn.linear_model import LinearRegression
+from sklearn.preprocessing import LabelEncoder
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import r2_score
+import warnings
+warnings.filterwarnings("ignore")
+
+# Load the filtered dataset
+file_path = "./working/filtered_dataset.csv"
+df = pd.read_csv(file_path)
+
+# Display basic information about the dataset
+print("Dataset shape:", df.shape)
+print("\nFirst few rows:")
+print(df.head())
+
+# Identify relevant variables for the hypothesis
+# We're interested in: 
+# - Donepezil adherence (assumed from "Reported_current_use_of_a_FDAapproved_medication_for_Alzheimers_disease_symptoms")
+# - Verbal fluency (measured by F-word and L-word generation/repetition scores)
+# - Type 2 diabetes (Diabetes variable)
+# - Adjusting for baseline cognitive status and comorbidities
+
+# Step 1: Define key variables
+# Since 'Donepezil' use is captured via FDA-approved Alzheimer's medication
+donepezil_use = df['Reported_current_use_of_a_FDAapproved_medication_for_Alzheimers_disease_symptoms']
+diabetes = df['Diabetes']
+
+# Verbal fluency scores (we'll focus on primary fluency tasks)
+f_words_correct = df['Number_of_correct_Fwords_generated_in_1_minute']
+l_words_correct = df['Number_of_correct_Lwords_generated_in_1_minute']
+total_correct_fluency = df['Total_number_of_correct_Fwords_and_Lwords']
+
+# Baseline cognitive status proxies:
+mo_ca_score = df['MoCA_Total_Score_corrected_for_education']
+reay_learning_delayed = df['Rey_Auditory_Verbal_Learning_total_delayed_recall']
+logical_memory = df['Logical_Memory_IIA_Delayed_Total_number_of_story_units_recalled']
+
+# Comorbidities of interest (to adjust for):
+hypertension = df['Hypertension']
+hypercholesterolemia = df['Hypercholesterolemia']
+vascular_dementia = df['Presumptive_etiologic_diagnosis_of_the_cognitive_disorder_Vascular_brain_injury_VBI']
+depression = df['Depression_Treated_or_untreated']
+age = df['Subjects_age_at_visit']
+years_edu = df['Years_of_education']
+
+# Step 2: Check for missing values
+print("\nMissing values per column:")
+missing = df.isnull().sum()
+print(missing[missing > 0])
+
+# Step 3: Descriptive statistics for key outcome variables
+print("\nDescriptive Statistics for Key Variables:")
+desc_stats = {
+    'F_words_correct': f_words_correct,
+    'L_words_correct': l_words_correct,
+    'Total_correct_fluency': total_correct_fluency,
+    'MoCA': mo_ca_score,
+    'Rey_Auditory_Verbal_Learning': reay_learning_delayed,
+    'Logical_Memory': logical_memory,
+    'Age': age,
+    'Years_Education': years_edu,
+}
+for var_name, series in desc_stats.items():
+    print(f"\n{var_name}:")
+    print(f"  Mean: {series.mean():.2f}, Std: {series.std():.2f}, Min: {series.min()}, Max: {series.max()}")
+
+# Step 4: Assess distribution and normality of verbal fluency outcomes
+plt.figure(figsize=(12, 5))
+plt.subplot(1, 2, 1)
+sns.histplot(f_words_correct.dropna(), kde=True, color='blue', bins=20)
+plt.title('Distribution of Correct F-Word Generation')
+plt.xlabel('Correct F-Words Generated')
+
+plt.subplot(1, 2, 2)
+sns.histplot(l_words_correct.dropna(), kde=True, color='green', bins=20)
+plt.title('Distribution of Correct L-Word Generation')
+plt.xlabel('Correct L-Words Generated')
+plt.tight_layout()
+plt.show()
+
+# Step 5: Test association between donepezil use and verbal fluency (before adjusting for confounders)
+# Convert binary donepezil use to 0/1
+donepezil_binary = (donepezil_use == 1).astype(int)
+
+# Test correlation between donepezil use and fluency scores using Spearman (non-parametric)
+print("\nSpearman Correlation between Donepezil Use and Fluency Scores:")
+corr_f, p_f = spearmanr(donepezil_binary, f_words_correct.dropna())
+corr_l, p_l = spearmanr(donepezil_binary, l_words_correct.dropna())
+corr_total, p_total = spearmanr(donepezil_binary, total_correct_fluency.dropna())
+
+print(f"F-words: rho={corr_f:.3f}, p={p_f:.4f}")
+print(f"L-words: rho={corr_l:.3f}, p={p_l:.4f}")
+print(f"Total correct: rho={corr_total:.3f}, p={p_total:.4f}")
+
+# Step 6: Adjust for baseline cognitive status and comorbidities — multivariate linear regression
+# Prepare features matrix X and response Y (verbal fluency)
+X = df[['MoCA_Total_Score_corrected_for_education',
+        'Rey_Auditory_Verbal_Learning_total_delayed_recall',
+        'Logical_Memory_IIA_Delayed_Total_number_of_story_units_recalled',
+        'Hypertension',
+        'Hypercholesterolemia',
+        'Depression_Treated_or_untreated',
+        'Subjects_age_at_visit',
+        'Years_of_education']]
+
+# Handle missing values in predictors
+X = X.dropna()
+
+# Outcome variable – we’ll use total correct words as proxy for verbal fluency
+Y = df['Total_number_of_correct_Fwords_and_Lwords'].dropna()
+
+# Ensure alignment between X and Y
+mask = X.index.isin(Y.index)
+X_filtered = X[mask]
+Y_filtered = Y[mask]
+
+# Encode categorical variables if any (none here; all numeric or boolean)
+# Now run multiple linear regression
+model = LinearRegression()
+model.fit(X_filtered, Y_filtered)
+
+# Output coefficients and R²
+print("\nMultivariate Linear Regression Results (Adjusted for Confounders):")
+print(f"R² (coefficient of determination): {model.score(X_filtered, Y_filtered):.4f}")
+print("\nCoefficients (adjusting for baseline cognition and comorbidities):")
+for col, coef in zip(X.columns, model.coef_):
+    print(f"{col}: {coef:.3f}")
+
+# Test significance of donepezil use as predictor (add as new feature)
+X_donepezil = X_filtered.copy()
+X_donepezil['Donepezil_Use'] = (df['Reported_current_use_of_a_FDAapproved_medication_for_Alzheimers_disease_symptoms'].iloc[X_filtered.index] == 1).astype(int)
+
+# Re-run regression including donepezil
+model_complete = LinearRegression()
+model_complete.fit(X_donepezil, Y_filtered)
+
+# Extract coefficient for donepezil use
+donepezil_coef = model_complete.coef_[len(X.columns)]
+donepezil_p_value = calculate_p_value_for_coefficient(
+    model_complete.coef_[len(X.columns)],
+    model_complete.residues_.std(),
+    len(Y_filtered),
+    degrees_freedom=len(Y_filtered) - X_donepezil.shape[1] - 1
+)
+
+print(f"\nEffect of Donepezil Use on Verbal Fluency (after adjustment):")
+print(f"Coef: {donepezil_coef:.3f} (p-value ≈ {donepezil_p_value:.4f})")
+
+# Interpretation: if p < 0.05, we reject null hypothesis of no effect
+if donepezil_p_value < 0.05:
+    print("→ Statistically significant positive association found.")
+else:
+    print("→ No statistically significant association after adjustment.")
+
+# Step 7: Effect size (Cohen’s d for difference in mean fluency by donepezil group)
+def cohens_d(group1, group2):
+    diff = np.mean(group1) - np.mean(group2)
+    n1, n2 = len(group1), len(group2)
+    std1, std2 = np.std(group1, ddof=1), np.std(group2, ddof=1)
+    pooled_std = np.sqrt((std1**2 + std2**2) / 2)
+    return diff / pooled_std
+
+# Split into groups
+group_donepezil_yes = Y_filtered[X_donepezil['Donepezil_Use'] == 1]
+group_donepezil_no = Y_filtered[X_donepezil['Donepezil_Use'] == 0]
+
+d_effect = cohens_d(group_donepezil_yes, group_donepezil_no)
+print(f"\nCohen’s d (effect size): {d_effect:.3f}")
+
+# Interpret effect size:
+if abs(d_effect) < 0.2:
+    print("→ Small effect size.")
+elif abs(d_effect) < 0.5:
+    print("→ Medium effect size.")
+else:
+    print("→ Large effect size.")
+
+# Final interpretation statement
+print("\nFinal Conclusion:")
+if donepezil_p_value < 0.05:
+    print("Higher adherence to prescribed donepezil use is significantly associated with better preservation of verbal fluency over time, even after adjusting for baseline cognitive status, age, education, hypertension, hypercholesterolemia, and depression.")
+else:
+    print("No significant association was observed between donepezil adherence and verbal fluency after controlling for baseline cognitive factors and comorbidities.")
+
+# Optional: Save regression results for further review
+results_summary = {
+    'Model_R_squared': model_complete.score(X_donepezil, Y_filtered),
+    'Donepezil_Coefficient': donepezil_coef,
+    'Donepezil_p_value': donepezil_p_value,
+    'Cohen_d': d_effect,
+    'Sample_size': len(Y_filtered)
+}
+pd.DataFrame([results_summary]).to_csv('./working/regression_results_summary.csv', index=False)
+print("\nRegression results saved to ./working/regression_results_summary.csv")
+
+# Helper function to approximate p-value for a coefficient under normal approximation
+def calculate_p_value_for_coefficient(coef, se, n, df):
+    # Approximate t-statistic
+    t_stat = coef / se
+    # Degrees of freedom = n - number of predictors
+    dof = df
+    # P-value for two-tailed test
+    return 2 * (1 - stats.t.cdf(abs(t_stat), dof)) if dof > 0 else 1
+```
+
+💻 Execution Output:
+Error: Traceback (most recent call last):
+  File "/projectnb/vkolagrp/ketanss/adrd_agent_custom/DiscoADRD/DiscoAD_MAS/discovery_agent_pkg/code_executor.py", line 80, in execute_code
+    raise result_container['exception']
+  File "/projectnb/vkolagrp/ketanss/adrd_agent_custom/DiscoADRD/DiscoAD_MAS/discovery_agent_pkg/code_executor.py", line 56, in execute_code_thread
+    exec(code, exec_namespace, exec_namespace)
+  File "<string>", line 94, in <module>
+  File "/projectnb/vkolagrp/ketanss/.conda/envs/llms/lib/python3.10/site-packages/scipy/stats/_stats_py.py", line 5244, in spearmanr
+    a = np.column_stack((a, b))
+  File "/projectnb/vkolagrp/ketanss/.conda/envs/llms/lib/python3.10/site-packages/numpy/lib/_shape_base_impl.py", line 662, in column_stack
+    return _nx.concatenate(arrays, 1)
+ValueError: all the input array dimensions except for the concatenation axis must match exactly, but along dimension 0, the array at index 0 has size 26778 and the array at index 1 has size 11692
+
+ℹ️ Info: 🔍 Starting Critic round...
+⏳ Critic is working...
+ℹ️ Info: 🔄 Generating Critic response...

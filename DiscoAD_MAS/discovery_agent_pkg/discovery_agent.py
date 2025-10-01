@@ -256,7 +256,39 @@ class DiscoveryAgentSystem:
             if generate_hypotheses:
                 # Generate multiple hypotheses from sampled keywords
                 ui.print_info(f"{emoji.emojize('🔬')} Generating multiple hypotheses from sampled keywords...", verbose=verbose)
-                self.hypotheses = self.hypothesis_generator.generate(hypothesis_input)
+                
+                # Load dataset dictionary and CSV statistics if available
+                dataset_dictionary = None
+                csv_statistics = None
+                if hasattr(self.config, 'dataset_folder') and self.config.dataset_folder:
+                    try:
+                        # Auto-detect dataset files
+                        csv_path, json_path = self._detect_dataset_files(self.config.dataset_folder)
+                        # Load the JSON dictionary
+                        import json
+                        with open(json_path, 'r') as f:
+                            dataset_dictionary = json.load(f)
+                        
+                        # Load CSV to get real statistics using the reusable function
+                        csv_statistics = self.get_dataset_statistics(csv_path)
+                        
+                        ui.print_info(f"📚 Loaded dataset dictionary with {len(dataset_dictionary)} variables", verbose=verbose)
+                        if 'error' not in csv_statistics:
+                            ui.print_info(f"📊 CSV statistics: {csv_statistics['total_rows']:,} rows, {csv_statistics['total_cols']} cols, {csv_statistics['missing_percentage']}% missing", verbose=verbose)
+                        else:
+                            ui.print_warning(f"⚠️ Could not load CSV statistics: {csv_statistics['error']}", verbose=verbose)
+                    except Exception as e:
+                        ui.print_warning(f"⚠️ Could not load dataset dictionary or CSV: {str(e)}", verbose=verbose)
+                        dataset_dictionary = None
+                        csv_statistics = None
+                
+                # Generate hypotheses with dataset information
+                self.hypotheses = self.hypothesis_generator.generate(
+                    user_query=hypothesis_input,
+                    dataset_dictionary=dataset_dictionary,
+                    user_keywords=sampled_keywords,
+                    csv_statistics=csv_statistics
+                )
                 ui.print_hypothesis_list(self.hypotheses, generated=True, verbose=verbose)
             else:
                 # Use sampled keywords directly as a single hypothesis
@@ -321,15 +353,30 @@ class DiscoveryAgentSystem:
             # Run manual preprocessing for this specific hypothesis and iteration
             ui.print_info(f"{emoji.emojize('🔧')} Running manual preprocessing for hypothesis {idx}, iteration {outer_iteration}...", verbose=verbose)
             try:
-                preprocessing_success = self.run_manual_preprocessing_conversation(hypothesis, self.config.dataset_folder, previous_conversation_summary)
-                if not preprocessing_success:
+                preprocessing_result = self.run_manual_preprocessing_conversation(hypothesis, self.config.dataset_folder, previous_conversation_summary)
+                if not preprocessing_result.get('success', False):
                     ui.print_warning(f"{emoji.emojize('⚠️')} Manual preprocessing failed for hypothesis {idx}, iteration {outer_iteration}, but continuing with analysis...", verbose=verbose)
+                    # Set default values for failed preprocessing
+                    filtered_csv_statistics = None
+                    relevant_variables = None
+                else:
+                    # Extract information for enhanced planning
+                    filtered_csv_statistics = preprocessing_result.get('filtered_csv_statistics')
+                    relevant_variables = preprocessing_result.get('relevant_variables')
             except Exception as e:
                 ui.print_error(f"Manual preprocessing failed for hypothesis {idx}, iteration {outer_iteration}: {str(e)}", "manual_preprocessing", verbose=verbose)
+                # Set default values for failed preprocessing
+                filtered_csv_statistics = None
+                relevant_variables = None
                 # Continue with the loop even if preprocessing fails
             
             # Run conversation until approved
-            iteration_approved, iteration_turns_to_approve, iteration_turns_to_autoapprove = self._run_conversation_until_approved(verbose)
+            iteration_approved, iteration_turns_to_approve, iteration_turns_to_autoapprove = self._run_conversation_until_approved(
+                verbose, 
+                hypothesis, 
+                filtered_csv_statistics, 
+                relevant_variables
+            )
             
             # Track this iteration
             total_outer_iterations = outer_iteration
@@ -372,7 +419,7 @@ class DiscoveryAgentSystem:
         
         return approved
 
-    def _run_conversation_until_approved(self, verbose):
+    def _run_conversation_until_approved(self, verbose, hypothesis: str = None, filtered_csv_statistics: Dict[str, Any] = None, relevant_variables: Dict[str, str] = None):
         """Run the conversation loop until a hypothesis is approved or max attempts reached."""
         approved = False
         num_turns_to_approve = None
@@ -381,7 +428,7 @@ class DiscoveryAgentSystem:
         # Planning agent round (only on first turn)
         if self.conversation_manager.get_turns() == 0:
             ui.print_info("📋 Starting Planning Agent round...", verbose=verbose)
-            self._planning_agent_round(verbose=verbose)
+            self._planning_agent_round(hypothesis, filtered_csv_statistics, relevant_variables, verbose=verbose)
 
         while not approved:
             try:
@@ -625,16 +672,133 @@ class DiscoveryAgentSystem:
             verbose=verbose
         )
     
-    def _planning_agent_round(self, verbose=True):
-        """Handle Planning Agent round."""
-        self._execute_agent_round(
-            agent=self.planning_agent,
-            agent_name="Planning Agent",
-            conversation_manager=self.conversation_manager,
-            verbose=verbose
-        )
+    def _planning_agent_round(self, hypothesis: str = None, filtered_csv_statistics: Dict[str, Any] = None, relevant_variables: Dict[str, str] = None, verbose=True):
+        """Handle Planning Agent round with enhanced information."""
+        # Use enhanced planning agent if we have the additional information
+        if hypothesis and filtered_csv_statistics is not None and relevant_variables is not None:
+            from .models import create_enhanced_planning_agent
+            enhanced_planning_agent = create_enhanced_planning_agent(
+                self.model_client, 
+                hypothesis, 
+                filtered_csv_statistics, 
+                relevant_variables
+            )
+            self._execute_agent_round(
+                agent=enhanced_planning_agent,
+                agent_name="Enhanced Planning Agent",
+                conversation_manager=self.conversation_manager,
+                verbose=verbose
+            )
+        else:
+            # Fall back to regular planning agent
+            self._execute_agent_round(
+                agent=self.planning_agent,
+                agent_name="Planning Agent",
+                conversation_manager=self.conversation_manager,
+                verbose=verbose
+            )
     
-    def get_relevant_variables(self, hypothesis: str, json_path: str, previous_iteration_context: str = None) -> Dict[str, str]:
+    def get_dataset_statistics(self, csv_path: str) -> Dict[str, Any]:
+        """
+        Get comprehensive statistics about the dataset from the CSV file.
+        
+        Args:
+            csv_path (str): Path to the CSV file
+        
+        Returns:
+            Dict[str, Any]: Dictionary containing dataset statistics
+        """
+        import pandas as pd
+        import numpy as np
+        
+        try:
+            df = pd.read_csv(csv_path)
+            
+            # Basic dataset info
+            total_rows = len(df)
+            total_cols = len(df.columns)
+            missing_data = df.isnull().sum().sum()
+            missing_percentage = (missing_data / (total_rows * total_cols)) * 100
+            
+            # Data type counts
+            numeric_cols = df.select_dtypes(include=['number']).columns.tolist()
+            categorical_cols = df.select_dtypes(include=['object']).columns.tolist()
+            
+            # Comprehensive statistics for numeric columns
+            numeric_stats = {}
+            if len(numeric_cols) > 0:
+                numeric_df = df[numeric_cols]
+                numeric_stats = {
+                    'count': len(numeric_cols),
+                    'column_names': numeric_cols,
+                    'summary_stats': {}
+                }
+                
+                # Get comprehensive stats for all numeric columns
+                for col in numeric_cols:
+                    if not numeric_df[col].isnull().all():
+                        col_stats = numeric_df[col].describe()
+                        missing_pct = round((numeric_df[col].isnull().sum() / total_rows) * 100, 1)
+                        numeric_stats['summary_stats'][col] = {
+                            'mean': round(col_stats['mean'], 2) if not pd.isna(col_stats['mean']) else 'N/A',
+                            'std': round(col_stats['std'], 2) if not pd.isna(col_stats['std']) else 'N/A',
+                            'min': round(col_stats['min'], 2) if not pd.isna(col_stats['min']) else 'N/A',
+                            'max': round(col_stats['max'], 2) if not pd.isna(col_stats['max']) else 'N/A',
+                            'missing_pct': missing_pct
+                        }
+            
+            # Comprehensive info for categorical columns
+            categorical_stats = {}
+            if len(categorical_cols) > 0:
+                categorical_stats = {
+                    'count': len(categorical_cols),
+                    'column_names': categorical_cols,
+                    'summary_info': {}
+                }
+                
+                # Get comprehensive info for all categorical columns
+                for col in categorical_cols:
+                    if not df[col].isnull().all():
+                        unique_vals = df[col].nunique()
+                        most_common = df[col].mode().iloc[0] if len(df[col].mode()) > 0 else 'N/A'
+                        missing_pct = round((df[col].isnull().sum() / total_rows) * 100, 1)
+                        categorical_stats['summary_info'][col] = {
+                            'unique_values': unique_vals,
+                            'most_common': str(most_common),  # No truncation
+                            'missing_pct': missing_pct
+                        }
+            
+            return {
+                'total_rows': total_rows,
+                'total_cols': total_cols,
+                'missing_data': missing_data,
+                'missing_percentage': round(missing_percentage, 1),
+                'numeric_cols': len(numeric_cols),
+                'categorical_cols': len(categorical_cols),
+                'all_columns': df.columns.tolist(),
+                'numeric_column_names': numeric_cols,
+                'categorical_column_names': categorical_cols,
+                'numeric_stats': numeric_stats,
+                'categorical_stats': categorical_stats
+            }
+            
+        except Exception as e:
+            return {
+                'error': f"Could not load CSV for statistics: {str(e)}",
+                'total_rows': 0,
+                'total_cols': 0,
+                'missing_data': 0,
+                'missing_percentage': 0,
+                'numeric_cols': 0,
+                'categorical_cols': 0,
+                'all_columns': [],
+                'numeric_column_names': [],
+                'categorical_column_names': [],
+                'numeric_stats': {},
+                'categorical_stats': {}
+            }
+
+    def get_relevant_variables(self, hypothesis: str, json_path: str, csv_statistics: Dict[str, Any] = None, previous_iteration_context: str = None) -> Dict[str, str]:
         """
         Get all relevant variables for a hypothesis from a JSON dictionary.
         
@@ -645,6 +809,7 @@ class DiscoveryAgentSystem:
         Args:
             hypothesis (str): The hypothesis to analyze
             json_path (str): Path to the JSON dictionary file
+            csv_statistics (Dict[str, Any], optional): Statistics from the CSV file (from get_dataset_statistics)
             previous_iteration_context (str, optional): Context from previous outer loop iteration
         
         Returns:
@@ -652,9 +817,11 @@ class DiscoveryAgentSystem:
             
         Example:
             >>> agent = DiscoveryAgentSystem()
+            >>> csv_stats = agent.get_dataset_statistics("/path/to/data.csv")
             >>> variables = agent.get_relevant_variables(
             ...     "Cognitive decline is associated with age and education",
-            ...     "/path/to/dictionary.json"
+            ...     "/path/to/dictionary.json",
+            ...     csv_statistics=csv_stats
             ... )
             >>> print(variables)
             {'AGE': 'Age at visit', 'EDUC': 'Years of education', ...}
@@ -663,6 +830,36 @@ class DiscoveryAgentSystem:
         # Load the JSON dictionary
         with open(json_path, 'r') as f:
             dictionary = json.load(f)
+        
+        # Format CSV statistics if provided
+        csv_stats = ""
+        if csv_statistics:
+            if 'error' in csv_statistics:
+                csv_stats = f"\n\nNote: {csv_statistics['error']}\n"
+            else:
+                # Format comprehensive dataset overview
+                csv_stats = (
+                    f"\n\nDATASET OVERVIEW:\n"
+                    f"- Total rows: {csv_statistics['total_rows']:,}\n"
+                    f"- Total columns: {csv_statistics['total_cols']}\n"
+                    f"- Missing values: {csv_statistics['missing_data']:,} ({csv_statistics['missing_percentage']}%)\n"
+                    f"- Numeric columns: {csv_statistics['numeric_cols']}\n"
+                    f"- Categorical columns: {csv_statistics['categorical_cols']}\n"
+                )
+                
+                # Add all column names for reference
+                if csv_statistics.get('all_columns'):
+                    csv_stats += f"- All available columns: {', '.join(csv_statistics['all_columns'])}\n"
+                
+                # Add numeric column names if available
+                if csv_statistics.get('numeric_column_names'):
+                    csv_stats += f"- Numeric columns: {', '.join(csv_statistics['numeric_column_names'])}\n"
+                
+                # Add categorical column names if available
+                if csv_statistics.get('categorical_column_names'):
+                    csv_stats += f"- Categorical columns: {', '.join(csv_statistics['categorical_column_names'])}\n"
+        else:
+            csv_stats = "\n\nNote: No CSV statistics provided.\n"
         
         # Use the instance's model client
         model_client = self.model_client
@@ -688,17 +885,25 @@ class DiscoveryAgentSystem:
             )
         
         prompt = (
-            f"You are a data analysis expert. Given a hypothesis and a dictionary of data fields, identify the *smallest possible set* of keys that are strictly necessary for testing or analyzing this hypothesis. "
-            "Choose as few keys as possible to keep the experiment clear and focused. Avoid including extra or tangentially related variables."
+            f"You are a data analysis expert. Given a hypothesis and a dictionary of data fields, identify the most useful keys for testing or analyzing this hypothesis. "
+            "Include variables that could provide valuable insights, context, or analytical depth. Focus on selecting variables that would enhance the scientific rigor and comprehensiveness of the analysis."
             f"{context_section}"
             f'Hypothesis: "{hypothesis}"\n\n'
             f"Available data fields:\n"
-            f"{keys_text}\n\n"
-            "Please identify only the most essential keys for this hypothesis. For each key, provide:\n"
+            f"{keys_text}\n"
+            f"{csv_stats}\n"
+            f"DATASET OVERVIEW:\n"
+            f"- Total variables in dictionary: {len(dictionary)}\n"
+            f"- Variables will be filtered from the full dataset\n"
+            f"- Sample size and data quality will be assessed after filtering\n"
+            f"- Missing data patterns will be evaluated during analysis\n\n"
+            "IMPORTANT: Select a maximum of 50 variables to keep the analysis manageable and focused. "
+            "Prioritize the most essential and relevant variables for this specific hypothesis. "
+            "Please identify the most useful keys for this hypothesis. For each key, provide:\n"
             "1. The key name\n"
-            "2. A brief explanation of why it's strictly necessary\n\n"
+            "2. A brief explanation of why it would be valuable for this analysis\n\n"
             "Format your response as a numbered list with the key name and explanation.\n\n"
-            "At the end of your response, provide a Python list of only the variable names you identified, formatted as:\n"
+            "At the end of your response, provide a Python list of the variable names you identified (maximum 50), formatted as:\n"
             'variable_names = ["key1", "key2", "key3", ...]'
         )
 
@@ -894,11 +1099,14 @@ class DiscoveryAgentSystem:
             ui.print_info(f"📊 CSV file: {csv_path}")
             ui.print_info(f"📚 JSON dictionary: {json_path}")
             
+            # Get CSV statistics
+            csv_statistics = self.get_dataset_statistics(csv_path)
+            
             # Get relevant variables from dictionary
             ui.print_info(f"{emoji.emojize('🔍')} Analyzing hypothesis to find relevant variables...")
             if previous_iteration_context:
                 ui.print_info(f"{emoji.emojize('🔄')} Using previous iteration context to guide variable selection...")
-            relevant_variables = self.get_relevant_variables(hypothesis, json_path, previous_iteration_context)
+            relevant_variables = self.get_relevant_variables(hypothesis, json_path, csv_statistics, previous_iteration_context)
             
             if not relevant_variables:
                 ui.print_warning(f"{emoji.emojize('⚠️')} No relevant variables found. Using all available data.")
@@ -912,25 +1120,45 @@ class DiscoveryAgentSystem:
             # Filter CSV files using relevant variables
             filtered_csv_path, variable_datatypes = self.filter_csv_with_dictionary(folder_path, relevant_variables, hypothesis)
             
+            # Get statistics for the filtered dataset
+            filtered_csv_statistics = self.get_dataset_statistics(filtered_csv_path)
+            
             variable_datatypes_str = "\n".join([f"- {col}: {dtype}" for col, dtype in variable_datatypes.items()])
 
             summarized_messages = [{
                 "role": "System",
                 "content": (
                     f"Filtered data saved to: {filtered_csv_path}\n\n"
-                    f"Relevant variables for this hypothesis:\n{variable_datatypes_str}"
+                    f"Relevant variables for this hypothesis:\n{variable_datatypes_str}\n\n"
+                    f"Filtered dataset statistics:\n"
+                    f"- Total rows: {filtered_csv_statistics.get('total_rows', 'N/A'):,}\n"
+                    f"- Total columns: {filtered_csv_statistics.get('total_cols', 'N/A')}\n"
+                    f"- Missing values: {filtered_csv_statistics.get('missing_data', 'N/A'):,} ({filtered_csv_statistics.get('missing_percentage', 'N/A')}%)\n"
+                    f"- Numeric columns: {filtered_csv_statistics.get('numeric_cols', 'N/A')}\n"
+                    f"- Categorical columns: {filtered_csv_statistics.get('categorical_cols', 'N/A')}"
                 )
             }]
             self.conversation_manager.messages.extend(summarized_messages)
 
             ui.print_info(f"{emoji.emojize('✅')} Manual preprocessing completed successfully!")
             ui.print_info(f"📊 Filtered data saved to: {filtered_csv_path}")
-            return True
+            
+            # Return the information needed for enhanced planning
+            return {
+                'success': True,
+                'hypothesis': hypothesis,
+                'filtered_csv_statistics': filtered_csv_statistics,
+                'relevant_variables': relevant_variables,
+                'filtered_csv_path': filtered_csv_path
+            }
             
         except Exception as e:
             error_msg = f"Manual preprocessing failed: {str(e)}"
             ui.print_error(error_msg, "manual_preprocessing")
-            return False
+            return {
+                'success': False,
+                'error': error_msg
+            }
 
     def _detect_dataset_files(self, folder_path: str) -> tuple:
         """
