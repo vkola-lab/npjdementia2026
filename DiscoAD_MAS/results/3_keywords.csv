@@ -1,0 +1,413 @@
+run_number,keywords,num_keywords_used,hypothesis_index,hypothesis_text,hypothesis_approved,num_turns_to_approve,num_turns_to_autoapprove,timestamp
+1,"obesity, inflammation, CDR",3,1,Higher obesity levels are associated with higher CDR scores.,False,,1,2025-09-21 03:24:17
+1,"obesity, inflammation, CDR",3,2,Increased inflammatory markers are linked to higher CDR scores.,False,,1,2025-09-21 03:25:15
+1,"obesity, inflammation, CDR",3,3,Obesity is positively associated with inflammation in individuals with dementia.,False,,1,2025-09-21 03:25:59
+1,"obesity, inflammation, CDR",3,4,Individuals with high obesity and high inflammation have higher CDR scores than those with low obesity and low inflammation.,True,1,1,2025-09-21 03:26:54
+2,"galantamine, brain volume, episodic memory",3,1,Galantamine use is associated with greater hippocampal volume.,False,,1,2025-09-21 03:27:41
+2,"galantamine, brain volume, episodic memory",3,2,Lower baseline hippocampal volume is associated with poorer episodic memory performance.,False,,1,2025-09-21 03:28:20
+2,"galantamine, brain volume, episodic memory",3,3,Individuals taking galantamine show improved episodic memory scores compared to non-users.,False,,1,2025-09-21 03:28:59
+2,"galantamine, brain volume, episodic memory",3,4,Hippocampal volume is positively associated with episodic memory performance.,False,,1,2025-09-21 03:29:37
+3,"Boston naming, heart disease, rivastigmine",3,1,Individuals with heart disease perform worse on the Boston Naming Test than those without heart disease.,False,,1,2025-09-21 03:30:27
+3,"Boston naming, heart disease, rivastigmine",3,2,Rivastigmine treatment is associated with improved Boston Naming Test scores in patients with Alzheimer’s disease.,False,,1,2025-09-21 03:31:21
+3,"Boston naming, heart disease, rivastigmine",3,3,People with both heart disease and Alzheimer’s disease show lower Boston Naming Test scores compared to those with only Alzheimer’s disease.,False,,1,2025-09-21 03:32:10
+3,"Boston naming, heart disease, rivastigmine",3,4,The severity of heart disease correlates with poorer Boston Naming Test performance.,False,,1,2025-09-21 03:33:06
+4,"alcohol abuse, MRI, MCI",3,1,Alcohol abuse is associated with reduced hippocampal volume measured by MRI in individuals with mild cognitive impairment (MCI).,False,,1,2025-09-21 03:33:45
+4,"alcohol abuse, MRI, MCI",3,2,Individuals with MCI who have a history of alcohol abuse show greater white matter hyperintensities on MRI compared to those without alcohol abuse.,False,,1,2025-09-21 03:34:24
+4,"alcohol abuse, MRI, MCI",3,3,MRI-measured cortical thinning in the prefrontal cortex is more severe in MCI patients with alcohol abuse than in those without alcohol abuse.,False,,1,2025-09-21 03:35:00
+4,"alcohol abuse, MRI, MCI",3,4,Alcohol abuse is negatively associated with overall brain volume as measured by MRI in people with MCI.,True,1,1,2025-09-21 03:35:31
+5,"benzodiazepines, obesity, APOE",3,1,Benzodiazepine use is associated with increased body mass index (BMI).,False,,1,2025-09-21 03:36:15
+5,"benzodiazepines, obesity, APOE",3,2,Individuals with the APOE ε4 allele have higher BMI than those without the APOE ε4 allele.,False,,1,2025-09-21 03:36:58
+5,"benzodiazepines, obesity, APOE",3,3,Obesity is associated with greater benzodiazepine prescription frequency.,False,,1,2025-09-21 03:37:48
+5,"benzodiazepines, obesity, APOE",3,4,APOE genotype moderates the relationship between obesity and benzodiazepine use.,True,1,1,2025-09-21 03:38:39
+5,"benzodiazepines, obesity, APOE",3,5,People with both obesity and the APOE ε4 allele have higher rates of benzodiazepine use compared to those without either factor.,False,,1,2025-09-21 03:39:44
+6,"hypertension, PET, anxiety",3,1,Hypertension is associated with reduced hippocampal volume measured by PET.,False,,1,2025-09-21 03:40:18
+6,"hypertension, PET, anxiety",3,2,Anxiety is positively associated with amyloid-beta deposition detected by PET.,True,1,1,2025-09-21 03:40:49
+6,"hypertension, PET, anxiety",3,3,Individuals with hypertension show higher levels of tau protein in the brain as measured by PET compared to those without hypertension.,False,,1,2025-09-21 03:41:21
+6,"hypertension, PET, anxiety",3,4,Anxiety is negatively correlated with regional cerebral blood flow observed via PET in older adults.,False,,1,2025-09-21 03:41:58
+6,"hypertension, PET, anxiety",3,5,Patients with both hypertension and anxiety exhibit greater amyloid accumulation on PET scans than those with only one condition.,False,,1,2025-09-21 03:42:30
+7,"smoking, verbal fluency, MCI",3,1,Current smoking is negatively associated with verbal fluency in individuals with mild cognitive impairment.,False,,1,2025-09-21 03:43:04
+7,"smoking, verbal fluency, MCI",3,2,Former smokers have better verbal fluency than current smokers among people with MCI.,False,,1,2025-09-21 03:43:44
+7,"smoking, verbal fluency, MCI",3,3,Non-smokers show higher verbal fluency scores compared to smokers with MCI.,False,,1,2025-09-21 03:44:25
+7,"smoking, verbal fluency, MCI",3,4,Smoking status is independently linked to verbal fluency performance in MCI patients.,False,,1,2025-09-21 03:45:11
+8,"memory, cholinesterase inhibitors, sex",3,1,Cholinesterase inhibitor use is associated with improved memory in individuals with Alzheimer’s disease.,True,1,1,2025-09-21 03:46:00
+8,"memory, cholinesterase inhibitors, sex",3,2,Women show greater memory improvement compared to men when treated with cholinesterase inhibitors.,False,,1,2025-09-21 03:46:33
+8,"memory, cholinesterase inhibitors, sex",3,3,Men have worse memory outcomes than women when receiving cholinesterase inhibitors.,False,,1,2025-09-21 03:47:12
+8,"memory, cholinesterase inhibitors, sex",3,4,Memory performance increases with cholinesterase inhibitor treatment across both sexes.,False,,1,2025-09-21 03:47:51
+8,"memory, cholinesterase inhibitors, sex",3,5,Sex modifies the effect of cholinesterase inhibitors on memory function.,False,,1,2025-09-21 03:48:36
+9,"tau, diet, cerebrospinal fluid",3,1,Higher tau levels in cerebrospinal fluid are associated with poorer dietary quality.,True,1,1,2025-09-21 03:49:44
+9,"tau, diet, cerebrospinal fluid",3,2,A higher intake of omega-3 fatty acids is linked to lower tau levels in cerebrospinal fluid.,False,,1,2025-09-21 03:50:38
+9,"tau, diet, cerebrospinal fluid",3,3,Low dietary fiber intake is associated with elevated tau levels in cerebrospinal fluid.,True,1,1,2025-09-21 03:51:22
+9,"tau, diet, cerebrospinal fluid",3,4,Individuals with high tau levels in cerebrospinal fluid have lower adherence to a Mediterranean-style diet.,True,1,1,2025-09-21 03:52:04
+10,"obesity, planning, sleep disorders",3,1,Obesity is negatively associated with executive planning ability.,False,,1,2025-09-21 03:52:40
+10,"obesity, planning, sleep disorders",3,2,Sleep disorders are negatively associated with planning performance.,True,1,1,2025-09-21 03:53:18
+10,"obesity, planning, sleep disorders",3,3,Individuals with obesity and sleep disorders show worse planning skills than those without either condition.,False,,1,2025-09-21 03:53:58
+11,"MRI, antihypertensives, dementia",3,1,Patients taking antihypertensives have less brain atrophy on MRI compared to those not taking antihypertensives.,True,1,1,2025-09-21 03:54:49
+11,"MRI, antihypertensives, dementia",3,2,Longer duration of antihypertensive use is associated with reduced hippocampal volume on MRI.,True,1,1,2025-09-21 03:55:24
+11,"MRI, antihypertensives, dementia",3,3,Individuals with dementia show greater white matter hyperintensity burden on MRI compared to non-dementia individuals who take antihypertensives.,False,,1,2025-09-21 03:56:07
+11,"MRI, antihypertensives, dementia",3,4,Antihypertensive use is associated with lower risk of developing dementia as shown by MRI-detected structural changes over time.,False,,1,2025-09-21 03:57:17
+12,"processing speed, cardiac arrest, sex",3,1,Processing speed is slower in individuals who have had a cardiac arrest.,False,,1,2025-09-21 03:58:05
+12,"processing speed, cardiac arrest, sex",3,2,Women have faster processing speed than men.,False,,1,2025-09-21 03:58:42
+12,"processing speed, cardiac arrest, sex",3,3,Individuals who have experienced a cardiac arrest have slower processing speed compared to those who have not.,False,,1,2025-09-21 03:59:23
+12,"processing speed, cardiac arrest, sex",3,4,"Sex moderates the effect of cardiac arrest on processing speed, such that women show less decline in processing speed after cardiac arrest than men.",False,,1,2025-09-21 04:00:06
+13,"Stroop, diabetes, amyloid",3,1,Individuals with diabetes show greater Stroop interference times than non-diabetic individuals.,False,,1,2025-09-21 04:00:50
+13,"Stroop, diabetes, amyloid",3,2,Higher levels of cerebrospinal fluid amyloid-beta are associated with increased Stroop interference times.,True,1,1,2025-09-21 04:01:45
+13,"Stroop, diabetes, amyloid",3,3,Diabetes is associated with worse Stroop color-word compatibility performance in older adults.,False,,1,2025-09-21 04:02:35
+13,"Stroop, diabetes, amyloid",3,4,Amyloid burden is positively correlated with Stroop task difficulty in people with type 2 diabetes.,False,,1,2025-09-21 04:03:17
+14,"mixed dementia, MRI, tau",3,1,Mixed dementia is associated with greater hippocampal volume reduction on MRI.,False,,1,2025-09-21 04:04:07
+14,"mixed dementia, MRI, tau",3,2,Increased tau burden is correlated with reduced cortical thickness in mixed dementia patients measured by MRI.,False,,1,2025-09-21 04:04:42
+14,"mixed dementia, MRI, tau",3,3,Patients with mixed dementia show higher tau PET signal intensity compared to non-dementia controls on MRI-derived structural measures.,False,,1,2025-09-21 04:05:34
+14,"mixed dementia, MRI, tau",3,4,MRI-measured white matter hyperintensities are positively associated with tau levels in mixed dementia.,True,1,1,2025-09-21 04:06:18
+15,"inhibition, diet, clock drawing",3,1,Diet high in antioxidants is associated with improved inhibition during clock drawing tasks.,True,1,1,2025-09-21 04:06:52
+15,"inhibition, diet, clock drawing",3,2,Poor dietary intake of omega-3 fatty acids is linked to reduced inhibition in clock drawing.,True,1,1,2025-09-21 04:07:32
+15,"inhibition, diet, clock drawing",3,3,Individuals with better inhibition perform more accurately in clock drawing tasks when consuming a balanced diet.,True,1,1,2025-09-21 04:08:24
+15,"inhibition, diet, clock drawing",3,4,Clock drawing inhibition scores are negatively correlated with consumption of processed foods.,True,1,1,2025-09-21 04:09:23
+15,"inhibition, diet, clock drawing",3,5,High intake of fruits and vegetables is positively associated with inhibition in clock drawing.,True,1,1,2025-09-21 04:09:59
+16,"genetics, attention, age",3,1,Genetic variants linked to Alzheimer’s disease are associated with poorer attention performance.,False,,1,2025-09-21 04:10:47
+16,"genetics, attention, age",3,2,"Attention declines with increasing age, independent of genetic factors.",False,,1,2025-09-21 04:11:37
+16,"genetics, attention, age",3,3,Older individuals with high-risk genetic profiles show greater attention deficits compared to those without such profiles.,False,,1,2025-09-21 04:12:18
+17,"cholinesterase inhibitors, CDR, PET",3,1,Cholinesterase inhibitor use is associated with lower CDR scores.,False,,1,2025-09-21 04:12:47
+17,"cholinesterase inhibitors, CDR, PET",3,2,Patients with higher CDR scores show reduced PET signal in the hippocampus.,True,1,1,2025-09-21 04:13:28
+17,"cholinesterase inhibitors, CDR, PET",3,3,Cholinesterase inhibitor use is linked to increased PET signal in the basal ganglia.,True,1,1,2025-09-21 04:14:48
+17,"cholinesterase inhibitors, CDR, PET",3,4,CDR score is negatively correlated with PET-measured amyloid burden.,True,1,1,2025-09-21 04:15:25
+17,"cholinesterase inhibitors, CDR, PET",3,5,Longer duration of cholinesterase inhibitor use is associated with slower decline in CDR scores.,True,1,1,2025-09-21 04:16:08
+18,"antipsychotics, verbal fluency, visuospatial",3,1,Patients taking antipsychotics show reduced verbal fluency compared to those not taking antipsychotics.,False,,1,2025-09-21 04:16:57
+18,"antipsychotics, verbal fluency, visuospatial",3,2,Visuospatial abilities are worse in individuals using antipsychotics than in those not using them.,True,1,1,2025-09-21 04:17:45
+18,"antipsychotics, verbal fluency, visuospatial",3,3,Antipsychotic use is negatively associated with verbal fluency scores.,True,1,1,2025-09-21 04:18:26
+18,"antipsychotics, verbal fluency, visuospatial",3,4,Visuospatial performance declines with increased duration of antipsychotic use.,True,1,1,2025-09-21 04:19:32
+19,"episodic memory, ethnicity, APOE",3,1,Ethnicity is associated with episodic memory performance.,False,,1,2025-09-21 04:20:28
+19,"episodic memory, ethnicity, APOE",3,2,Carriers of the APOE ε4 allele have poorer episodic memory compared to non-carriers.,False,,1,2025-09-21 04:21:14
+19,"episodic memory, ethnicity, APOE",3,3,"Individuals of African ancestry show worse episodic memory than individuals of European ancestry, after adjusting for age and education.",False,,1,2025-09-21 04:21:52
+19,"episodic memory, ethnicity, APOE",3,4,APOE genotype interacts with ethnicity to influence episodic memory performance.,False,,1,2025-09-21 04:22:48
+20,"MoCA, mixed dementia, memory",3,1,moCA score is lower in individuals with mixed dementia compared to those without mixed dementia.,False,,1,2025-09-21 04:23:27
+20,"MoCA, mixed dementia, memory",3,2,mixed dementia is associated with worse memory performance compared to non-dementia controls.,True,1,1,2025-09-21 04:24:16
+20,"MoCA, mixed dementia, memory",3,3,lower moCA scores are linked to poorer memory function in people with mixed dementia.,False,,1,2025-09-21 04:24:51
+21,"mild cognitive impairment, executive function, APOE",3,1,Individuals with mild cognitive impairment have poorer executive function than cognitively normal individuals.,True,1,1,2025-09-21 04:25:31
+21,"mild cognitive impairment, executive function, APOE",3,2,The APOE ε4 allele is associated with worse executive function in people with mild cognitive impairment.,True,1,1,2025-09-21 04:26:05
+21,"mild cognitive impairment, executive function, APOE",3,3,People with mild cognitive impairment and the APOE ε4 allele show greater decline in executive function over time compared to those without the allele.,True,1,1,2025-09-21 04:26:57
+21,"mild cognitive impairment, executive function, APOE",3,4,Executive function is negatively correlated with APOE ε4 carrier status in individuals with mild cognitive impairment.,False,,1,2025-09-21 04:27:41
+22,"neurofibrillary tangles, NSAIDs, heart valve replacement",3,1,The presence of neurofibrillary tangles is associated with increased risk of Alzheimer’s disease.,True,1,1,2025-09-21 04:28:33
+22,"neurofibrillary tangles, NSAIDs, heart valve replacement",3,2,Long-term use of NSAIDs is associated with reduced incidence of Alzheimer’s disease.,False,,1,2025-09-21 04:29:32
+22,"neurofibrillary tangles, NSAIDs, heart valve replacement",3,3,Individuals who undergo heart valve replacement have a higher prevalence of neurofibrillary tangles compared to those without such surgery.,True,1,1,2025-09-21 04:30:33
+22,"neurofibrillary tangles, NSAIDs, heart valve replacement",3,4,NSAID use is inversely associated with the accumulation of neurofibrillary tangles in brain tissue.,False,,1,2025-09-21 04:31:25
+22,"neurofibrillary tangles, NSAIDs, heart valve replacement",3,5,Heart valve replacement surgery is independently associated with an increased risk of developing dementia.,True,1,1,2025-09-21 04:32:18
+23,"Wisconsin card sort, vascular dementia, MMSE",3,1,Patients with vascular dementia score lower on the MMSE than patients without vascular dementia.,True,1,1,2025-09-21 04:33:06
+23,"Wisconsin card sort, vascular dementia, MMSE",3,2,Performance on the Wisconsin Card Sort Test is worse in individuals with vascular dementia compared to those without.,False,,1,2025-09-21 04:33:52
+23,"Wisconsin card sort, vascular dementia, MMSE",3,3,MMSE scores are negatively associated with worsening performance on the Wisconsin Card Sort Test in people with vascular dementia.,False,,1,2025-09-21 04:34:53
+23,"Wisconsin card sort, vascular dementia, MMSE",3,4,Individuals with vascular dementia show reduced ability to perform abstract reasoning tasks as measured by the Wisconsin Card Sort Test.,False,,1,2025-09-21 04:35:38
+24,"obesity, inflammation, gender",3,1,Obesity is positively associated with markers of inflammation.,False,,1,2025-09-21 04:36:20
+24,"obesity, inflammation, gender",3,2,Women with obesity show higher levels of inflammatory markers than men with obesity.,False,,1,2025-09-21 04:37:21
+24,"obesity, inflammation, gender",3,3,Men with obesity have higher levels of inflammation than women with obesity.,False,,1,2025-09-21 04:37:55
+24,"obesity, inflammation, gender",3,4,Gender moderates the relationship between obesity and inflammation.,False,,1,2025-09-21 04:38:32
+24,"obesity, inflammation, gender",3,5,Obesity is associated with increased C-reactive protein levels regardless of gender.,False,,1,2025-09-21 04:39:12
+25,"PET, exercise, ethnicity",3,1,PET signal intensity is higher in individuals who engage in regular exercise.,True,1,1,2025-09-21 04:40:07
+25,"PET, exercise, ethnicity",3,2,Ethnicity is associated with baseline PET signal intensity in the brain.,False,,1,2025-09-21 04:41:03
+25,"PET, exercise, ethnicity",3,3,Regular physical exercise is associated with reduced PET signal changes over time by ethnicity.,False,,1,2025-09-21 04:42:20
+25,"PET, exercise, ethnicity",3,4,Individuals of certain ethnicities show greater PET signal reduction after exercise intervention.,True,1,1,2025-09-21 04:43:01
+26,"memory, vascular dementia, tower of London",3,1,Performance on the Tower of London is negatively associated with age in individuals with vascular dementia.,False,,1,2025-09-21 04:43:30
+26,"memory, vascular dementia, tower of London",3,2,Individuals with vascular dementia show poorer Tower of London performance compared to those without vascular dementia.,False,,1,2025-09-21 04:44:23
+26,"memory, vascular dementia, tower of London",3,3,Memory impairment is associated with worse performance on the Tower of London in patients with vascular dementia.,False,,1,2025-09-21 04:45:01
+26,"memory, vascular dementia, tower of London",3,4,Patients with vascular dementia and memory deficits perform worse on the Tower of London than those with vascular dementia and intact memory.,False,,1,2025-09-21 04:45:31
+27,"CSF, cognitive flexibility, executive function",3,1,Lower CSF Aβ42 levels are associated with reduced cognitive flexibility.,False,,1,2025-09-21 04:46:16
+27,"CSF, cognitive flexibility, executive function",3,2,Higher CSF p-tau levels are associated with impaired executive function.,False,,1,2025-09-21 04:47:03
+27,"CSF, cognitive flexibility, executive function",3,3,CSF Aβ42 concentrations correlate with performance on cognitive flexibility tasks.,False,,1,2025-09-21 04:48:00
+27,"CSF, cognitive flexibility, executive function",3,4,Individuals with low CSF t-tau show better executive function scores.,False,,1,2025-09-21 04:48:47
+27,"CSF, cognitive flexibility, executive function",3,5,Cognitive flexibility scores decline as CSF Aβ42 levels decrease.,False,,1,2025-09-21 04:49:50
+28,"race, genetics, clock drawing",3,1,Race is associated with differences in clock drawing performance.,True,1,1,2025-09-21 04:50:39
+28,"race, genetics, clock drawing",3,2,Genetic variants linked to Alzheimer’s disease are associated with poorer clock drawing scores.,False,,1,2025-09-21 04:51:47
+28,"race, genetics, clock drawing",3,3,Individuals of certain racial groups show distinct patterns in clock drawing accuracy compared to others.,False,,1,2025-09-21 04:52:38
+28,"race, genetics, clock drawing",3,4,Clock drawing performance differs by genetic risk score for Alzheimer’s disease.,False,,1,2025-09-21 04:53:26
+29,"neurofibrillary tangles, brain volume, diet",3,1,The presence of neurofibrillary tangles is negatively associated with overall brain volume.,True,1,1,2025-09-21 04:54:17
+29,"neurofibrillary tangles, brain volume, diet",3,2,A higher intake of antioxidants in the diet is associated with greater brain volume.,True,1,1,2025-09-21 04:54:50
+29,"neurofibrillary tangles, brain volume, diet",3,3,Individuals with high levels of neurofibrillary tangles have smaller hippocampal volumes compared to those without tangles.,True,1,1,2025-09-21 04:55:35
+29,"neurofibrillary tangles, brain volume, diet",3,4,Adherence to a Mediterranean-style diet is positively associated with preserved brain volume.,True,1,1,2025-09-21 04:56:15
+29,"neurofibrillary tangles, brain volume, diet",3,5,Dietary fiber intake is negatively associated with the density of neurofibrillary tangles.,True,1,1,2025-09-21 04:56:51
+30,"APOE, Parkinson's disease dementia, processing speed",3,1,APOE ε4 allele is associated with slower processing speed in individuals with Parkinson's disease dementia.,True,1,1,2025-09-21 04:57:48
+30,"APOE, Parkinson's disease dementia, processing speed",3,2,Individuals with Parkinson's disease dementia and the APOE ε4 allele show worse processing speed than those without the ε4 allele.,False,,1,2025-09-21 04:58:47
+30,"APOE, Parkinson's disease dementia, processing speed",3,3,Processing speed is negatively associated with APOE genotype in people with Parkinson's disease dementia.,False,,1,2025-09-21 04:59:41
+30,"APOE, Parkinson's disease dementia, processing speed",3,4,People with Parkinson's disease dementia who do not carry the APOE ε4 allele have faster processing speed than those who do.,False,,1,2025-09-21 05:00:39
+31,"processing speed, metabolic syndrome, mixed dementia",3,1,Processing speed is slower in individuals with metabolic syndrome compared to those without.,False,,1,2025-09-21 05:01:25
+31,"processing speed, metabolic syndrome, mixed dementia",3,2,Metabolic syndrome is associated with worse processing speed in people with mixed dementia.,True,1,1,2025-09-21 05:02:19
+31,"processing speed, metabolic syndrome, mixed dementia",3,3,Individuals with mixed dementia and metabolic syndrome have significantly slower processing speed than those with mixed dementia alone.,False,,1,2025-09-21 05:03:08
+31,"processing speed, metabolic syndrome, mixed dementia",3,4,Processing speed declines with the presence of metabolic syndrome across all dementia stages.,False,,1,2025-09-21 05:03:59
+32,"CSF, cerebrospinal fluid, obesity",3,1,Higher body mass index (BMI) is associated with increased CSF tau protein levels.,False,,1,2025-09-21 05:04:49
+32,"CSF, cerebrospinal fluid, obesity",3,2,Obesity is associated with elevated CSF beta-amyloid 42 levels.,False,,1,2025-09-21 05:05:48
+32,"CSF, cerebrospinal fluid, obesity",3,3,Increased BMI is linked to lower CSF amyloid-beta 42 concentrations.,False,,1,2025-09-21 05:06:48
+32,"CSF, cerebrospinal fluid, obesity",3,4,CSF Aβ42 levels decrease with increasing obesity measured by BMI.,False,,1,2025-09-21 05:07:24
+33,"MCI, sex, Stroop",3,1,MCI individuals who are female perform worse on the Stroop task than male MCI individuals.,False,,1,2025-09-21 05:08:10
+33,"MCI, sex, Stroop",3,2,Female sex is associated with slower Stroop color naming times in MCI.,False,,1,2025-09-21 05:09:29
+33,"MCI, sex, Stroop",3,3,Male sex is associated with better Stroop interference scores compared to female sex in MCI.,False,,1,2025-09-21 05:10:36
+34,"executive function, connectivity, metabolic syndrome",3,1,Poor executive function is associated with reduced brain connectivity.,True,1,1,2025-09-21 05:11:32
+34,"executive function, connectivity, metabolic syndrome",3,2,Individuals with metabolic syndrome show lower executive function scores.,False,,1,2025-09-21 05:12:30
+34,"executive function, connectivity, metabolic syndrome",3,3,Metabolic syndrome is negatively associated with functional connectivity in executive control networks.,False,,1,2025-09-21 05:13:19
+34,"executive function, connectivity, metabolic syndrome",3,4,Stronger connectivity in executive function-related brain regions is linked to better executive function.,False,,1,2025-09-21 05:14:04
+35,"education, congestive heart failure, cardiac arrest",3,1,Individuals with higher education are less likely to experience congestive heart failure.,False,,1,2025-09-21 05:14:44
+35,"education, congestive heart failure, cardiac arrest",3,2,People who have had a cardiac arrest are less educated than those without a cardiac arrest.,False,,1,2025-09-21 05:15:31
+35,"education, congestive heart failure, cardiac arrest",3,3,Congestive heart failure is more common in individuals with lower levels of education.,False,,1,2025-09-21 05:16:15
+35,"education, congestive heart failure, cardiac arrest",3,4,Lower educational attainment is associated with an increased risk of cardiac arrest.,False,,1,2025-09-21 05:17:04
+36,"cognitive decline, donepezil, trail making",3,1,Donepezil is associated with slower cognitive decline in patients with Alzheimer’s disease.,False,,1,2025-09-21 05:18:12
+36,"cognitive decline, donepezil, trail making",3,2,Patients who complete the Trail Making Test Part B faster show less cognitive decline over time.,True,1,1,2025-09-21 05:18:58
+36,"cognitive decline, donepezil, trail making",3,3,Individuals taking donepezil show improved Trail Making Test performance compared to those not taking donepezil.,False,,1,2025-09-21 05:19:52
+36,"cognitive decline, donepezil, trail making",3,4,Cognitive decline is greater in individuals with worse initial Trail Making Test scores.,True,1,1,2025-09-21 05:20:40
+37,"memory, planning, metabolic syndrome",3,1,Metabolic syndrome is negatively associated with memory.,False,,1,2025-09-21 05:21:33
+37,"memory, planning, metabolic syndrome",3,2,Metabolic syndrome is negatively associated with planning ability.,True,1,1,2025-09-21 05:22:28
+37,"memory, planning, metabolic syndrome",3,3,Individuals with metabolic syndrome have worse memory scores than those without metabolic syndrome.,True,1,1,2025-09-21 05:23:25
+37,"memory, planning, metabolic syndrome",3,4,Individuals with metabolic syndrome have poorer planning scores than those without metabolic syndrome.,True,1,1,2025-09-21 05:24:35
+38,"brain volume, ethnicity, age",3,1,Brain volume is negatively associated with age.,False,,1,2025-09-21 05:25:29
+38,"brain volume, ethnicity, age",3,2,Ethnicity is associated with differences in brain volume.,True,1,1,2025-09-21 05:26:01
+38,"brain volume, ethnicity, age",3,3,Older individuals from certain ethnic groups have smaller brain volumes than younger individuals from the same group.,True,1,1,2025-09-21 05:26:43
+39,"MoCA, frontotemporal dementia, amyloid",3,1,moCA score is lower in individuals with frontotemporal dementia compared to healthy controls.,False,,1,2025-09-21 05:27:22
+39,"MoCA, frontotemporal dementia, amyloid",3,2,Presence of amyloid positivity is associated with lower moCA scores in individuals with frontotemporal dementia.,False,,1,2025-09-21 05:28:00
+39,"MoCA, frontotemporal dementia, amyloid",3,3,Individuals with frontotemporal dementia and amyloid positivity have significantly lower moCA scores than those with frontotemporal dementia and no amyloid positivity.,False,,1,2025-09-21 05:28:39
+40,"cognitive flexibility, memory, heart attack",3,1,Cognitive flexibility is negatively associated with memory decline after a heart attack.,True,1,1,2025-09-21 05:29:27
+40,"cognitive flexibility, memory, heart attack",3,2,Individuals who have had a heart attack show reduced cognitive flexibility compared to those without a heart attack.,True,1,1,2025-09-21 05:30:13
+40,"cognitive flexibility, memory, heart attack",3,3,Memory performance is worse in individuals who have experienced a heart attack and low cognitive flexibility.,True,1,1,2025-09-21 05:30:55
+40,"cognitive flexibility, memory, heart attack",3,4,Heart attack history is associated with decreased cognitive flexibility.,False,,1,2025-09-21 05:31:34
+40,"cognitive flexibility, memory, heart attack",3,5,Cognitive flexibility is independently linked to memory retention in individuals post-heart attack.,False,,1,2025-09-21 05:32:23
+41,"semantic memory, sleep disorders, dementia",3,1,Sleep disorders are negatively associated with semantic memory in individuals with dementia.,True,1,1,2025-09-21 05:33:24
+41,"semantic memory, sleep disorders, dementia",3,2,Individuals with dementia who have sleep disorders show worse semantic memory performance than those without sleep disorders.,False,,1,2025-09-21 05:34:10
+41,"semantic memory, sleep disorders, dementia",3,3,Semantic memory declines more rapidly in people with dementia who also have sleep disorders compared to those without sleep disorders.,False,,1,2025-09-21 05:35:01
+42,"Parkinson's disease dementia, heart disease, smoking",3,1,Individuals with Parkinson’s disease dementia have a higher prevalence of heart disease than those without Parkinson’s disease dementia.,False,,1,2025-09-21 05:35:54
+42,"Parkinson's disease dementia, heart disease, smoking",3,2,Current smokers have a higher risk of developing Parkinson’s disease dementia compared to non-smokers.,False,,1,2025-09-21 05:36:45
+42,"Parkinson's disease dementia, heart disease, smoking",3,3,People with both heart disease and a history of smoking are more likely to develop Parkinson’s disease dementia than those without either condition.,False,,1,2025-09-21 05:37:18
+42,"Parkinson's disease dementia, heart disease, smoking",3,4,Smoking is negatively associated with cognitive outcomes in individuals diagnosed with Parkinson’s disease dementia.,False,,1,2025-09-21 05:38:10
+43,"vascular dementia, physical activity, ethnicity",3,1,Physical activity is positively associated with cognitive function in individuals with vascular dementia.,False,,1,2025-09-21 05:38:48
+43,"vascular dementia, physical activity, ethnicity",3,2,Ethnicity is associated with the prevalence of vascular dementia.,False,,1,2025-09-21 05:39:35
+43,"vascular dementia, physical activity, ethnicity",3,3,Individuals of certain ethnic groups exhibit higher levels of physical activity compared to others.,True,1,1,2025-09-21 05:40:19
+43,"vascular dementia, physical activity, ethnicity",3,4,Higher physical activity levels are linked to slower progression of vascular dementia across ethnic groups.,True,1,1,2025-09-21 05:41:43
+43,"vascular dementia, physical activity, ethnicity",3,5,Ethnicity moderates the association between physical activity and cognitive outcomes in vascular dementia.,False,,1,2025-09-21 05:42:29
+44,"cholinesterase inhibitors, obesity, antihypertensives",3,1,Cholinesterase inhibitor use is associated with lower BMI in patients with Alzheimer’s disease.,False,,1,2025-09-21 05:43:07
+44,"cholinesterase inhibitors, obesity, antihypertensives",3,2,Obesity is associated with reduced likelihood of receiving cholinesterase inhibitor treatment.,False,,1,2025-09-21 05:44:14
+44,"cholinesterase inhibitors, obesity, antihypertensives",3,3,Patients on antihypertensive medication have lower rates of obesity compared to those not on such medications.,False,,1,2025-09-21 05:45:07
+44,"cholinesterase inhibitors, obesity, antihypertensives",3,4,Use of antihypertensives is associated with better cognitive outcomes in obese individuals.,False,,1,2025-09-21 05:46:02
+44,"cholinesterase inhibitors, obesity, antihypertensives",3,5,Obesity is inversely related to the frequency of cholinesterase inhibitor prescriptions.,False,,1,2025-09-21 05:46:36
+45,"inflammation, APOE, cerebrospinal fluid",3,1,Higher levels of inflammation in cerebrospinal fluid are associated with increased APOE ε4 allele carriage.,False,,1,2025-09-21 05:47:44
+45,"inflammation, APOE, cerebrospinal fluid",3,2,Cerebrospinal fluid inflammation markers are positively correlated with APOE genotype (ε4 vs. non-ε4).,False,,1,2025-09-21 05:48:41
+45,"inflammation, APOE, cerebrospinal fluid",3,3,Individuals with the APOE ε4 allele show higher cerebrospinal fluid inflammation compared to those without the ε4 allele.,True,1,1,2025-09-21 05:49:42
+45,"inflammation, APOE, cerebrospinal fluid",3,4,Levels of cerebrospinal fluid inflammation decrease with non-APOE ε4 genotypes.,True,1,1,2025-09-21 05:50:34
+46,"depression, procedural memory, family history",3,1,Depression is negatively associated with procedural memory performance.,False,,1,2025-09-21 05:51:31
+46,"depression, procedural memory, family history",3,2,Individuals with a family history of dementia have poorer procedural memory than those without a family history.,False,,1,2025-09-21 05:52:14
+46,"depression, procedural memory, family history",3,3,People with both depression and a family history of dementia show worse procedural memory than those without either factor.,False,,1,2025-09-21 05:53:11
+47,"planning, obesity, attention",3,1,Poor planning is associated with higher body mass index (BMI).,False,,1,2025-09-21 05:53:53
+47,"planning, obesity, attention",3,2,Lower attention span is linked to higher obesity rates.,True,1,1,2025-09-21 05:54:46
+47,"planning, obesity, attention",3,3,Individuals with difficulties in planning show reduced attention during cognitive tasks.,False,,1,2025-09-21 05:55:42
+47,"planning, obesity, attention",3,4,Obesity is negatively associated with attention performance in daily activities.,False,,1,2025-09-21 05:56:25
+48,"tau, genetics, inhibition",3,1,Genetic variants in the MAPT gene are associated with higher tau levels in cerebrospinal fluid.,False,,1,2025-09-21 05:57:30
+48,"tau, genetics, inhibition",3,2,Increased tau levels are associated with reduced neuronal inhibition in brain regions affected by Alzheimer’s disease.,False,,1,2025-09-21 05:58:19
+48,"tau, genetics, inhibition",3,3,Genetic predisposition to APOE ε4 allele is linked to greater tau accumulation.,True,1,1,2025-09-21 05:59:06
+48,"tau, genetics, inhibition",3,4,Inhibition of tau phosphorylation reduces tau protein levels in cell culture models.,True,1,1,2025-09-21 05:59:54
+48,"tau, genetics, inhibition",3,5,Genetic factors influence the effectiveness of inhibitory signaling pathways in neurons exposed to tau pathology.,True,1,1,2025-09-21 06:00:48
+49,"APOE, MRI, procedural memory",3,1,APOE ε4 allele carriers have reduced hippocampal volume on MRI.,True,1,1,2025-09-21 06:01:47
+49,"APOE, MRI, procedural memory",3,2,Individuals with poorer procedural memory show less gray matter density in the basal ganglia on MRI.,True,1,1,2025-09-21 06:02:47
+49,"APOE, MRI, procedural memory",3,3,The APOE ε4 allele is associated with worse procedural memory performance.,False,,1,2025-09-21 06:03:32
+49,"APOE, MRI, procedural memory",3,4,Procedural memory performance is positively correlated with hippocampal volume measured by MRI.,False,,1,2025-09-21 06:04:18
+49,"APOE, MRI, procedural memory",3,5,APOE ε4 carriers exhibit greater atrophy in the striatum on MRI compared to non-carriers.,True,1,1,2025-09-21 06:05:11
+50,"depression, digit span, plaques",3,1,Depression is negatively associated with digit span performance.,False,,1,2025-09-21 06:05:58
+50,"depression, digit span, plaques",3,2,The presence of plaques is negatively associated with digit span performance.,False,,1,2025-09-21 06:06:53
+50,"depression, digit span, plaques",3,3,Individuals with depression have shorter digit span scores compared to individuals without depression.,True,1,1,2025-09-21 06:07:49
+50,"depression, digit span, plaques",3,4,Individuals with plaques have shorter digit span scores compared to individuals without plaques.,False,,1,2025-09-21 06:08:59
+51,"cognitive flexibility, PET, mixed dementia",3,1,Individuals with mixed dementia show reduced cognitive flexibility compared to cognitively healthy individuals.,False,,1,2025-09-21 06:10:06
+51,"cognitive flexibility, PET, mixed dementia",3,2,Cognitive flexibility is negatively associated with amyloid-beta accumulation measured by PET in patients with mixed dementia.,False,,1,2025-09-21 06:10:59
+51,"cognitive flexibility, PET, mixed dementia",3,3,Cognitive flexibility is negatively associated with tau protein burden measured by PET in patients with mixed dementia.,True,1,1,2025-09-21 06:11:46
+52,"exercise, cardiac arrest, trail making",3,1,Regular exercise is associated with reduced risk of cardiac arrest.,False,,1,2025-09-21 06:12:39
+52,"exercise, cardiac arrest, trail making",3,2,Individuals who experience cardiac arrest show worse Trail Making Test performance compared to healthy controls.,False,,1,2025-09-21 06:13:30
+52,"exercise, cardiac arrest, trail making",3,3,People who perform well on the Trail Making Test are less likely to experience cardiac arrest.,True,1,1,2025-09-21 06:14:09
+53,"heart disease, cognitive decline, gender",3,1,Men are more likely to experience cognitive decline than women.,False,,1,2025-09-21 06:14:52
+53,"heart disease, cognitive decline, gender",3,2,Women are more likely to experience cognitive decline than men.,False,,1,2025-09-21 06:15:43
+53,"heart disease, cognitive decline, gender",3,3,Individuals with heart disease show greater cognitive decline compared to those without heart disease.,False,,1,2025-09-21 06:17:13
+53,"heart disease, cognitive decline, gender",3,4,Gender moderates the relationship between heart disease and cognitive decline.,False,,1,2025-09-21 06:18:19
+53,"heart disease, cognitive decline, gender",3,5,Heart disease is associated with faster cognitive decline in males than in females.,False,,1,2025-09-21 06:19:10
+54,"visuospatial, gray matter, white matter",3,1,Visuospatial ability is positively associated with gray matter volume.,False,,1,2025-09-21 06:20:06
+54,"visuospatial, gray matter, white matter",3,2,Gray matter volume is negatively associated with age in individuals with normal visuospatial function.,False,,1,2025-09-21 06:21:09
+54,"visuospatial, gray matter, white matter",3,3,White matter integrity is positively associated with visuospatial performance.,False,,1,2025-09-21 06:21:49
+54,"visuospatial, gray matter, white matter",3,4,Reduced white matter volume is linked to poorer visuospatial skills.,True,1,1,2025-09-21 06:22:38
+54,"visuospatial, gray matter, white matter",3,5,Greater gray matter density in the parietal lobe is associated with better visuospatial cognition.,True,1,1,2025-09-21 06:23:09
+55,"episodic memory, hypercholesterolemia, verbal fluency",3,1,Hypercholesterolemia is negatively associated with episodic memory performance.,False,,1,2025-09-21 06:23:45
+55,"episodic memory, hypercholesterolemia, verbal fluency",3,2,Lower verbal fluency is linked to higher levels of hypercholesterolemia.,True,1,1,2025-09-21 06:24:26
+55,"episodic memory, hypercholesterolemia, verbal fluency",3,3,Individuals with hypercholesterolemia show reduced episodic memory compared to those without hypercholesterolemia.,False,,1,2025-09-21 06:25:09
+55,"episodic memory, hypercholesterolemia, verbal fluency",3,4,Verbal fluency is positively associated with episodic memory function.,True,1,1,2025-09-21 06:25:43
+56,"cognitive decline, anxiety, heart valve replacement",3,1,Anxiety is positively associated with cognitive decline.,False,,1,2025-09-21 06:26:27
+56,"cognitive decline, anxiety, heart valve replacement",3,2,Individuals who undergo heart valve replacement show greater cognitive decline over time compared to those who do not.,False,,1,2025-09-21 06:27:09
+56,"cognitive decline, anxiety, heart valve replacement",3,3,Higher levels of anxiety are linked to faster rates of cognitive decline in patients after heart valve replacement.,False,,1,2025-09-21 06:28:04
+57,"hypertension, cardiac arrest, attention",3,1,Hypertension is negatively associated with attention.,False,,1,2025-09-21 06:28:30
+57,"hypertension, cardiac arrest, attention",3,2,Cardiac arrest is negatively associated with attention.,False,,1,2025-09-21 06:29:28
+57,"hypertension, cardiac arrest, attention",3,3,Individuals with hypertension have lower attention scores than individuals without hypertension.,False,,1,2025-09-21 06:30:44
+58,"Stroop, statins, donepezil",3,1,Patients taking statins show less Stroop interference compared to those not taking statins.,False,,1,2025-09-21 06:31:35
+58,"Stroop, statins, donepezil",3,2,Patients taking donepezil exhibit better Stroop task performance than those not taking donepezil.,False,,1,2025-09-21 06:32:43
+58,"Stroop, statins, donepezil",3,3,Statins are associated with reduced Stroop interference in individuals with mild cognitive impairment.,False,,1,2025-09-21 06:34:08
+58,"Stroop, statins, donepezil",3,4,Donepezil use is linked to improved Stroop accuracy in people with Alzheimer’s disease.,False,,1,2025-09-21 06:34:55
+58,"Stroop, statins, donepezil",3,5,There is no difference in Stroop performance between patients on statins and those on donepezil.,False,,1,2025-09-21 06:35:44
+59,"MCI, memory, NSAIDs",3,1,Regular use of NSAIDs is associated with slower decline in memory in individuals with MCI.,True,1,1,2025-09-21 06:36:46
+59,"MCI, memory, NSAIDs",3,2,Individuals with MCI who take NSAIDs have better memory scores than those who do not take NSAIDs.,False,,1,2025-09-21 06:37:27
+59,"MCI, memory, NSAIDs",3,3,Long-term NSAID use is linked to reduced risk of progression from MCI to dementia.,False,,1,2025-09-21 06:38:15
+60,"gray matter, amyloid, education",3,1,Gray matter volume is negatively associated with amyloid burden.,False,,1,2025-09-21 06:39:05
+60,"gray matter, amyloid, education",3,2,Higher levels of education are associated with lower amyloid burden.,True,1,1,2025-09-21 06:39:39
+60,"gray matter, amyloid, education",3,3,Individuals with higher education show greater gray matter volume compared to those with lower education.,False,,1,2025-09-21 06:40:22
+60,"gray matter, amyloid, education",3,4,Amyloid burden is inversely related to gray matter volume.,False,,1,2025-09-21 06:41:10
+61,"amyloid, antidepressants, statins",3,1,Higher amyloid burden is associated with reduced effectiveness of antidepressants in patients with Alzheimer’s disease.,True,1,1,2025-09-21 06:42:02
+61,"amyloid, antidepressants, statins",3,2,Patients taking statins show lower amyloid levels compared to non-users.,True,1,1,2025-09-21 06:42:51
+61,"amyloid, antidepressants, statins",3,3,Antidepressant use is associated with decreased amyloid accumulation over time.,False,,1,2025-09-21 06:43:35
+61,"amyloid, antidepressants, statins",3,4,Statins are associated with improved cognitive outcomes in individuals with high amyloid levels.,True,1,1,2025-09-21 06:44:06
+61,"amyloid, antidepressants, statins",3,5,The presence of amyloid predicts a lower likelihood of responding to antidepressants.,False,,1,2025-09-21 06:44:53
+62,"age, cortical thickness, heart attack",3,1,Older age is associated with reduced cortical thickness.,False,,1,2025-09-21 06:45:30
+62,"age, cortical thickness, heart attack",3,2,History of heart attack is associated with thinner cortical thickness in specific brain regions.,True,1,1,2025-09-21 06:46:18
+62,"age, cortical thickness, heart attack",3,3,Individuals who have had a heart attack show less cortical thickness compared to those without a heart attack.,False,,1,2025-09-21 06:47:10
+62,"age, cortical thickness, heart attack",3,4,"Cortical thickness decreases with increasing age, independent of heart attack history.",False,,1,2025-09-21 06:48:29
+63,"mixed dementia, cardiac arrest, sex",3,1,mixed dementia is more common in males than in females.,False,,1,2025-09-21 06:49:05
+63,"mixed dementia, cardiac arrest, sex",3,2,Females have a lower risk of mixed dementia after cardiac arrest compared to males.,True,1,1,2025-09-21 06:49:50
+63,"mixed dementia, cardiac arrest, sex",3,3,males who experience cardiac arrest are more likely to develop mixed dementia than females.,True,1,1,2025-09-21 06:50:31
+63,"mixed dementia, cardiac arrest, sex",3,4,"Cardiac arrest is associated with an increased risk of mixed dementia in both sexes, but more so in males.",False,,1,2025-09-21 06:51:21
+64,"physical activity, NSAIDs, frontotemporal dementia",3,1,Physical activity is associated with reduced risk of frontotemporal dementia.,True,1,1,2025-09-21 06:51:57
+64,"physical activity, NSAIDs, frontotemporal dementia",3,2,Long-term use of NSAIDs is associated with lower incidence of frontotemporal dementia.,False,,1,2025-09-21 06:53:01
+64,"physical activity, NSAIDs, frontotemporal dementia",3,3,Individuals who engage in regular physical activity have a lower likelihood of developing frontotemporal dementia compared to those who are sedentary.,False,,1,2025-09-21 06:54:12
+64,"physical activity, NSAIDs, frontotemporal dementia",3,4,Use of NSAIDs is independently linked to improved cognitive outcomes in individuals with frontotemporal dementia.,False,,1,2025-09-21 06:54:55
+64,"physical activity, NSAIDs, frontotemporal dementia",3,5,Physical activity has no significant effect on the progression of frontotemporal dementia.,True,1,1,2025-09-21 06:55:42
+65,"digit span, clock drawing, cholinesterase inhibitors",3,1,Digit span is positively associated with cognitive performance in individuals with Alzheimer’s disease and related dementias.,True,1,1,2025-09-21 06:56:22
+65,"digit span, clock drawing, cholinesterase inhibitors",3,2,Clock drawing test score is negatively associated with dementia severity.,False,,1,2025-09-21 06:57:05
+65,"digit span, clock drawing, cholinesterase inhibitors",3,3,Individuals treated with cholinesterase inhibitors show improved digit span performance compared to untreated individuals.,True,1,1,2025-09-21 06:57:51
+65,"digit span, clock drawing, cholinesterase inhibitors",3,4,Cholinesterase inhibitor use is associated with better clock drawing test performance.,True,1,1,2025-09-21 06:58:21
+65,"digit span, clock drawing, cholinesterase inhibitors",3,5,Digit span performance is correlated with clock drawing test accuracy in people with mild cognitive impairment.,True,1,1,2025-09-21 06:58:52
+66,"anxiety, working memory, inhibition",3,1,Anxiety is negatively associated with working memory.,False,,1,2025-09-21 06:59:25
+66,"anxiety, working memory, inhibition",3,2,Anxiety is negatively associated with inhibition.,False,,1,2025-09-21 06:59:53
+66,"anxiety, working memory, inhibition",3,3,Higher levels of anxiety are linked to poorer working memory performance.,False,,1,2025-09-21 07:00:27
+66,"anxiety, working memory, inhibition",3,4,Greater anxiety is associated with reduced inhibition capacity.,False,,1,2025-09-21 07:01:12
+66,"anxiety, working memory, inhibition",3,5,Individuals with high anxiety show worse inhibition compared to individuals with low anxiety.,True,1,1,2025-09-21 07:01:45
+67,"donepezil, mixed dementia, procedural memory",3,1,Patients with mixed dementia who take donepezil show better procedural memory outcomes than those who do not take donepezil.,True,1,1,2025-09-21 07:02:25
+67,"donepezil, mixed dementia, procedural memory",3,2,Procedural memory performance is worse in patients with mixed dementia compared to healthy controls.,True,1,1,2025-09-21 07:03:10
+67,"donepezil, mixed dementia, procedural memory",3,3,Donepezil use is positively associated with procedural memory improvement in individuals with mixed dementia.,True,1,1,2025-09-21 07:04:00
+67,"donepezil, mixed dementia, procedural memory",3,4,Mixed dementia is negatively associated with procedural memory function.,False,,1,2025-09-21 07:04:49
+68,"exercise, visuospatial, stroke",3,1,Regular exercise is associated with better visuospatial performance in individuals who have had a stroke.,True,1,1,2025-09-21 07:05:32
+68,"exercise, visuospatial, stroke",3,2,Visuospatial performance is worse in stroke survivors who do not engage in regular exercise.,True,1,1,2025-09-21 07:06:07
+68,"exercise, visuospatial, stroke",3,3,Individuals who have had a stroke and participate in regular exercise show improved visuospatial skills compared to those who do not exercise.,True,1,1,2025-09-21 07:06:42
+68,"exercise, visuospatial, stroke",3,4,Exercise frequency is positively correlated with visuospatial ability in stroke patients.,True,1,1,2025-09-21 07:07:34
+69,"smoking, age, education",3,1,Smoking is negatively associated with cognitive performance in older adults.,True,1,1,2025-09-21 07:08:21
+69,"smoking, age, education",3,2,Age is positively associated with cognitive decline.,False,,1,2025-09-21 07:08:59
+69,"smoking, age, education",3,3,Higher levels of education are associated with reduced risk of cognitive decline.,True,1,1,2025-09-21 07:09:36
+69,"smoking, age, education",3,4,Current smokers have worse cognitive performance compared to non-smokers at similar ages.,False,,1,2025-09-21 07:10:34
+69,"smoking, age, education",3,5,Individuals with higher education show less cognitive decline with increasing age.,True,1,1,2025-09-21 07:11:23
+70,"Parkinson's disease dementia, inhibition, Lewy body dementia",3,1,Patients with Parkinson’s disease dementia show reduced inhibitory control compared to patients without dementia.,False,,1,2025-09-21 07:12:14
+70,"Parkinson's disease dementia, inhibition, Lewy body dementia",3,2,Individuals with Lewy body dementia exhibit greater impairment in inhibition than those with Parkinson’s disease dementia.,False,,1,2025-09-21 07:13:12
+70,"Parkinson's disease dementia, inhibition, Lewy body dementia",3,3,Inhibition scores are lower in individuals diagnosed with Lewy body dementia compared to those with Parkinson’s disease dementia.,True,1,1,2025-09-21 07:14:08
+70,"Parkinson's disease dementia, inhibition, Lewy body dementia",3,4,Presence of Lewy bodies is associated with poorer inhibition performance in dementia patients.,False,,1,2025-09-21 07:14:58
+71,"family history, visuospatial, gray matter",3,1,A family history of Alzheimer’s disease is associated with poorer visuospatial performance.,False,,1,2025-09-21 07:15:57
+71,"family history, visuospatial, gray matter",3,2,Individuals with reduced gray matter volume show worse visuospatial abilities.,False,,1,2025-09-21 07:16:41
+71,"family history, visuospatial, gray matter",3,3,Those with a positive family history of dementia have lower gray matter volume in visuospatial regions compared to those without such history.,False,,1,2025-09-21 07:17:31
+71,"family history, visuospatial, gray matter",3,4,Visuospatial performance is negatively correlated with gray matter volume.,False,,1,2025-09-21 07:18:17
+72,"alcohol abuse, mild cognitive impairment, marital status",3,1,Alcohol abuse is associated with a higher prevalence of mild cognitive impairment.,False,,1,2025-09-21 07:19:04
+72,"alcohol abuse, mild cognitive impairment, marital status",3,2,Individuals with stable marital status have a lower risk of developing mild cognitive impairment compared to those who are unmarried or divorced.,True,1,1,2025-09-21 07:19:49
+72,"alcohol abuse, mild cognitive impairment, marital status",3,3,People with mild cognitive impairment who report alcohol abuse have worse cognitive scores than those with mild cognitive impairment who do not abuse alcohol.,False,,1,2025-09-21 07:20:39
+72,"alcohol abuse, mild cognitive impairment, marital status",3,4,Marital status has no effect on the severity of cognitive decline in individuals with mild cognitive impairment.,True,1,1,2025-09-21 07:21:29
+73,"neurofibrillary tangles, MRI, APOE",3,1,The presence of neurofibrillary tangles is associated with reduced hippocampal volume measured by MRI.,False,,1,2025-09-21 07:22:07
+73,"neurofibrillary tangles, MRI, APOE",3,2,Individuals with the APOE ε4 allele show greater hippocampal atrophy on MRI compared to non-carriers.,False,,1,2025-09-21 07:22:52
+73,"neurofibrillary tangles, MRI, APOE",3,3,APOE ε4 carriers exhibit more prominent MRI signal changes in regions with high neurofibrillary tangle burden.,False,,1,2025-09-21 07:23:48
+73,"neurofibrillary tangles, MRI, APOE",3,4,Neurofibrillary tangle load correlates positively with decreased gray matter density in the frontal lobe as seen on MRI.,True,1,1,2025-09-21 07:24:23
+74,"inflammation, attention, MMSE",3,1,Higher levels of inflammation are associated with lower MMSE scores.,True,1,1,2025-09-21 07:25:08
+74,"inflammation, attention, MMSE",3,2,Better attention is associated with higher MMSE scores.,True,1,1,2025-09-21 07:25:51
+74,"inflammation, attention, MMSE",3,3,Individuals with poor attention have lower MMSE scores than those with good attention.,False,,1,2025-09-21 07:26:34
+75,"hypertension, semantic memory, CDR",3,1,Hypertension is negatively associated with semantic memory performance.,False,,1,2025-09-21 07:27:17
+75,"hypertension, semantic memory, CDR",3,2,Higher Clinical Dementia Rating (CDR) scores are associated with poorer semantic memory performance.,False,,1,2025-09-21 07:27:59
+75,"hypertension, semantic memory, CDR",3,3,Individuals with hypertension have lower semantic memory scores compared to those without hypertension.,False,,1,2025-09-21 07:28:43
+75,"hypertension, semantic memory, CDR",3,4,Semantic memory performance declines as CDR score increases.,False,,1,2025-09-21 07:29:42
+76,"cholinesterase inhibitors, Lewy body dementia, family history",3,1,Patients with Lewy body dementia who take cholinesterase inhibitors have slower disease progression compared to those who do not.,False,,1,2025-09-21 07:30:27
+76,"cholinesterase inhibitors, Lewy body dementia, family history",3,2,Individuals with a family history of Lewy body dementia are more likely to develop Lewy body dementia than those without a family history.,False,,1,2025-09-21 07:31:13
+76,"cholinesterase inhibitors, Lewy body dementia, family history",3,3,Cholinesterase inhibitor use is associated with improved cognitive symptoms in patients with Lewy body dementia.,True,1,1,2025-09-21 07:31:57
+76,"cholinesterase inhibitors, Lewy body dementia, family history",3,4,Those with a family history of Lewy body dementia show earlier onset of dementia symptoms than individuals without such history.,True,1,1,2025-09-21 07:32:40
+77,"tower of London, physical activity, frontotemporal dementia",3,1,Physical activity is associated with better performance on the Tower of London test in individuals with frontotemporal dementia.,True,1,1,2025-09-21 07:33:55
+77,"tower of London, physical activity, frontotemporal dementia",3,2,Individuals with frontotemporal dementia who engage in regular physical activity show greater accuracy on the Tower of London task compared to those who are sedentary.,False,,1,2025-09-21 07:34:29
+77,"tower of London, physical activity, frontotemporal dementia",3,3,Lower levels of physical activity are linked to poorer performance on the Tower of London in people with frontotemporal dementia.,False,,1,2025-09-21 07:35:31
+78,"cognitive decline, smoking, language",3,1,Current smoking status is negatively associated with rate of cognitive decline.,True,1,1,2025-09-21 07:36:27
+78,"cognitive decline, smoking, language",3,2,Smoking is negatively associated with language ability in older adults.,False,,1,2025-09-21 07:37:07
+78,"cognitive decline, smoking, language",3,3,Individuals who smoke have greater language impairment over time compared to non-smokers.,False,,1,2025-09-21 07:37:44
+78,"cognitive decline, smoking, language",3,4,Non-smokers show slower cognitive decline in language tasks than smokers.,False,,1,2025-09-21 07:38:35
+79,"stroke, episodic memory, heart valve replacement",3,1,Patients who have had a stroke have worse episodic memory compared to those without a stroke.,False,,1,2025-09-21 07:39:18
+79,"stroke, episodic memory, heart valve replacement",3,2,Individuals who have undergone heart valve replacement show poorer episodic memory than those who have not had heart valve replacement.,False,,1,2025-09-21 07:39:59
+79,"stroke, episodic memory, heart valve replacement",3,3,Stroke history is negatively associated with episodic memory performance.,False,,1,2025-09-21 07:40:42
+79,"stroke, episodic memory, heart valve replacement",3,4,Heart valve replacement is associated with reduced episodic memory function.,False,,1,2025-09-21 07:41:23
+79,"stroke, episodic memory, heart valve replacement",3,5,People with both stroke and heart valve replacement have significantly worse episodic memory than those with neither condition.,False,,1,2025-09-21 07:42:08
+80,"tower of London, Rey figure, frontotemporal dementia",3,1,Patients with frontotemporal dementia perform worse on the Tower of London task than healthy controls.,False,,1,2025-09-21 07:43:17
+80,"tower of London, Rey figure, frontotemporal dementia",3,2,The Rey Figure copy score is lower in patients with frontotemporal dementia compared to individuals without dementia.,True,1,1,2025-09-21 07:43:56
+80,"tower of London, Rey figure, frontotemporal dementia",3,3,Frontotemporal dementia patients show greater impairment in the Rey Figure immediate recall compared to their delayed recall.,False,,1,2025-09-21 07:44:31
+80,"tower of London, Rey figure, frontotemporal dementia",3,4,The Tower of London task performance correlates negatively with disease severity in frontotemporal dementia.,True,1,1,2025-09-21 07:45:13
+80,"tower of London, Rey figure, frontotemporal dementia",3,5,Rey Figure drawing accuracy is significantly reduced in frontotemporal dementia compared to cognitively normal individuals.,True,1,1,2025-09-21 07:46:00
+81,"Parkinson's disease dementia, donepezil, ethnicity",3,1,Patients with Parkinson’s disease dementia have lower cognitive scores compared to those without dementia.,False,,1,2025-09-21 07:46:47
+81,"Parkinson's disease dementia, donepezil, ethnicity",3,2,Donepezil treatment is associated with improved cognitive function in patients with Parkinson’s disease dementia.,False,,1,2025-09-21 07:47:26
+81,"Parkinson's disease dementia, donepezil, ethnicity",3,3,Ethnicity is associated with the incidence of Parkinson’s disease dementia.,False,,1,2025-09-21 07:48:15
+81,"Parkinson's disease dementia, donepezil, ethnicity",3,4,Non-white ethnic groups have a higher prevalence of Parkinson’s disease dementia than white ethnic groups.,False,,1,2025-09-21 07:49:02
+81,"Parkinson's disease dementia, donepezil, ethnicity",3,5,Donepezil effectiveness in improving cognition varies by ethnicity.,True,1,1,2025-09-21 07:49:44
+82,"memory, Alzheimer's disease, heart valve replacement",3,1,"['Patients with Alzheimer's disease who have undergone heart valve replacement show worse memory performance than those without heart valve replacement.', 'Heart valve replacement is associated with declines in memory over time in patients with Alzheimer's disease.', 'Individuals with Alzheimer's disease and a history of heart valve replacement have lower baseline memory scores compared to those with Alzheimer's disease and no heart valve replacement.']",False,,1,2025-09-21 07:50:38
+83,"congestive heart failure, benzodiazepines, Stroop",3,1,Patients with congestive heart failure show worse Stroop test performance compared to those without congestive heart failure.,False,,1,2025-09-21 07:51:43
+83,"congestive heart failure, benzodiazepines, Stroop",3,2,Benzodiazepine use is associated with slower Stroop test completion times.,True,1,1,2025-09-21 07:52:27
+83,"congestive heart failure, benzodiazepines, Stroop",3,3,Individuals using benzodiazepines have greater Stroop interference scores than non-users.,True,1,1,2025-09-21 07:53:24
+83,"congestive heart failure, benzodiazepines, Stroop",3,4,Congestive heart failure is negatively associated with Stroop accuracy.,False,,1,2025-09-21 07:54:04
+83,"congestive heart failure, benzodiazepines, Stroop",3,5,Benzodiazepine use is independently linked to increased Stroop reaction time in patients with congestive heart failure.,False,,1,2025-09-21 07:54:56
+84,"brain volume, working memory, executive function",3,1,Lower brain volume is associated with poorer working memory.,False,,1,2025-09-21 07:55:37
+84,"brain volume, working memory, executive function",3,2,Greater brain volume is associated with better executive function.,False,,1,2025-09-21 07:56:19
+84,"brain volume, working memory, executive function",3,3,Working memory performance is positively correlated with overall brain volume.,False,,1,2025-09-21 07:57:13
+84,"brain volume, working memory, executive function",3,4,Executive function scores are negatively correlated with reduced brain volume.,False,,1,2025-09-21 07:58:06
+85,"heart attack, working memory, Wisconsin card sort",3,1,Individuals who have had a heart attack show worse working memory performance than those without a heart attack.,False,,1,2025-09-21 07:59:01
+85,"heart attack, working memory, Wisconsin card sort",3,2,Performance on the Wisconsin Card Sort Test is negatively associated with history of heart attack.,False,,1,2025-09-21 07:59:42
+85,"heart attack, working memory, Wisconsin card sort",3,3,People with a history of heart attack perform less well on the Wisconsin Card Sort Test compared to healthy controls.,False,,1,2025-09-21 08:00:17
+85,"heart attack, working memory, Wisconsin card sort",3,4,Working memory capacity is reduced in individuals who have experienced a heart attack.,False,,1,2025-09-21 08:00:59
+86,"visuospatial, ethnicity, NSAIDs",3,1,Visuospatial ability is negatively associated with older age.,True,1,1,2025-09-21 08:01:47
+86,"visuospatial, ethnicity, NSAIDs",3,2,Ethnicity is associated with differences in visuospatial performance.,False,,1,2025-09-21 08:02:24
+86,"visuospatial, ethnicity, NSAIDs",3,3,Individuals of certain ethnicities show better visuospatial skills than others.,False,,1,2025-09-21 08:03:20
+86,"visuospatial, ethnicity, NSAIDs",3,4,Long-term use of NSAIDs is associated with improved visuospatial function.,False,,1,2025-09-21 08:04:06
+86,"visuospatial, ethnicity, NSAIDs",3,5,Non-Hispanic White individuals have better visuospatial performance compared to Black or Hispanic individuals.,False,,1,2025-09-21 08:04:51
+86,"visuospatial, ethnicity, NSAIDs",3,6,Daily NSAID use is linked to better visuospatial outcomes in older adults.,True,1,1,2025-09-21 08:05:39
+87,"antipsychotics, cardiovascular disease, executive function",3,1,Use of antipsychotics is associated with increased risk of cardiovascular disease.,True,1,1,2025-09-21 08:06:26
+87,"antipsychotics, cardiovascular disease, executive function",3,2,Individuals with cardiovascular disease show reduced executive function compared to those without cardiovascular disease.,True,1,1,2025-09-21 08:07:17
+87,"antipsychotics, cardiovascular disease, executive function",3,3,Patients receiving antipsychotics have worse executive function than those not receiving antipsychotics.,True,1,1,2025-09-21 08:08:01
+87,"antipsychotics, cardiovascular disease, executive function",3,4,Executive function is negatively associated with the presence of cardiovascular disease.,False,,1,2025-09-21 08:08:43
+88,"cortical thickness, gender, heart attack",3,1,"['Cortical thickness is different between males and females.', 'Gender influences cortical thickness in individuals who have had a heart attack.', 'Individuals who have had a heart attack have thinner cortical thickness compared to those who haven't.', 'Females who have had a heart attack show greater cortical thinning than males who have had a heart attack.']",False,,1,2025-09-21 08:09:39
+89,"white matter, Alzheimer's disease, aspirin",3,1,"[
+    'White matter integrity is reduced in individuals with Alzheimer's disease.',
+    'Aspirin use is associated with better white matter integrity in older adults.',
+    'Individuals with Alzheimer's disease who take aspirin have less severe white matter degeneration than those who do not.',
+    'Higher levels of aspirin use are linked to improved white matter fractional anisotropy in cognitively healthy older adults.'
+]",False,,1,2025-09-21 08:10:59
+90,"cognitive decline, Alzheimer's disease, sleep disorders",3,1,Poor sleep quality is associated with faster cognitive decline in individuals with Alzheimer’s disease.,False,,1,2025-09-21 08:11:56
+90,"cognitive decline, Alzheimer's disease, sleep disorders",3,2,The presence of sleep disorders is linked to worse cognitive performance in people without Alzheimer’s disease.,False,,1,2025-09-21 08:12:36
+90,"cognitive decline, Alzheimer's disease, sleep disorders",3,3,Individuals with Alzheimer’s disease who have sleep disorders show greater cognitive decline over time compared to those without sleep disorders.,False,,1,2025-09-21 08:13:28
+90,"cognitive decline, Alzheimer's disease, sleep disorders",3,4,Sleep duration is negatively associated with cognitive decline in older adults with Alzheimer’s disease.,False,,1,2025-09-21 08:14:18
+90,"cognitive decline, Alzheimer's disease, sleep disorders",3,5,Chronic insomnia is associated with increased risk of cognitive decline in early-stage Alzheimer’s disease.,False,,1,2025-09-21 08:15:03
+91,"working memory, tower of London, alcohol abuse",3,1,Working memory performance is negatively associated with alcohol abuse.,True,1,1,2025-09-21 08:15:38
+91,"working memory, tower of London, alcohol abuse",3,2,Individuals with a history of alcohol abuse perform worse on the Tower of London task.,False,,1,2025-09-21 08:16:19
+91,"working memory, tower of London, alcohol abuse",3,3,Performance on the Tower of London is positively associated with working memory capacity.,False,,1,2025-09-21 08:16:55
+91,"working memory, tower of London, alcohol abuse",3,4,People with high levels of working memory score higher on the Tower of London compared to those with low working memory.,False,,1,2025-09-21 08:17:39
+92,"hypercholesterolemia, gender, neurofibrillary tangles",3,1,Hypercholesterolemia is positively associated with the presence of neurofibrillary tangles.,False,,1,2025-09-21 08:18:22
+92,"hypercholesterolemia, gender, neurofibrillary tangles",3,2,Women with hypercholesterolemia have more neurofibrillary tangles than men with hypercholesterolemia.,False,,1,2025-09-21 08:19:10
+92,"hypercholesterolemia, gender, neurofibrillary tangles",3,3,Gender moderates the association between hypercholesterolemia and neurofibrillary tangle burden.,False,,1,2025-09-21 08:19:49
+92,"hypercholesterolemia, gender, neurofibrillary tangles",3,4,Individuals with hypercholesterolemia show greater neurofibrillary tangle load compared to individuals without hypercholesterolemia.,False,,1,2025-09-21 08:20:31
+93,"memory, CDR, Rey figure",3,1,Memory performance is negatively associated with CDR score.,False,,1,2025-09-21 08:21:02
+93,"memory, CDR, Rey figure",3,2,CDR score is positively associated with difficulty in copying the Rey figure.,True,1,1,2025-09-21 08:21:33
+93,"memory, CDR, Rey figure",3,3,Individuals with higher CDR scores show worse memory recall during the Rey figure task.,False,,1,2025-09-21 08:22:06
+93,"memory, CDR, Rey figure",3,4,Performance on the Rey figure test is negatively correlated with CDR stage.,False,,1,2025-09-21 08:22:44
+94,"white matter, digit span, vascular dementia",3,1,White matter hyperintensities are negatively associated with digit span performance in individuals with vascular dementia.,False,,1,2025-09-21 08:23:23
+94,"white matter, digit span, vascular dementia",3,2,Individuals with vascular dementia show worse digit span scores as white matter lesion volume increases.,False,,1,2025-09-21 08:24:01
+94,"white matter, digit span, vascular dementia",3,3,Greater white matter integrity is linked to better digit span performance in people with vascular dementia.,False,,1,2025-09-21 08:24:33
+95,"cholinesterase inhibitors, Rey figure, Boston naming",3,1,Patients treated with cholinesterase inhibitors show improved performance on the Rey Figure copy task.,False,,1,2025-09-21 08:25:29
+95,"cholinesterase inhibitors, Rey figure, Boston naming",3,2,Patients who perform worse on the Boston Naming Test have lower scores on the Rey Figure recall task.,False,,1,2025-09-21 08:26:05
+95,"cholinesterase inhibitors, Rey figure, Boston naming",3,3,Cholinesterase inhibitor use is associated with better Rey Figure immediate recall scores.,False,,1,2025-09-21 08:26:44
+95,"cholinesterase inhibitors, Rey figure, Boston naming",3,4,Individuals with poorer Boston Naming Test scores exhibit reduced ability to draw the Rey Figure accurately.,False,,1,2025-09-21 08:27:16
+96,"smoking, genetics, Stroop",3,1,Current smoking status is negatively associated with Stroop interference scores.,False,,1,2025-09-21 08:28:08
+96,"smoking, genetics, Stroop",3,2,Individuals with APOE ε4 genotype show greater Stroop task impairment compared to non-carriers.,False,,1,2025-09-21 08:29:01
+96,"smoking, genetics, Stroop",3,3,Smokers who carry the APOE ε4 allele have worse Stroop performance than non-smokers without the allele.,False,,1,2025-09-21 08:29:56
+96,"smoking, genetics, Stroop",3,4,Stroop task performance is poorer in current smokers compared to never-smokers.,False,,1,2025-09-21 08:30:39
+96,"smoking, genetics, Stroop",3,5,Non-smokers exhibit better Stroop accuracy than smokers.,False,,1,2025-09-21 08:31:19
+97,"alcohol abuse, MRI, gender",3,1,Alcohol abuse is associated with reduced hippocampal volume on MRI.,False,,1,2025-09-21 08:32:05
+97,"alcohol abuse, MRI, gender",3,2,Gender moderates the effect of alcohol abuse on gray matter density measured by MRI.,False,,1,2025-09-21 08:33:00
+97,"alcohol abuse, MRI, gender",3,3,Men with alcohol abuse show greater cortical thinning on MRI compared to women with alcohol abuse.,False,,1,2025-09-21 08:33:42
+97,"alcohol abuse, MRI, gender",3,4,Women with alcohol abuse have lower white matter integrity on MRI than men with alcohol abuse.,False,,1,2025-09-21 08:34:19
+97,"alcohol abuse, MRI, gender",3,5,Alcohol abuse is associated with decreased amygdala volume in both genders as seen on MRI.,False,,1,2025-09-21 08:34:59
+98,"semantic memory, visuospatial, ethnicity",3,1,Semantic memory is negatively associated with age.,False,,1,2025-09-21 08:35:37
+98,"semantic memory, visuospatial, ethnicity",3,2,Visuospatial ability is positively associated with education level.,False,,1,2025-09-21 08:36:31
+98,"semantic memory, visuospatial, ethnicity",3,3,Ethnicity is associated with differences in semantic memory performance.,False,,1,2025-09-21 08:37:21
+98,"semantic memory, visuospatial, ethnicity",3,4,Individuals of certain ethnicities show greater visuospatial skills compared to others.,True,1,1,2025-09-21 08:38:12
+98,"semantic memory, visuospatial, ethnicity",3,5,Semantic memory performance varies by ethnicity.,True,1,1,2025-09-21 08:39:09
+99,"procedural memory, sleep disorders, sex",3,1,Individuals with sleep disorders have poorer procedural memory than those without sleep disorders.,False,,1,2025-09-21 08:40:12
+99,"procedural memory, sleep disorders, sex",3,2,"Sex differences exist in procedural memory, with males showing better procedural memory than females.",False,,1,2025-09-21 08:40:59
+99,"procedural memory, sleep disorders, sex",3,3,Women with sleep disorders show worse procedural memory compared to women without sleep disorders.,False,,1,2025-09-21 08:41:42
+99,"procedural memory, sleep disorders, sex",3,4,Men with sleep disorders exhibit reduced procedural memory compared to men without sleep disorders.,False,,1,2025-09-21 08:42:21
+100,"cerebrospinal fluid, marital status, congestive heart failure",3,1,Cerebrospinal fluid biomarker levels are different in individuals with congestive heart failure compared to those without.,False,,1,2025-09-21 08:43:13
+100,"cerebrospinal fluid, marital status, congestive heart failure",3,2,Marital status is associated with differences in cerebrospinal fluid biomarker concentrations.,False,,1,2025-09-21 08:44:02
+100,"cerebrospinal fluid, marital status, congestive heart failure",3,3,Individuals with congestive heart failure show altered cerebrospinal fluid biomarkers compared to healthy controls.,False,,1,2025-09-21 08:45:05
+100,"cerebrospinal fluid, marital status, congestive heart failure",3,4,Being married is associated with lower levels of cerebrospinal fluid biomarkers linked to Alzheimer’s disease.,False,,1,2025-09-21 08:45:56

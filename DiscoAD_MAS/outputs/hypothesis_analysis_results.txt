@@ -1,0 +1,6 @@
+Hypothesis Analysis Results:
+========================================
+Aspirin user CV event rate: 0.110
+No aspirin user CV event rate: 0.063
+Chi-squared test p-value: 0.000
+Significant association? Yes
