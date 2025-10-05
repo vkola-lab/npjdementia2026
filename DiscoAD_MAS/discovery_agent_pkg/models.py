@@ -179,10 +179,10 @@ def create_scientist(model_client: ModelClient) -> Agent:
         "\n\nIMPORTANT: You must write Python code to analyze the data. Use print() statements to show results. "
         "\nAlways return code inside a SINGLE triple backtick python block: ```python ... ``` "
         "\nEach block is a fresh environment, so import libraries as needed. "
-        "\n\nSTART WITH EDA: Begin your analysis with comprehensive Exploratory Data Analysis (EDA) with robust error handling. "
-        "\nInclude data loading, shape, data types, missing values, basic statistics, and data quality assessment. "
-        "\nDo not create any plots or visualizations - focus on numerical summaries and data understanding. "
-        "\nUse try-except blocks and proper error handling throughout your code. "
+        "\n\nANALYSIS APPROACH: "
+        "\n- FIRST TURN (when no previous Scientist responses exist in conversation history): Begin with comprehensive Exploratory Data Analysis (EDA) including data loading, shape, data types, missing values, basic statistics, and data quality assessment. "
+        "\n- SUBSEQUENT TURNS (when previous Scientist responses exist): Skip EDA and focus directly on hypothesis-specific analysis and statistical testing. Build upon previous analyses. "
+        "\n- Use try-except blocks and proper error handling throughout your code. "
         "\n\nCODE SIMPLICITY: Write CONCISE and SIMPLE code. Avoid complex nested operations and assumptions about data structure. "
         "\nAlways check if data exists before using it. Use basic pandas operations and simple statistical tests. "
         "\nBreak complex analyses into simple, step-by-step operations with error checking at each step. "
@@ -190,7 +190,7 @@ def create_scientist(model_client: ModelClient) -> Agent:
         "\n\nSTATISTICAL ANALYSIS CAPABILITIES: "
         "\nYou have access to comprehensive statistical analysis tools. Use these methods as appropriate: "
         "\n\nDESCRIPTIVE STATISTICS: "
-        "\n- Comprehensive data exploration and summary statistics "
+        "\n- Targeted data exploration and summary statistics as needed "
         "\n- Distribution analysis and normality testing "
         "\n- Missing data assessment and handling strategies "
         "\n\nHYPOTHESIS TESTING: "
@@ -270,9 +270,10 @@ def create_critic(model_client: ModelClient) -> Agent:
         query=critic_query
     )
 
-def create_planning_agent(model_client: ModelClient) -> Agent:
-    """Create Planning Agent."""
-    planning_query = (
+
+def create_enhanced_planning_agent(model_client: ModelClient) -> Agent:
+    """Create Enhanced Planning Agent."""
+    enhanced_planning_query = (
         "\nBased on the conversation so far, develop a comprehensive research strategy for the Scientist to test the hypothesis. "
         "\n\nIMPORTANT: If there is a PREVIOUS ITERATION SUMMARY in the conversation history, review it and adjust your strategy accordingly. "
         "\nAvoid repeating failed approaches and suggest alternative methodologies or variables. "
@@ -303,85 +304,12 @@ def create_planning_agent(model_client: ModelClient) -> Agent:
         "\n\nProvide a structured, multi-step research strategy (3-4 key steps) that guides the Scientist's comprehensive analysis. "
         "\nEach step should be specific about the analytical approach while allowing the Scientist flexibility in implementation. "
         "\nFocus on scientific rigor, statistical appropriateness, and hypothesis validation. "
-    )
-    return Agent(
-        name="Planning Agent",
-        system_message="You are a Research Planning Agent with expertise in statistical methodology and research design. Your role is to develop comprehensive analytical strategies that guide the Scientist's advanced statistical analysis capabilities. Design rigorous, multi-step research approaches that ensure scientific validity and robust hypothesis testing.",
-        model_client=model_client,
-        query=planning_query
-    )
-
-
-def create_enhanced_planning_agent(model_client: ModelClient, hypothesis: str, filtered_csv_statistics: Dict[str, Any], relevant_variables: Dict[str, str]) -> Agent:
-    """Create Enhanced Planning Agent with access to filtered dataset information."""
-    
-    # Format filtered dataset information
-    dataset_info = ""
-    if filtered_csv_statistics and 'error' not in filtered_csv_statistics:
-        dataset_info = (
-            f"\n\nFILTERED DATASET INFORMATION:\n"
-            f"- Total rows in filtered dataset: {filtered_csv_statistics['total_rows']:,}\n"
-            f"- Total columns in filtered dataset: {filtered_csv_statistics['total_cols']}\n"
-            f"- Missing values: {filtered_csv_statistics['missing_data']:,} ({filtered_csv_statistics['missing_percentage']}%)\n"
-            f"- Numeric columns: {filtered_csv_statistics['numeric_cols']}\n"
-            f"- Categorical columns: {filtered_csv_statistics['categorical_cols']}\n"
-        )
-        
-        if filtered_csv_statistics.get('all_columns'):
-            dataset_info += f"- Available columns: {', '.join(filtered_csv_statistics['all_columns'])}\n"
-    else:
-        dataset_info = "\n\nNote: Filtered dataset statistics not available.\n"
-    
-    # Format relevant variables information
-    variables_info = ""
-    if relevant_variables:
-        variables_info = "\n\nRELEVANT VARIABLES FOR THIS HYPOTHESIS:\n"
-        for var_name, description in relevant_variables.items():
-            variables_info += f"- {var_name}: {description}\n"
-    else:
-        variables_info = "\n\nNote: No specific relevant variables identified.\n"
-    
-    enhanced_planning_query = (
-        f"\nHYPOTHESIS TO TEST: {hypothesis}\n"
-        f"{dataset_info}"
-        f"{variables_info}"
-        "\nBased on the specific hypothesis, filtered dataset characteristics, and relevant variables above, "
-        "develop a comprehensive research strategy for the Scientist to test this hypothesis. "
-        "\n\nIMPORTANT: If there is a PREVIOUS ITERATION SUMMARY in the conversation history, review it and adjust your strategy accordingly. "
-        "\nAvoid repeating failed approaches and suggest alternative methodologies or variables. "
-        "\n\nYOUR ROLE: You are a Research Planning Agent who designs comprehensive analytical strategies. "
-        "\nThe Scientist has advanced statistical capabilities including regression analysis, survival analysis, machine learning, "
-        "\nand sophisticated hypothesis testing. Design strategies that leverage these capabilities effectively. "
-        "\n\nSTRATEGY COMPONENTS TO CONSIDER: "
-        "\n\n1. EXPLORATORY DATA ANALYSIS (EDA) STRATEGY: "
-        "\n- Comprehensive data quality assessment and missing data patterns "
-        "\n- Distribution analysis and normality testing for key variables "
-        "\n- Outlier detection and handling strategies "
-        "\n- Data visualization approach for hypothesis validation "
-        "\n\n2. STATISTICAL ANALYSIS FRAMEWORK: "
-        "\n- Primary statistical tests appropriate for the hypothesis "
-        "\n- Secondary analyses for robustness and sensitivity "
-        "\n- Effect size calculations and power analysis considerations "
-        "\n- Multiple comparison corrections if needed "
-        "\n\n3. ADVANCED ANALYTICAL APPROACHES: "
-        "\n- Regression modeling strategies (linear, logistic, survival) "
-        "\n- Machine learning approaches for pattern detection "
-        "\n- Mediation and moderation analyses if relevant "
-        "\n- Subgroup analyses and heterogeneity assessment "
-        "\n\n4. VALIDATION AND ROBUSTNESS: "
-        "\n- Cross-validation strategies "
-        "\n- Sensitivity analyses for key assumptions "
-        "\n- Alternative statistical approaches for comparison "
-        "\n- Confidence interval and significance testing framework "
-        "\n\nProvide a structured, multi-step research strategy (3-4 key steps) that guides the Scientist's comprehensive analysis. "
-        "\nEach step should be specific about the analytical approach while allowing the Scientist flexibility in implementation. "
-        "\nFocus on scientific rigor, statistical appropriateness, and hypothesis validation. "
-        "\nTailor your strategy specifically to the filtered dataset characteristics and relevant variables identified above. "
+        "\nUse any dataset information, hypothesis details, and relevant variables provided in the conversation context. "
     )
     
     return Agent(
         name="Enhanced Planning Agent",
-        system_message="You are a Research Planning Agent with expertise in statistical methodology and research design. Your role is to develop comprehensive analytical strategies that guide the Scientist's advanced statistical analysis capabilities. You have access to specific hypothesis details, filtered dataset characteristics, and relevant variables to design targeted research approaches.",
+        system_message="You are a Research Planning Agent with expertise in statistical methodology and research design. Your role is to develop comprehensive analytical strategies that guide the Scientist's advanced statistical analysis capabilities. Design rigorous, multi-step research approaches that ensure scientific validity and robust hypothesis testing.",
         model_client=model_client,
         query=enhanced_planning_query
     )

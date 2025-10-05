@@ -1,0 +1,12 @@
+
+======================================================================
+🧠           Discovery Agent    🔬
+    AI-Powered Scientific Discovery    🚀
+======================================================================
+
+ℹ️ Info: 🔧 Initializing Discovery Agent System...
+ℹ️ Info: ⚙️ Initializing Discovery Agent...
+❌ Error in initialization: Failed to initialize model client: [enforce fail at alloc_cpu.cpp:124] err == 0. DefaultCPUAllocator: can't allocate memory: you tried to allocate 99614720 bytes. Error code 12 (Cannot allocate memory)
+❌ Error in main: Runtime error: Failed to initialize model client: [enforce fail at alloc_cpu.cpp:124] err == 0. DefaultCPUAllocator: can't allocate memory: you tried to allocate 99614720 bytes. Error code 12 (Cannot allocate memory)
+ℹ️ Info: 💡 This might be a model loading or GPU memory issue.
+ℹ️ Info: 👋 Discovery Agent session ended.

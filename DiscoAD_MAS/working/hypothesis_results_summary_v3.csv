@@ -1,0 +1,2 @@
+point_biserial_r,point_biserial_p_value,t_test_t_statistic,t_test_p_value,cohens_d,effect_size_interpretation,mean_age_dementia_case,mean_age_non_dementia_case,ci_dementia_case,ci_non_dementia_case
+0.13853575062272258,7.436146892318064e-115,23.211477443739106,6.78278882965259e-118,0.2872398152513682,medium,76.78353290633993,73.57688222430491,76.6–77.0,73.4–73.8

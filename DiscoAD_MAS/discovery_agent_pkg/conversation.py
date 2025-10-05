@@ -157,14 +157,17 @@ class ConversationManager:
                 f"This summary will be used as context for a new iteration where we will try different variables/approaches. "
                 f"Focus on:\n"
                 f"1. The original hypothesis that was tested\n"
-                f"2. What data preprocessing was done (which variables were selected/filtered)\n"
+                f"2. What data preprocessing was done (which variables were selected/filtered) - LIST ALL VARIABLES USED\n"
                 f"3. What analysis approaches were attempted by the Scientist\n"
                 f"4. What analysis and visualizations were performed by the Scientist\n"
                 f"5. What the Critic found problematic or what was not approved\n"
                 f"6. Key insights and lessons learned\n"
                 f"7. What should be done differently in the next iteration\n\n"
+                f"IMPORTANT: Make sure to explicitly list all the variables that were selected and used in the previous iteration. "
+                f"This information is critical for the next iteration to avoid using the same variables.\n\n"
                 f"Conversation:\n{conversation_text}\n\n"
-                f"Provide a detailed summary that will help guide the next iteration to avoid the same issues and try different approaches."
+                f"Provide a detailed summary that will help guide the next iteration to avoid the same issues and try different approaches. "
+                f"Be sure to include a clear list of all variables that were used in the previous iteration."
             )
             
             # Use the model client to generate comprehensive summary

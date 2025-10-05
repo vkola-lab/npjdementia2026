@@ -29,7 +29,8 @@ AUTO_APPROVE_AFTER=4
 OUTER_LOOP_ITERATIONS=2
 
 # User input configuration - Edit these values for your specific analysis
-HYPOTHESIS_MODE="generate"  # Options: "generate" or "direct"
+HYPOTHESIS_MODE="direct hypothesis"  # Options: "generate" or "direct hypothesis"
+HYPOTHESIS="Higher age is associated with increased dementia incidence."  # Direct hypothesis when HYPOTHESIS_MODE is "direct hypothesis"
 KEYWORDS_FILE="adrd_keywords.txt"  # Path to keywords file for sampling
 # NUM_KEYWORDS will be set in the loop (2 and 3)
 DATASET_FOLDER="/projectnb/vkolagrp/ketanss/adrd_agent_custom/adrd_agent/datasets/NACC"
@@ -60,6 +61,9 @@ echo "   Model: $MODEL_NAME"
 echo "   Device: $DEVICE"
 echo "   Max tokens: $MAX_TOKENS"
 echo "   Hypothesis mode: $HYPOTHESIS_MODE"
+if [ "$HYPOTHESIS_MODE" = "direct hypothesis" ]; then
+    echo "   Direct hypothesis: $HYPOTHESIS"
+fi
 echo "   Keywords file: $KEYWORDS_FILE"
 echo "   Number of keywords per run: 2 and 3 (looping)"
 echo "   Number of sampling runs: $NUM_SAMPLING_RUNS"
@@ -70,12 +74,12 @@ if [ -n "$DATASET_FOLDER" ]; then
 fi
 echo ""
 
-# Loop through 2 and 3 keywords
-for NUM_KEYWORDS in 2 3; do
-    echo "🔄 Running with $NUM_KEYWORDS keywords..."
+# Check if using direct hypothesis mode
+if [ "$HYPOTHESIS_MODE" = "direct hypothesis" ]; then
+    echo "🎯 Running with direct hypothesis (single call)..."
     echo "=========================================="
     
-    # Run the discovery agent with direct arguments
+    # Run the discovery agent with direct hypothesis (single call)
     if [ "$VERBOSE" = "true" ]; then
         python discover.py \
             --model-name "$MODEL_NAME" \
@@ -85,10 +89,8 @@ for NUM_KEYWORDS in 2 3; do
             --auto-approve-after "$AUTO_APPROVE_AFTER" \
             --outer-loop-iterations "$OUTER_LOOP_ITERATIONS" \
             --hypothesis-mode "$HYPOTHESIS_MODE" \
-            --keywords-file "$KEYWORDS_FILE" \
-            --num-keywords "$NUM_KEYWORDS" \
+            --hypothesis "$HYPOTHESIS" \
             --dataset-folder "$DATASET_FOLDER" \
-            --num-sampling-runs "$NUM_SAMPLING_RUNS" \
             --verbose
     else
         python discover.py \
@@ -99,15 +101,51 @@ for NUM_KEYWORDS in 2 3; do
             --auto-approve-after "$AUTO_APPROVE_AFTER" \
             --outer-loop-iterations "$OUTER_LOOP_ITERATIONS" \
             --hypothesis-mode "$HYPOTHESIS_MODE" \
-            --keywords-file "$KEYWORDS_FILE" \
-            --num-keywords "$NUM_KEYWORDS" \
-            --dataset-folder "$DATASET_FOLDER" \
-            --num-sampling-runs "$NUM_SAMPLING_RUNS"
+            --hypothesis "$HYPOTHESIS" \
+            --dataset-folder "$DATASET_FOLDER"
     fi
     
-    echo "✅ Completed run with $NUM_KEYWORDS keywords"
-    echo ""
-done
+    echo "✅ Completed direct hypothesis run"
+else
+    # Loop through 2 and 3 keywords for generate/direct modes
+    for NUM_KEYWORDS in 2 3; do
+        echo "🔄 Running with $NUM_KEYWORDS keywords..."
+        echo "=========================================="
+        
+        # Run the discovery agent with direct arguments
+        if [ "$VERBOSE" = "true" ]; then
+            python discover.py \
+                --model-name "$MODEL_NAME" \
+                --device "$DEVICE" \
+                --max-tokens "$MAX_TOKENS" \
+                --max-conversation-length "$MAX_CONVERSATION_LENGTH" \
+                --auto-approve-after "$AUTO_APPROVE_AFTER" \
+                --outer-loop-iterations "$OUTER_LOOP_ITERATIONS" \
+                --hypothesis-mode "$HYPOTHESIS_MODE" \
+                --keywords-file "$KEYWORDS_FILE" \
+                --num-keywords "$NUM_KEYWORDS" \
+                --dataset-folder "$DATASET_FOLDER" \
+                --num-sampling-runs "$NUM_SAMPLING_RUNS" \
+                --verbose
+        else
+            python discover.py \
+                --model-name "$MODEL_NAME" \
+                --device "$DEVICE" \
+                --max-tokens "$MAX_TOKENS" \
+                --max-conversation-length "$MAX_CONVERSATION_LENGTH" \
+                --auto-approve-after "$AUTO_APPROVE_AFTER" \
+                --outer-loop-iterations "$OUTER_LOOP_ITERATIONS" \
+                --hypothesis-mode "$HYPOTHESIS_MODE" \
+                --keywords-file "$KEYWORDS_FILE" \
+                --num-keywords "$NUM_KEYWORDS" \
+                --dataset-folder "$DATASET_FOLDER" \
+                --num-sampling-runs "$NUM_SAMPLING_RUNS"
+        fi
+        
+        echo "✅ Completed run with $NUM_KEYWORDS keywords"
+        echo ""
+    done
+fi
 
 echo "🎉 All runs completed!"
     

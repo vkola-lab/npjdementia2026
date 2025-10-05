@@ -18,8 +18,9 @@ class Config:
         parser.add_argument('--code-timeout', type=int, default=30, help='Code execution timeout in seconds')
         
         # User input configuration parameters
-        parser.add_argument('--hypothesis-mode', choices=['generate', 'direct'], default='generate', 
-                          help='Whether to generate multiple hypotheses (generate) or use input directly (direct)')
+        parser.add_argument('--hypothesis-mode', choices=['generate', 'direct', 'direct hypothesis'], default='generate', 
+                          help='Whether to generate multiple hypotheses (generate), use keywords directly (direct), or use provided hypothesis (direct hypothesis)')
+        parser.add_argument('--hypothesis', type=str, help='Direct hypothesis to use when hypothesis-mode is "direct hypothesis"')
         parser.add_argument('--dataset-folder', type=str, help='Path to folder containing CSV and JSON files')
         parser.add_argument('--keywords-file', type=str, default='adrd_keywords.txt', 
                           help='Path to keywords file for sampling (default: adrd_keywords.txt)')
@@ -46,6 +47,7 @@ class Config:
         
         # User input settings
         self.hypothesis_mode = args.hypothesis_mode
+        self.hypothesis = args.hypothesis
         self.dataset_folder = args.dataset_folder
         self.keywords_file = args.keywords_file
         self.num_keywords = args.num_keywords
@@ -66,6 +68,8 @@ class Config:
         print(f"   Max tokens: {self.max_new_tokens}")
         print(f"   Code timeout: {self.code_timeout}s")
         print(f"   Hypothesis mode: {self.hypothesis_mode}")
+        if self.hypothesis_mode == "direct hypothesis" and self.hypothesis:
+            print(f"   Direct hypothesis: {self.hypothesis}")
         print(f"   Keywords file: {self.keywords_file}")
         print(f"   Number of keywords per run: {self.num_keywords}")
         print(f"   Number of sampling runs: {self.num_sampling_runs}")
