@@ -1,0 +1,464 @@
+
+======================================================================
+🧠           Discovery Agent    🔬
+    AI-Powered Scientific Discovery    🚀
+======================================================================
+
+ℹ️ Info: 🔧 Initializing Discovery Agent System...
+ℹ️ Info: ⚙️ Initializing Discovery Agent...
+ℹ️ Info: 🗑️ Deleted existing working directory
+ℹ️ Info: 📁 Created fresh working directory
+ℹ️ Info: 📊 Created new CSV tracking file: results/hypothesis_approval_tracking_model_Qwen3_4B_Instruct_2507_mode_direct hypothesis_kw_3_runs_10_outer_2_auto_4_20251006_150856.csv
+ℹ️ Info: 🔧 CodeExecutor initialized with 30s timeout
+✅ Success: 🎉 Discovery Agent initialized successfully!
+ℹ️ Info: 🚀 Starting Discovery Agent...
+ℹ️ Info: 🎯 Using direct hypothesis mode with provided hypothesis
+────────────────────────────────────────────────────────────
+ℹ️ Info: 🎯 Direct Hypothesis Run 1/1
+ℹ️ Info: 📝 Using provided direct hypothesis: Higher age is associated with increased dementia incidence.
+ℹ️ Info: 📝 Setting direct hypothesis: Higher age is associated with increased dementia incidence.
+
+📝 Using Input as Hypothesis:
+  1. Higher age is associated with increased dementia incidence.
+
+📊 Progress: 1/1 hypothesiss (100.0%)
+────────────────────────────────────────────────────────────
+ℹ️ Info: 🔍 Working on hypothesis 1: Higher age is associated with increased dementia incidence.
+────────────────────────────────────────────────────────────
+ℹ️ Info: 🔄 OUTER LOOP ITERATION 1/2
+👤 User Input: Higher age is associated with increased dementia incidence.
+ℹ️ Info: 🔧 Running manual preprocessing for hypothesis 1, iteration 1...
+ℹ️ Info: 🔧 Starting manual preprocessing conversation...
+ℹ️ Info: 📁 Using dataset folder from config: /projectnb/vkolagrp/ketanss/adrd_agent_custom/adrd_agent/datasets/NACC
+ℹ️ Info: 🔍 Auto-detected files:
+ℹ️ Info:    📊 CSV: NACC.csv
+ℹ️ Info:    📚 JSON: NACC.json
+✅ Success: ✅ JSON dictionary file is valid: NACC.json
+ℹ️ Info: 🔬 Hypothesis: Higher age is associated with increased dementia incidence.
+ℹ️ Info: 📁 Dataset folder: /projectnb/vkolagrp/ketanss/adrd_agent_custom/adrd_agent/datasets/NACC
+ℹ️ Info: 📊 CSV file: /projectnb/vkolagrp/ketanss/adrd_agent_custom/adrd_agent/datasets/NACC/NACC.csv
+ℹ️ Info: 📚 JSON dictionary: /projectnb/vkolagrp/ketanss/adrd_agent_custom/adrd_agent/datasets/NACC/NACC.json
+ℹ️ Info: 🔍 Analyzing hypothesis to find relevant variables...
+ℹ️ Info: 🔍 Categorizing variables from dictionary...
+ℹ️ Info: 📊 Variable categorization summary:
+ℹ️ Info:    • Categorical: 645
+ℹ️ Info:    • Numerical: 20
+ℹ️ Info:    • Mixed: 145
+ℹ️ Info:    • Unknown: 0
+ℹ️ Info:    • Total: 810
+ℹ️ Info: 🎯 Selected 17 variables with categorization:
+ℹ️ Info:    • NACCAGE: numerical (numerical)
+ℹ️ Info:    • DEMENTED: categorical (categorical)
+ℹ️ Info:    • NACCAGEB: numerical (numerical)
+ℹ️ Info:    • SEX: categorical (categorical)
+ℹ️ Info:    • EDUC: mixed (numerical)
+ℹ️ Info:    • HISPANIC: categorical (categorical)
+ℹ️ Info:    • RACE: categorical (categorical)
+ℹ️ Info:    • NACCALZD: categorical (categorical)
+ℹ️ Info:    • NACCMMSE: mixed (numerical)
+ℹ️ Info:    • NACCMOCA: mixed (numerical)
+ℹ️ Info:    • HYPERTEN: categorical (categorical)
+ℹ️ Info:    • STROKE: categorical (categorical)
+ℹ️ Info:    • CVDIMAG: categorical (categorical)
+ℹ️ Info:    • CVDIMAG1: categorical (categorical)
+ℹ️ Info:    • CVDIMAG2: categorical (categorical)
+ℹ️ Info:    • CVDIMAG3: categorical (categorical)
+ℹ️ Info:    • CVDIMAG4: categorical (categorical)
+ℹ️ Info: 🎯 Found 17 relevant variables:
+ℹ️ Info:    • NACCAGE: Subject's age at visit [numerical] (numerical)
+ℹ️ Info:    • DEMENTED: Met criteria for dementia [categorical] (categorical)
+ℹ️ Info:    • NACCAGEB: Subject's age at initial visit [numerical] (numerical)
+ℹ️ Info:    • SEX: Subject's sex [categorical] (categorical)
+ℹ️ Info:    • EDUC: Years of education [mixed] (numerical)
+ℹ️ Info:    • HISPANIC: Hispanic/Latino ethnicity [categorical] (categorical)
+ℹ️ Info:    • RACE: Race [categorical] (categorical)
+ℹ️ Info:    • NACCALZD: Presumptive etiologic diagnosis of the cognitive disorder - Alzheimer's disease [categorical] (categorical)
+ℹ️ Info:    • NACCMMSE: Total MMSE score (using D-L-R-O-W) [mixed] (numerical)
+ℹ️ Info:    • NACCMOCA: MoCA Total Score - corrected for education [mixed] (numerical)
+ℹ️ Info:    • HYPERTEN: Hypertension [categorical] (categorical)
+ℹ️ Info:    • STROKE: Presumptive etiologic diagnosis of the cognitive disorder - Stroke [categorical] (categorical)
+ℹ️ Info:    • CVDIMAG: Imaging evidence [categorical] (categorical)
+ℹ️ Info:    • CVDIMAG1: Single strategic infarct [categorical] (categorical)
+ℹ️ Info:    • CVDIMAG2: Multiple infarcts [categorical] (categorical)
+ℹ️ Info:    • CVDIMAG3: Extensive white matter hyperintensity [categorical] (categorical)
+ℹ️ Info:    • CVDIMAG4: Other imaging evidence [categorical] (categorical)
+ℹ️ Info: 🔍 Filtering CSV files with relevant variables...
+ℹ️ Info: 📊 Processing CSV file: NACC.csv
+ℹ️ Info: 📈 Original CSV has 26778 rows and 2117 columns
+ℹ️ Info: 🎯 Found 16 relevant columns: ['NACCAGE', 'DEMENTED', 'SEX', 'EDUC', 'HISPANIC', 'RACE', 'NACCALZD', 'NACCMMSE', 'NACCMOCA', 'HYPERTEN', 'STROKE', 'CVDIMAG', 'CVDIMAG1', 'CVDIMAG2', 'CVDIMAG3', 'CVDIMAG4']
+ℹ️ Info: 🔄 Renamed columns to descriptions: {'NACCAGE': 'Subjects_age_at_visit', 'DEMENTED': 'Met_criteria_for_dementia', 'SEX': 'Subjects_sex', 'EDUC': 'Years_of_education', 'HISPANIC': 'HispanicLatino_ethnicity', 'RACE': 'Race', 'NACCALZD': 'Presumptive_etiologic_diagnosis_of_the_cognitive_disorder_Alzheimers_disease', 'NACCMMSE': 'Total_MMSE_score_using_DLROW', 'NACCMOCA': 'MoCA_Total_Score_corrected_for_education', 'HYPERTEN': 'Hypertension', 'STROKE': 'Presumptive_etiologic_diagnosis_of_the_cognitive_disorder_Stroke', 'CVDIMAG': 'Imaging_evidence', 'CVDIMAG1': 'Single_strategic_infarct', 'CVDIMAG2': 'Multiple_infarcts', 'CVDIMAG3': 'Extensive_white_matter_hyperintensity', 'CVDIMAG4': 'Other_imaging_evidence'}
+ℹ️ Info: 🔧 Starting data preprocessing with JSON-based categorization...
+ℹ️ Info: 📊 Original data shape: 26778 rows, 16 columns
+ℹ️ Info: 🔍 Analyzing missing data patterns...
+ℹ️ Info:    📊 Total missing values: 145,826 (34.0% of all data)
+ℹ️ Info:    📊 Columns with high missingness (>10%): 9
+ℹ️ Info:    📊 Top 10 columns with highest missingness:
+ℹ️ Info:      • Single_strategic_infarct: 68.4% missing
+ℹ️ Info:      • Multiple_infarcts: 68.4% missing
+ℹ️ Info:      • Extensive_white_matter_hyperintensity: 68.4% missing
+ℹ️ Info:      • Other_imaging_evidence: 68.4% missing
+ℹ️ Info:      • Imaging_evidence: 68.4% missing
+ℹ️ Info:      • MoCA_Total_Score_corrected_for_education: 63.0% missing
+ℹ️ Info:      • Total_MMSE_score_using_DLROW: 52.7% missing
+ℹ️ Info:      • Presumptive_etiologic_diagnosis_of_the_cognitive_disorder_Stroke: 50.0% missing
+ℹ️ Info:      • Hypertension: 36.9% missing
+ℹ️ Info:      • Subjects_age_at_visit: 0.0% missing
+ℹ️ Info: 🗑️ Removing columns with >10.0% missing data...
+ℹ️ Info:    📊 Removing 9 columns with high missingness:
+ℹ️ Info:    • Total_MMSE_score_using_DLROW: 52.7% missing
+ℹ️ Info:    • MoCA_Total_Score_corrected_for_education: 63.0% missing
+ℹ️ Info:    • Hypertension: 36.9% missing
+ℹ️ Info:    • Presumptive_etiologic_diagnosis_of_the_cognitive_disorder_Stroke: 50.0% missing
+ℹ️ Info:    • Imaging_evidence: 68.4% missing
+ℹ️ Info:    • Single_strategic_infarct: 68.4% missing
+ℹ️ Info:    • Multiple_infarcts: 68.4% missing
+ℹ️ Info:    • Extensive_white_matter_hyperintensity: 68.4% missing
+ℹ️ Info:    • Other_imaging_evidence: 68.4% missing
+ℹ️ Info: 🔍 Using JSON-based categorization for column types...
+ℹ️ Info:    📊 JSON-based categorization:
+ℹ️ Info:      • Categorical columns (1): ['Race']
+ℹ️ Info:      • Numerical columns (6): ['Subjects_age_at_visit', 'Met_criteria_for_dementia', 'Subjects_sex', 'Years_of_education', 'HispanicLatino_ethnicity', 'Presumptive_etiologic_diagnosis_of_the_cognitive_disorder_Alzheimers_disease']
+ℹ️ Info:      • Mixed columns (0): []
+ℹ️ Info: 🔧 Handling special values in mixed variables...
+ℹ️ Info: 🔧 Creating dummy variables for categorical columns...
+ℹ️ Info:    📊 Created 6 dummy variables for Race: ['Race_is_2', 'Race_is_3', 'Race_is_4', 'Race_is_5', 'Race_is_50', 'Race_is_99']
+ℹ️ Info: 🔧 Converting remaining object columns to numeric...
+ℹ️ Info: 🔍 Final data validation...
+✅ Success: ✅ Data preprocessing with categorization completed!
+ℹ️ Info: 📊 Final data shape: 26778 rows, 12 columns
+ℹ️ Info: 📈 Columns removed: 4
+ℹ️ Info: 📈 Columns added: 5
+✅ Success: ✅ Processed CSV saved to: working/filtered_dataset.csv
+ℹ️ Info: 📊 Final processed CSV has 26778 rows and 12 columns
+ℹ️ Info: ✅ Manual preprocessing completed successfully!
+ℹ️ Info: 📊 Filtered data saved to: working/filtered_dataset.csv
+ℹ️ Info: 📋 Updated previously used variables list: 17 total variables
+ℹ️ Info: 📋 Starting Planning Agent round...
+⏳ Enhanced Planning Agent is working...
+ℹ️ Info: 🔄 Generating Enhanced Planning Agent response...
+ℹ️ Info: ⏱️ Response generated in 35.33 seconds
+
+🤖 --- Enhanced Planning Agent ---
+Certainly. Based on the current hypothesis — **"Higher age is associated with increased dementia incidence"** — and the available dataset characteristics, here is a **comprehensive, scientifically rigorous, and statistically sound research strategy** tailored specifically for you as the Scientist. This plan avoids redundant or previously tested methods, leverages your advanced analytical tools, and ensures robust validation of the core association while accounting for confounding factors and biological plausibility.
+
+---
+
+### 🎯 **Research Strategy: Testing "Higher Age Is Associated With Increased Dementia Incidence"**
+
+> *Objective:* To establish a statistically significant, biologically plausible, and clinically meaningful relationship between increasing subject age at visit and the occurrence of dementia diagnosis, using multivariate and time-to-event modeling frameworks.
+
+---
+
+## 🔍 Step 1: Exploratory Data Analysis (EDA) – Understand Patterns & Structure  
+*Goal: Validate data integrity, assess distributions, detect outliers, and identify potential confounders.*
+
+**Actions:**  
+- **Distribution Assessment**:  
+  - Plot histograms and density plots of `Subjects_age_at_visit` and `Met_criteria_for_dementia`.  
+  - Test normality using Shapiro-Wilk or Kolmogorov-Smirnov tests for age; note skewness/kurtosis.  
+    > ⚠️ *If non-normal, consider transformations (log, square root) or use non-parametric methods later.*  
+
+- **Age-Dementia Association via Descriptive Summary**:  
+  - Compute mean ± SD of age by dementia status (`Met_criteria_for_dementia = 0 vs 1`).  
+  - Perform t-test (or Mann-Whitney U if non-normally distributed) to evaluate baseline difference.  
+  - Visualize with boxplots or violin plots showing age distribution across dementia status groups.  
+
+- **Outlier Detection**:  
+  - Identify extreme ages (>100 years or <30 years) using IQR rules or z-scores.  
+  - Flag and assess whether such cases are valid (e.g., possible errors, rare population).  
+  - Consider exclusion only if justified (e.g., >2 standard deviations from mean), but document rationale.  
+
+- **Initial Confounder Screening**:  
+  - Examine correlations between age and other covariates (e.g., education, sex):  
+    - Pearson/Spearman correlation matrix (for numeric variables).  
+    - Note strong inverse relationships (e.g., higher education → lower dementia risk); these will inform adjustment.  
+
+✅ *Output*: A clear narrative of how age differs between those with and without dementia, supported by visualizations and summary stats. This sets the stage for formal testing.
+
+---
+
+## 📊 Step 2: Primary Statistical Testing – Multivariable Logistic Regression + Survival Analysis  
+*Goal: Quantify the effect of age on dementia incidence while adjusting for known confounders.*
+
+**Primary Model: Multivariable Logistic Regression**  
+- Dependent variable: `Met_criteria_for_dementia` (binary outcome: 0 = no, 1 = yes)  
+- Independent variable: `Subjects_age_at_visit` (continuous predictor)  
+- Covariates: Include all potentially confounding variables:  
+  - `Subjects_sex`, `Years_of_education`, `HispanicLatino_ethnicity` (treat as categorical),  
+  - Race indicators (`Race_is_2`, ..., `Race_is_99`) — include only those with ≥5% prevalence to avoid overfitting.  
+
+➡️ **Model Fit & Interpretation**:  
+- Estimate odds ratio (OR) per year increase in age (e.g., OR = 1.08 → 8% higher odds of dementia per additional year).  
+- Report 95% confidence intervals (CIs).  
+- Assess model fit with AIC/BIC and pseudo-R² (Cox-Snell or McFadden).  
+
+👉 *Why?* Adjusts for demographic and socioeconomic confounders. Controls for selection bias.
+
+**Secondary Model: Cox Proportional Hazards Regression (Time-to-Event)**  
+- Treat `Met_criteria_for_dementia` as a time-to-event endpoint (if longitudinal data exists).  
+- If the dataset includes follow-up times (not explicitly listed), assume a static cross-sectional snapshot — then proceed cautiously.  
+- Since no explicit time-to-event structure is present, **use Cox model only if we can reasonably interpret onset timing**, otherwise skip or interpret as a "lifetime incidence" model.  
+
+➡️ **Alternative Interpretation**:  
+- Use **age-stratified hazard ratios** if age is naturally grouped into cohorts (e.g., 60–69, 70–79, etc.).  
+- Compare hazard ratios across strata to show nonlinear trends (e.g., steeper slope after 75).  
+
+📌 *Key Output*:  
+- Odds ratio (OR) for dementia per one-year increase in age, adjusted for sex, education, ethnicity, race.  
+- P-value and CI to confirm statistical significance.  
+- Graphical representation (forest plot or trend line) of age vs. log(OR).
+
+---
+
+## 🔬 Step 3: Advanced Analyses – Moderation, Mediation, and Heterogeneity Checks  
+*Goal: Explore whether the age-dementia link varies across subgroups or is influenced by intermediate pathways.*
+
+**A. Moderation Analysis**  
+- Test interaction terms: `age × sex`, `age × education`, `age × HispanicLatino_ethnicity`  
+- Add interaction terms to logistic regression:  
+  ```R
+  model <- glm(Met_criteria_for_dementia ~ age + sex + education + age:sex + age:education, family=binomial)
+  ```
+- Evaluate whether effect of age differs significantly by subgroup (e.g., women vs men).  
+- If interaction term is significant, conduct post-hoc stratified analyses.  
+
+💡 *Insight*: Could the effect of aging be stronger in low-educated individuals or certain ethnicities?
+
+**B. Mediation Analysis (Optional but Powerful)**  
+- Investigate whether **education acts as a mediator** between age and dementia.  
+- Use Baron & Kenny’s method or structural equation modeling (SEM) to test:  
+  - Does higher education reduce dementia risk independently of age?  
+  - Is the effect of age reduced when controlling for education?  
+- Calculate indirect effects and total effects.  
+
+➡️ *Example question*: “Does education buffer against the negative impact of aging on cognition?”  
+
+**C. Sensitivity Analysis**  
+- Recalculate primary model excluding high-age outliers (>90 years) or removing participants with missing education.  
+- Repeat analysis with different thresholds (e.g., age ≥70 vs age ≥80).  
+- Check robustness of OR estimates under varying sample subsets.  
+
+---
+
+## ✅ Step 4: Validation & Robustness Checks  
+*Goal: Ensure findings are reliable, reproducible, and not driven by chance or model artifacts.*
+
+**A. Cross-Validation (Bootstrapping)**  
+- Apply bootstrapping (with replacement, B = 1000 bootstrap samples) to estimate sampling variability of the OR.  
+- Generate 95% percentile-based confidence intervals.  
+- Compare observed OR with bootstrap distribution to validate stability.  
+
+**B. Assumption Checks**  
+- For logistic regression:  
+  - Check multicollinearity (VIF ≤ 5 recommended).  
+  - Verify linearity assumption via partial residual plots.  
+  - Confirm independence of observations (no clustering).  
+- For interactions: Assess parallelism of lines in interaction plots.  
+
+**C. Comparison with Alternative Models**  
+- Run simple bivariate analysis (age vs dementia) and compare its OR with the adjusted OR.  
+- Report the magnitude of attenuation due to confounding.  
+- Use a table summarizing:  
+  | Model Type            | OR (per year) | 95% CI       | p-value     |  
+  |------------------------|---------------|--------------|-------------|  
+  | Unadjusted             | X.XX          | [a,b]        | p           |  
+  | Adjusted               | Y.YY          | [c,d]        | p’          |  
+
+**D. Clinical Relevance Assessment**  
+- Translate OR into real-world terms: e.g., “An 80-year-old has 1.8× greater odds than a 60-year-old.”  
+- Discuss public health implications (e.g., early screening for those >75).  
+
+---
+
+### 💡 Final Notes:
+
+- **No need to include race binary flags directly** unless they represent distinct populations with known cognitive disparities. Focus on meaningful categories like “non-Hispanic White,” “Black,” etc., derived from the existing flags.  
+- **Avoid overfitting**: Do not include every racial category; use principal component analysis or aggregation if necessary.  
+- **Ethical consideration**: Be cautious about interpreting race as causal — treat as sociodemographic proxy, not biological determinant.  
+
+---
+
+### ✔️ Summary of Key Outputs Expected:
+1. Clear EDA showing age differences by dementia status.  
+2. Adjusted OR per year of age (with 95% CI and p-value).  
+3. Interaction results indicating moderating effects (e.g., by sex or education).  
+4. Bootstrap-reinforced confidence intervals.  
+5. Table comparing unadjusted vs. adjusted models.  
+6. One concise statement validating the original hypothesis with precision and nuance.
+
+---
+
+This strategy balances **scientific depth**, **methodological rigor**, and **practical interpretability**, enabling you to move beyond simple correlation toward a nuanced understanding of how age influences dementia risk — grounded in modern statistical practice.
+
+Proceed with Step 1 now. Ready when you are!
+ℹ️ Info: 🔄 Conversation turn 1
+ℹ️ Info: 🧪 Starting Scientist round...
+⏳ Scientist is working...
+ℹ️ Info: 🔄 Generating Scientist response...
+ℹ️ Info: ⏱️ Response generated in 13.11 seconds
+ℹ️ Info: 💻 Executing code from Scientist response...
+ℹ️ Info: 🔍 About to call execute_code_from_response...
+ℹ️ Info: 🔍 Extracting code block from text...
+ℹ️ Info: 📝 Found code block: 2980 characters
+ℹ️ Info: 💻 Executing code block
+ℹ️ Info: 🔄 Executing code...
+ℹ️ Info: ⏰ Setting timeout to 30s
+ℹ️ Info: ✅ Code execution completed in 0.49s
+ℹ️ Info: 📊 Output: Dataset loaded successfully. Shape: (26778, 12)
+
+--- Basic DataFrame Information ---
+<class 'pandas....
+ℹ️ Info: 🔍 execute_code_from_response completed successfully
+
+👨‍🔬 --- Scientist ---
+```python
+import pandas as pd
+import numpy as np
+from scipy import stats
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# Load the filtered dataset from the working directory
+file_path = "./working/filtered_dataset.csv"
+try:
+    df = pd.read_csv(file_path)
+    print(f"Dataset loaded successfully. Shape: {df.shape}")
+except FileNotFoundError:
+    print("Error: The file './working/filtered_dataset.csv' was not found.")
+    raise
+except Exception as e:
+    print(f"Error loading the dataset: {e}")
+    raise
+
+# Display basic information about the dataframe
+print("\n--- Basic DataFrame Information ---")
+print(df.info())
+
+print("\n--- Summary Statistics ---")
+print(df.describe())
+
+# Check for missing values
+missing_values = df.isnull().sum()
+print("\n--- Missing Values per Column ---")
+print(missing_values[missing_values > 0])
+
+# Confirm that we have the relevant variables
+relevant_vars = ['Subjects_age_at_visit', 'Met_criteria_for_dementia']
+if not all(var in df.columns for var in relevant_vars):
+    missing_cols = [var for var in relevant_vars if var not in df.columns]
+    print(f"Warning: Missing required variables: {missing_cols}")
+else:
+    print("All required variables present.")
+
+# Hypothesis: Higher age is associated with increased dementia incidence
+# We'll perform a chi-square test of independence between age group and dementia status
+# First, bin age into reasonable categories (e.g., 5-year bins)
+
+# Create age bins
+age_bins = [0, 40, 50, 60, 70, 80, 100]
+age_labels = ['<40', '40-50', '50-60', '60-70', '70-80', '80+']
+
+df['age_group'] = pd.cut(df['Subjects_age_at_visit'], bins=age_bins, labels=age_labels, right=False)
+
+# Now create a contingency table for dementia occurrence by age group
+contingency_table = pd.crosstab(df['age_group'], df['Met_criteria_for_dementia'])
+
+print("\n--- Contingency Table: Dementia Incidence by Age Group ---")
+print(contingency_table)
+
+# Perform chi-square test of independence
+chi2_stat, p_value, dof, expected = stats.chi2_contingency(contingency_table)
+
+print(f"\n--- Chi-Square Test Results ---")
+print(f"Chi-square statistic: {chi2_stat:.4f}")
+print(f"P-value: {p_value:.4f}")
+
+# Interpretation
+alpha = 0.05
+if p_value < alpha:
+    print(f"Conclusion: There is a statistically significant association between age group and dementia incidence (p < {alpha}).")
+else:
+    print(f"Conclusion: No statistically significant association found between age group and dementia incidence (p >= {alpha}).")
+
+# Optional: Add visualization
+plt.figure(figsize=(10, 6))
+sns.countplot(data=df, x='age_group', hue='Met_criteria_for_dementia')
+plt.title('Dementia Incidence by Age Group')
+plt.xlabel('Age Group')
+plt.ylabel('Count')
+plt.xticks(rotation=45)
+plt.tight_layout()
+plt.show()
+
+# Additional descriptive analysis: mean age by dementia status
+age_by_dementia = df.groupby('Met_criteria_for_dementia')['Subjects_age_at_visit'].agg(['mean', 'std']).round(2)
+print("\n--- Mean Age by Dementia Status ---")
+print(age_by_dementia)
+```
+
+💻 Execution Output:
+Dataset loaded successfully. Shape: (26778, 12)
+
+--- Basic DataFrame Information ---
+<class 'pandas.core.frame.DataFrame'>
+RangeIndex: 26778 entries, 0 to 26777
+Data columns (total 12 columns):
+ #   Column                                                                        Non-Null Count  Dtype
+---  ------                                                                        --------------  -----
+ 0   Subjects_age_at_visit                                                         26778 non-null  int64
+ 1   Met_criteria_for_dementia                                                     26778 non-null  int64
+ 2   Subjects_sex                                                                  26778 non-null  int64
+ 3   Years_of_education                                                            26778 non-null  int64
+ 4   HispanicLatino_ethnicity                                                      26778 non-null  int64
+ 5   Presumptive_etiologic_diagnosis_of_the_cognitive_disorder_Alzheimers_disease  26778 non-null  int64
+ 6   Race_is_2                                                                     26778 non-null  bool 
+ 7   Race_is_3                                                                     26778 non-null  bool 
+ 8   Race_is_4                                                                     26778 non-null  bool 
+ 9   Race_is_5                                                                     26778 non-null  bool 
+ 10  Race_is_50                                                                    26778 non-null  bool 
+ 11  Race_is_99                                                                    26778 non-null  bool 
+dtypes: bool(6), int64(6)
+memory usage: 1.4 MB
+None
+
+--- Summary Statistics ---
+       Subjects_age_at_visit  ...  Presumptive_etiologic_diagnosis_of_the_cognitive_disorder_Alzheimers_disease
+count           26778.000000  ...                                       26778.000000                           
+mean               74.866943  ...                                           4.383188                           
+std                11.350525  ...                                           3.602920                           
+min                18.000000  ...                                           0.000000                           
+25%                68.000000  ...                                           1.000000                           
+50%                76.000000  ...                                           1.000000                           
+75%                83.000000  ...                                           8.000000                           
+max               110.000000  ...                                           8.000000                           
+
+[8 rows x 6 columns]
+
+--- Missing Values per Column ---
+Series([], dtype: int64)
+All required variables present.
+
+--- Contingency Table: Dementia Incidence by Age Group ---
+Met_criteria_for_dementia     0     1
+age_group                            
+<40                         194    22
+40-50                       258    91
+50-60                      1139   653
+60-70                      3684  1805
+70-80                      5792  3406
+80+                        4880  4740
+
+--- Chi-Square Test Results ---
+Chi-square statistic: 610.5294
+P-value: 0.0000
+Conclusion: There is a statistically significant association between age group and dementia incidence (p < 0.05).
+
+--- Mean Age by Dementia Status ---
+                            mean    std
+Met_criteria_for_dementia              
+0                          73.58  11.56
+1                          76.78  10.76
+
+ℹ️ Info: 🔍 Starting Critic round...
+⏳ Critic is working...
+ℹ️ Info: 🔄 Generating Critic response...
