@@ -40,13 +40,104 @@ except ImportError:
             except (ValueError, TypeError):
                 return False
 
-
 class DataProcessor:
     """Handles all data processing operations for the Discovery Agent."""
     
     def __init__(self, model_client: ModelClient):
         """Initialize the data processor with a model client."""
         self.model_client = model_client
+    
+    def categorize_variables_from_dictionary(self, json_path: str) -> Dict[str, Dict[str, Any]]:
+        """
+        Categorize variables from JSON dictionary as categorical, numerical, or mixed.
+        
+        Args:
+            json_path (str): Path to the JSON dictionary file
+        
+        Returns:
+            Dict[str, Dict[str, Any]]: Dictionary with variable categorization info
+        """
+        with open(json_path, 'r') as f:
+            dictionary = json.load(f)
+        
+        categorized_vars = {}
+        
+        for var_name, var_info in dictionary.items():
+            values_info = var_info.get('Values', {})
+            
+            # Check if it has a range (numerical)
+            has_range = 'range' in values_info
+            # Check if it has specific categorical values (non-range keys)
+            has_categorical_values = any(key != 'range' for key in values_info.keys())
+            
+            if has_range and has_categorical_values:
+                # Mixed variable: has both range and categorical values
+                var_type = 'mixed'
+                range_info = values_info.get('range', [])
+                categorical_values = {k: v for k, v in values_info.items() if k != 'range'}
+                
+                categorized_vars[var_name] = {
+                    'type': var_type,
+                    'description': var_info.get('Description', 'No description'),
+                    'range': range_info,
+                    'categorical_values': categorical_values,
+                    'total_categories': len(categorical_values),
+                    'is_numerical': True,  # Can be treated as numerical for analysis
+                    'special_values': list(categorical_values.keys())  # Special codes like 88, 99, 9999
+                }
+                
+            elif has_range and not has_categorical_values:
+                # Pure numerical variable
+                var_type = 'numerical'
+                range_info = values_info.get('range', [])
+                
+                categorized_vars[var_name] = {
+                    'type': var_type,
+                    'description': var_info.get('Description', 'No description'),
+                    'range': range_info,
+                    'min_value': range_info[0] if len(range_info) >= 2 else None,
+                    'max_value': range_info[1] if len(range_info) >= 2 else None,
+                    'is_numerical': True,
+                    'special_values': []
+                }
+                
+            elif has_categorical_values and not has_range:
+                # Pure categorical variable
+                var_type = 'categorical'
+                categorical_values = values_info
+                
+                categorized_vars[var_name] = {
+                    'type': var_type,
+                    'description': var_info.get('Description', 'No description'),
+                    'categorical_values': categorical_values,
+                    'total_categories': len(categorical_values),
+                    'is_numerical': False,
+                    'special_values': []
+                }
+                
+            else:
+                # No values information - treat as unknown
+                categorized_vars[var_name] = {
+                    'type': 'unknown',
+                    'description': var_info.get('Description', 'No description'),
+                    'is_numerical': False,
+                    'special_values': []
+                }
+        
+        # Print summary
+        type_counts = {}
+        for var_info in categorized_vars.values():
+            var_type = var_info['type']
+            type_counts[var_type] = type_counts.get(var_type, 0) + 1
+        
+        ui.print_info(f"📊 Variable categorization summary:")
+        ui.print_info(f"   • Categorical: {type_counts.get('categorical', 0)}")
+        ui.print_info(f"   • Numerical: {type_counts.get('numerical', 0)}")
+        ui.print_info(f"   • Mixed: {type_counts.get('mixed', 0)}")
+        ui.print_info(f"   • Unknown: {type_counts.get('unknown', 0)}")
+        ui.print_info(f"   • Total: {len(categorized_vars)}")
+        
+        return categorized_vars
     
     def get_dataset_statistics(self, csv_path: str) -> Dict[str, Any]:
         """
@@ -161,13 +252,13 @@ class DataProcessor:
                 'categorical_stats': {}
             }
     
-    def get_relevant_variables(self, hypothesis: str, json_path: str, csv_statistics: Dict[str, Any] = None, previous_iteration_context: str = None, previously_used_variables: List[str] = None) -> Dict[str, str]:
+    def get_relevant_variables(self, hypothesis: str, json_path: str, csv_statistics: Dict[str, Any] = None, previous_iteration_context: str = None, previously_used_variables: List[str] = None) -> Dict[str, Dict[str, Any]]:
         """
         Get all relevant variables for a hypothesis from a JSON dictionary.
         
         This method uses an LLM to analyze a hypothesis and identify all relevant
-        variables from a data dictionary. It returns a simple dictionary with
-        variable names as keys and their descriptions as values.
+        variables from a data dictionary. It returns a dictionary with variable names
+        as keys and their categorization information as values.
         
         Args:
             hypothesis (str): The hypothesis to analyze
@@ -177,10 +268,14 @@ class DataProcessor:
             previously_used_variables (List[str], optional): List of variables used in previous iterations
         
         Returns:
-            Dict[str, str]: Dictionary with variable names as keys and descriptions as values
+            Dict[str, Dict[str, Any]]: Dictionary with variable names as keys and categorization info as values
         """
         
-        # Load the JSON dictionary
+        # First, categorize all variables from the dictionary
+        ui.print_info(f"🔍 Categorizing variables from dictionary...")
+        categorized_vars = self.categorize_variables_from_dictionary(json_path)
+        
+        # Load the JSON dictionary for the LLM prompt
         with open(json_path, 'r') as f:
             dictionary = json.load(f)
         
@@ -214,11 +309,19 @@ class DataProcessor:
         else:
             csv_stats = "\n\nNote: No CSV statistics provided.\n"
         
-        # Create a formatted string of all keys and descriptions
+        # Create a formatted string of all keys with descriptions and categorization
         keys_info = []
         for key, info in dictionary.items():
             description = info.get('Description', 'No description available')
-            keys_info.append(f"Key: {key} | Description: {description}")
+            var_cat = categorized_vars.get(key, {})
+            var_type = var_cat.get('type', 'unknown')
+            is_numerical = var_cat.get('is_numerical', False)
+            
+            # Add categorization info to the description
+            type_info = f" [{var_type.upper()}]" if var_type != 'unknown' else ""
+            numerical_info = " [NUMERICAL]" if is_numerical else " [CATEGORICAL]"
+            
+            keys_info.append(f"Key: {key} | Description: {description}{type_info}{numerical_info}")
         
         keys_text = "\n".join(keys_info)
         
@@ -309,29 +412,44 @@ class DataProcessor:
             print("No variable names found in Python list, returning empty dictionary")
             return {}
         
-        # Create result dictionary with variable names and descriptions
+        # Create result dictionary with variable names and full categorization info
         result_dict = {}
         for var_name in variable_names:
-            if var_name in dictionary:
-                result_dict[var_name] = dictionary[var_name].get('Description', 'No description available')
+            if var_name in categorized_vars:
+                result_dict[var_name] = categorized_vars[var_name]
+            elif var_name in dictionary:
+                # Fallback for variables not in categorized_vars
+                result_dict[var_name] = {
+                    'type': 'unknown',
+                    'description': dictionary[var_name].get('Description', 'No description available'),
+                    'is_numerical': False,
+                    'special_values': []
+                }
+        
+        ui.print_info(f"🎯 Selected {len(result_dict)} variables with categorization:")
+        for var_name, var_info in result_dict.items():
+            var_type = var_info.get('type', 'unknown')
+            is_numerical = var_info.get('is_numerical', False)
+            ui.print_info(f"   • {var_name}: {var_type} ({'numerical' if is_numerical else 'categorical'})")
         
         return result_dict
     
-    def preprocess_data(self, df: pd.DataFrame, missing_threshold: float = 0.10) -> pd.DataFrame:
+    def preprocess_data_with_categorization(self, df: pd.DataFrame, relevant_variables: Dict[str, Dict[str, Any]], missing_threshold: float = 0.10) -> Dict[str, Any]:
         """
-        Perform data preprocessing by removing columns with high missingness and handling remaining data.
+        Perform data preprocessing using JSON-based categorization information.
         
         Args:
             df (pd.DataFrame): Input dataframe to preprocess
+            relevant_variables (Dict[str, Dict[str, Any]]): Variable categorization information
             missing_threshold (float): Threshold for missing data percentage (default 10%)
         
         Returns:
-            pd.DataFrame: Preprocessed dataframe
+            Dict[str, Any]: Dictionary containing preprocessed dataframe and metadata
         """
         if not PANDAS_AVAILABLE:
             raise ImportError("pandas is required for data preprocessing operations. Please install pandas.")
         
-        ui.print_info(f"🔧 Starting data preprocessing with missing data removal...")
+        ui.print_info(f"🔧 Starting data preprocessing with JSON-based categorization...")
         original_shape = df.shape
         ui.print_info(f"📊 Original data shape: {original_shape[0]} rows, {original_shape[1]} columns")
         
@@ -356,11 +474,156 @@ class DataProcessor:
         else:
             ui.print_info(f"   ✅ No columns exceed the {missing_threshold*100:.1f}% missing threshold")
         
-        # 3. Handle remaining missing values in kept columns
-        remaining_missing = processed_df.isnull().sum().sum()
-        if remaining_missing > 0:
-            ui.print_info(f"🔧 Handling remaining {remaining_missing} missing values...")
-            processed_df = self._handle_remaining_missing(processed_df)
+        # 3. Use JSON-based categorization to identify column types
+        ui.print_info(f"🔍 Using JSON-based categorization for column types...")
+        json_categorical_cols = []
+        json_numerical_cols = []
+        json_mixed_cols = []
+        
+        for col in processed_df.columns:
+            # Find the corresponding variable info
+            var_info = None
+            for var_name, info in relevant_variables.items():
+                if col.upper() == var_name.upper() or col in info.get('description', ''):
+                    var_info = info
+                    break
+            
+            if var_info:
+                var_type = var_info.get('type', 'unknown')
+                is_numerical = var_info.get('is_numerical', False)
+                
+                if var_type == 'categorical':
+                    json_categorical_cols.append(col)
+                elif var_type == 'numerical':
+                    json_numerical_cols.append(col)
+                elif var_type == 'mixed':
+                    json_mixed_cols.append(col)
+                    # Mixed variables can be treated as numerical for analysis
+                    json_numerical_cols.append(col)
+                else:
+                    # Unknown type - use pandas inference as fallback
+                    if processed_df[col].dtype == 'object':
+                        json_categorical_cols.append(col)
+                    else:
+                        json_numerical_cols.append(col)
+            else:
+                # No categorization info - use pandas inference as fallback
+                if processed_df[col].dtype == 'object':
+                    json_categorical_cols.append(col)
+                else:
+                    json_numerical_cols.append(col)
+        
+        ui.print_info(f"   📊 JSON-based categorization:")
+        ui.print_info(f"     • Categorical columns ({len(json_categorical_cols)}): {json_categorical_cols}")
+        ui.print_info(f"     • Numerical columns ({len(json_numerical_cols)}): {json_numerical_cols}")
+        ui.print_info(f"     • Mixed columns ({len(json_mixed_cols)}): {json_mixed_cols}")
+        
+        # 4. Handle special values in mixed variables
+        ui.print_info(f"🔧 Handling special values in mixed variables...")
+        for col in json_mixed_cols:
+            var_info = None
+            for var_name, info in relevant_variables.items():
+                if col.upper() == var_name.upper() or col in info.get('description', ''):
+                    var_info = info
+                    break
+            
+            if var_info and var_info.get('special_values'):
+                special_values = var_info['special_values']
+                ui.print_info(f"   📊 Column {col} has special values: {special_values}")
+                # Convert special values to NaN for numerical analysis
+                for special_val in special_values:
+                    try:
+                        processed_df[col] = processed_df[col].replace(special_val, np.nan)
+                    except:
+                        # If conversion fails, keep original value
+                        pass
+        
+        # 5. Create dummy variables for categorical columns
+        ui.print_info(f"🔧 Creating dummy variables for categorical columns...")
+        processed_df = self._create_dummy_variables_with_categorization(processed_df, json_categorical_cols, relevant_variables)
+        
+        # 6. Convert remaining object columns to numeric if possible
+        ui.print_info(f"🔧 Converting remaining object columns to numeric...")
+        processed_df = self._convert_to_numeric(processed_df)
+        
+        # 7. Final data validation and warning about NaN values
+        ui.print_info(f"🔍 Final data validation...")
+        final_missing = processed_df.isnull().sum().sum()
+        if final_missing > 0:
+            ui.print_warning(f"⚠️ Dataset contains {final_missing} missing values (NaN)")
+            ui.print_warning(f"⚠️ IMPORTANT: For each specific test, remove rows with NaN values in the columns being compared")
+            ui.print_warning(f"⚠️ Example: If comparing columns A and B, drop rows where either A or B has NaN values")
+        
+        final_shape = processed_df.shape
+        ui.print_success(f"✅ Data preprocessing with categorization completed!")
+        ui.print_info(f"📊 Final data shape: {final_shape[0]} rows, {final_shape[1]} columns")
+        ui.print_info(f"📈 Columns removed: {original_shape[1] - final_shape[1]}")
+        ui.print_info(f"📈 Columns added: {final_shape[1] - (original_shape[1] - len(columns_to_remove))}")
+        
+        # Return dictionary with preprocessed data and metadata
+        return {
+            'dataframe': processed_df,
+            'original_shape': original_shape,
+            'final_shape': final_shape,
+            'categorical_columns': json_categorical_cols,
+            'numerical_columns': json_numerical_cols,
+            'mixed_columns': json_mixed_cols,
+            'missing_values_count': final_missing,
+            'columns_removed': len(columns_to_remove),
+            'columns_added': final_shape[1] - (original_shape[1] - len(columns_to_remove))
+        }
+    
+    def preprocess_data(self, df: pd.DataFrame, missing_threshold: float = 0.10) -> Dict[str, Any]:
+        """
+        Perform data preprocessing following simple rule:
+        1. Filter dataset to fewer variables and rename columns to descriptions
+        2. Detect categorical and numerical columns
+        3. For categorical columns, create dummy variables (one hot encode) and name them
+        4. For numerical columns, they stay the same
+        5. Return dictionary of preprocessed data for conversation manager
+        
+        Args:
+            df (pd.DataFrame): Input dataframe to preprocess
+            missing_threshold (float): Threshold for missing data percentage (default 10%)
+        
+        Returns:
+            Dict[str, Any]: Dictionary containing preprocessed dataframe and metadata
+        """
+        if not PANDAS_AVAILABLE:
+            raise ImportError("pandas is required for data preprocessing operations. Please install pandas.")
+        
+        ui.print_info(f"🔧 Starting data preprocessing with simple rule...")
+        original_shape = df.shape
+        ui.print_info(f"📊 Original data shape: {original_shape[0]} rows, {original_shape[1]} columns")
+        
+        # Create a copy to avoid modifying the original
+        processed_df = df.copy()
+        
+        # 1. Analyze missing data patterns
+        ui.print_info(f"🔍 Analyzing missing data patterns...")
+        missing_analysis = self._analyze_missing_data(processed_df)
+        self._print_missing_analysis(missing_analysis)
+        
+        # 2. Remove columns with high missingness (>threshold)
+        ui.print_info(f"🗑️ Removing columns with >{missing_threshold*100:.1f}% missing data...")
+        columns_to_remove = missing_analysis['high_missing_cols']
+        
+        if columns_to_remove:
+            ui.print_info(f"   📊 Removing {len(columns_to_remove)} columns with high missingness:")
+            for col in columns_to_remove:
+                missing_pct = missing_analysis['missing_percentages'][col]
+                ui.print_info(f"   • {col}: {missing_pct:.1f}% missing")
+            processed_df = processed_df.drop(columns=columns_to_remove)
+        else:
+            ui.print_info(f"   ✅ No columns exceed the {missing_threshold*100:.1f}% missing threshold")
+        
+        # 3. Detect categorical and numerical columns
+        ui.print_info(f"🔍 Detecting column types...")
+        categorical_cols = processed_df.select_dtypes(include=['object']).columns.tolist()
+        numerical_cols = processed_df.select_dtypes(include=['number']).columns.tolist()
+        
+        ui.print_info(f"   📊 Categorical columns ({len(categorical_cols)}): {categorical_cols}")
+        ui.print_info(f"   📊 Numerical columns ({len(numerical_cols)}): {numerical_cols}")
         
         # 4. Create dummy variables for categorical columns
         ui.print_info(f"🔧 Creating dummy variables for categorical columns...")
@@ -370,12 +633,13 @@ class DataProcessor:
         ui.print_info(f"🔧 Converting remaining object columns to numeric...")
         processed_df = self._convert_to_numeric(processed_df)
         
-        # 6. Final data validation
+        # 6. Final data validation and warning about NaN values
         ui.print_info(f"🔍 Final data validation...")
         final_missing = processed_df.isnull().sum().sum()
         if final_missing > 0:
-            ui.print_warning(f"⚠️ Still {final_missing} missing values after preprocessing, filling with 0")
-            processed_df.fillna(0, inplace=True)
+            ui.print_warning(f"⚠️ Dataset contains {final_missing} missing values (NaN)")
+            ui.print_warning(f"⚠️ IMPORTANT: For each specific test, remove rows with NaN values in the columns being compared")
+            ui.print_warning(f"⚠️ Example: If comparing columns A and B, drop rows where either A or B has NaN values")
         
         final_shape = processed_df.shape
         ui.print_success(f"✅ Data preprocessing completed!")
@@ -383,7 +647,17 @@ class DataProcessor:
         ui.print_info(f"📈 Columns removed: {original_shape[1] - final_shape[1]}")
         ui.print_info(f"📈 Columns added: {final_shape[1] - (original_shape[1] - len(columns_to_remove))}")
         
-        return processed_df
+        # Return dictionary with preprocessed data and metadata
+        return {
+            'dataframe': processed_df,
+            'original_shape': original_shape,
+            'final_shape': final_shape,
+            'categorical_columns': categorical_cols,
+            'numerical_columns': numerical_cols,
+            'missing_values_count': final_missing,
+            'columns_removed': len(columns_to_remove),
+            'columns_added': final_shape[1] - (original_shape[1] - len(columns_to_remove))
+        }
     
     def _analyze_missing_data(self, df: pd.DataFrame, missing_threshold: float = 0.10) -> Dict[str, Any]:
         """
@@ -430,44 +704,9 @@ class DataProcessor:
             for col, pct in top_missing.items():
                 ui.print_info(f"     • {col}: {pct:.1f}% missing")
     
-    def _handle_remaining_missing(self, df: pd.DataFrame) -> pd.DataFrame:
-        """
-        Handle remaining missing values in columns that were kept.
-        
-        Args:
-            df (pd.DataFrame): Dataframe with remaining missing values
-        
-        Returns:
-            pd.DataFrame: Dataframe with missing values handled
-        """
-        processed_df = df.copy()
-        
-        # For numeric columns: impute with median (more robust than mean)
-        numeric_cols = processed_df.select_dtypes(include=['number']).columns
-        for col in numeric_cols:
-            if processed_df[col].isnull().sum() > 0:
-                median_val = processed_df[col].median()
-                processed_df[col].fillna(median_val, inplace=True)
-                ui.print_info(f"   📊 Imputed {processed_df[col].isnull().sum()} missing values in {col} with median: {median_val:.2f}")
-        
-        # For categorical columns: impute with mode
-        categorical_cols = processed_df.select_dtypes(include=['object']).columns
-        for col in categorical_cols:
-            if processed_df[col].isnull().sum() > 0:
-                mode_val = processed_df[col].mode()
-                if len(mode_val) > 0:
-                    processed_df[col].fillna(mode_val[0], inplace=True)
-                    ui.print_info(f"   📊 Imputed {processed_df[col].isnull().sum()} missing values in {col} with mode: {mode_val[0]}")
-                else:
-                    # If no mode (all values are missing), fill with 'Unknown'
-                    processed_df[col].fillna('Unknown', inplace=True)
-                    ui.print_info(f"   📊 Imputed {processed_df[col].isnull().sum()} missing values in {col} with 'Unknown'")
-        
-        return processed_df
-    
     def _create_dummy_variables(self, df: pd.DataFrame) -> pd.DataFrame:
         """
-        Create dummy variables for categorical columns.
+        Create dummy variables for categorical columns with proper naming.
         
         Args:
             df (pd.DataFrame): Input dataframe
@@ -482,13 +721,101 @@ class DataProcessor:
             # Check if column has reasonable number of unique values
             unique_count = processed_df[col].nunique()
             if unique_count > 1 and unique_count <= 20:  # Reasonable threshold for dummy variables
-                # Create dummy variables
+                # Create dummy variables with descriptive names
                 dummies = pd.get_dummies(processed_df[col], prefix=col, drop_first=True)
+                
+                # Improve dummy variable names by making them more descriptive
+                new_dummy_names = {}
+                for dummy_col in dummies.columns:
+                    # Extract the value from the dummy column name (format: colname_value)
+                    if '_' in dummy_col:
+                        base_name, value = dummy_col.split('_', 1)
+                        # Create a more descriptive name
+                        new_name = f"{base_name}_is_{value}"
+                        new_dummy_names[dummy_col] = new_name
+                
+                # Rename dummy columns
+                dummies = dummies.rename(columns=new_dummy_names)
+                
                 # Add dummy variables to dataframe
                 processed_df = pd.concat([processed_df, dummies], axis=1)
                 # Remove original categorical column
                 processed_df.drop(col, axis=1, inplace=True)
-                ui.print_info(f"   📊 Created {len(dummies.columns)} dummy variables for {col}")
+                ui.print_info(f"   📊 Created {len(dummies.columns)} dummy variables for {col}: {list(dummies.columns)}")
+            elif unique_count > 20:
+                ui.print_warning(f"   ⚠️ Column {col} has {unique_count} unique values, skipping dummy variable creation")
+            else:
+                ui.print_info(f"   📊 Column {col} has only 1 unique value, removing it")
+                processed_df.drop(col, axis=1, inplace=True)
+        
+        return processed_df
+    
+    def _create_dummy_variables_with_categorization(self, df: pd.DataFrame, categorical_cols: List[str], relevant_variables: Dict[str, Dict[str, Any]]) -> pd.DataFrame:
+        """
+        Create dummy variables for categorical columns using JSON-based categorization.
+        
+        Args:
+            df (pd.DataFrame): Input dataframe
+            categorical_cols (List[str]): List of categorical column names
+            relevant_variables (Dict[str, Dict[str, Any]]): Variable categorization information
+        
+        Returns:
+            pd.DataFrame: Dataframe with dummy variables
+        """
+        processed_df = df.copy()
+        
+        for col in categorical_cols:
+            if col not in processed_df.columns:
+                continue
+                
+            # Check if column has reasonable number of unique values
+            unique_count = processed_df[col].nunique()
+            if unique_count > 1 and unique_count <= 20:  # Reasonable threshold for dummy variables
+                # Get variable info for better naming
+                var_info = None
+                for var_name, info in relevant_variables.items():
+                    if col.upper() == var_name.upper() or col in info.get('description', ''):
+                        var_info = info
+                        break
+                
+                # Create dummy variables with meaningful names from JSON dictionary
+                if var_info and 'categorical_values' in var_info:
+                    # Use the categorical values from JSON to create meaningful dummy names
+                    categorical_values = var_info['categorical_values']
+                    
+                    # Create a mapping from raw values to meaningful descriptions
+                    value_to_description = {}
+                    for raw_value, description in categorical_values.items():
+                        # Clean the description for use as a variable name
+                        clean_desc = re.sub(r"[^\w\s]", "", description)  # Remove special characters
+                        clean_desc = re.sub(r"\s+", "_", clean_desc.strip())  # Replace spaces with underscores
+                        value_to_description[str(raw_value)] = clean_desc
+                    
+                    # Create dummy variables with meaningful names
+                    dummies = pd.get_dummies(processed_df[col], drop_first=True)
+                    
+                    # Rename dummy columns using meaningful descriptions
+                    new_dummy_names = {}
+                    for dummy_col in dummies.columns:
+                        if str(dummy_col) in value_to_description:
+                            meaningful_name = value_to_description[str(dummy_col)]
+                            new_dummy_names[dummy_col] = f"{col}_is_{meaningful_name}"
+                        else:
+                            # Fallback to original naming if no description found
+                            new_dummy_names[dummy_col] = f"{col}_is_{dummy_col}"
+                    
+                    # Rename dummy columns
+                    dummies = dummies.rename(columns=new_dummy_names)
+                    
+                else:
+                    # Fallback to standard dummy variable creation
+                    dummies = pd.get_dummies(processed_df[col], prefix=col, drop_first=True)
+                
+                # Add dummy variables to dataframe
+                processed_df = pd.concat([processed_df, dummies], axis=1)
+                # Remove original categorical column
+                processed_df.drop(col, axis=1, inplace=True)
+                ui.print_info(f"   📊 Created {len(dummies.columns)} dummy variables for {col}: {list(dummies.columns)}")
             elif unique_count > 20:
                 ui.print_warning(f"   ⚠️ Column {col} has {unique_count} unique values, skipping dummy variable creation")
             else:
@@ -518,14 +845,13 @@ class DataProcessor:
         
         return processed_df
     
-
-    def filter_csv_with_dictionary(self, folder_path: str, relevant_variables: Dict[str, str], hypothesis: str) -> Tuple[str, Dict[str, str]]:
+    def filter_csv_with_dictionary(self, folder_path: str, relevant_variables: Dict[str, Dict[str, Any]], hypothesis: str) -> Tuple[str, Dict[str, str]]:
         """
         Filter CSV files in a folder using relevant variables from dictionary, preprocess the data, and save to .working.
         
         Args:
             folder_path (str): Path to folder containing CSV files
-            relevant_variables (Dict[str, str]): Dictionary of relevant variable names and descriptions
+            relevant_variables (Dict[str, Dict[str, Any]]): Dictionary of relevant variable names and categorization info
             hypothesis (str): The hypothesis being tested
         
         Returns:
@@ -583,9 +909,10 @@ class DataProcessor:
                 column_mapping = {}
                 for col in filtered_df.columns:
                     # Find the corresponding variable name and its description
-                    for var_name, description in relevant_variables.items():
+                    for var_name, var_info in relevant_variables.items():
                         if col.upper() == var_name.upper():
                             # Use the description as the new column name
+                            description = var_info.get('description', 'No description')
                             # Remove special characters and replace spaces with underscores for variable names
                             clean_description = re.sub(r"[^\w\s]", "", description)  # Remove special characters
                             clean_description = re.sub(r"\s+", "_", clean_description.strip())  # Replace spaces with underscores
@@ -597,8 +924,9 @@ class DataProcessor:
                     filtered_df = filtered_df.rename(columns=column_mapping)
                     ui.print_info(f"🔄 Renamed columns to descriptions: {column_mapping}")
             
-            # Preprocess the data (impute missing values, create dummy variables, etc.)
-            processed_df = self.preprocess_data(filtered_df)
+            # Preprocess the data using JSON-based categorization (create dummy variables, etc.)
+            preprocessing_result = self.preprocess_data_with_categorization(filtered_df, relevant_variables)
+            processed_df = preprocessing_result['dataframe']
             
             # Create .working directory if it doesn't exist
             working_dir = Path("working")
@@ -737,8 +1065,11 @@ class DataProcessor:
                 relevant_variables = {"ALL_COLUMNS": "All available columns"}
             
             ui.print_info(f"🎯 Found {len(relevant_variables)} relevant variables:")
-            for var_name, description in relevant_variables.items():
-                ui.print_info(f"   • {var_name}: {description}")
+            for var_name, var_info in relevant_variables.items():
+                description = var_info.get('description', 'No description')
+                var_type = var_info.get('type', 'unknown')
+                is_numerical = var_info.get('is_numerical', False)
+                ui.print_info(f"   • {var_name}: {description} [{var_type}] ({'numerical' if is_numerical else 'categorical'})")
 
             # Filter CSV files using relevant variables
             filtered_csv_path, variable_datatypes = self.filter_csv_with_dictionary(folder_path, relevant_variables, hypothesis)
@@ -746,7 +1077,29 @@ class DataProcessor:
             # Get statistics for the filtered dataset
             filtered_csv_statistics = self.get_dataset_statistics(filtered_csv_path)
             
-            variable_datatypes_str = "\n".join([f"- {col}: {dtype}" for col, dtype in variable_datatypes.items()])
+            # Load the preprocessed data to return in the dictionary
+            preprocessed_df = pd.read_csv(filtered_csv_path)
+            
+            # Create enhanced variable information string with categorization
+            variable_info_str = []
+            for col, dtype in variable_datatypes.items():
+                # Find the original variable info
+                var_info = None
+                for var_name, info in relevant_variables.items():
+                    if col.upper() == var_name.upper() or col in info.get('description', ''):
+                        var_info = info
+                        break
+                
+                if var_info:
+                    var_type = var_info.get('type', 'unknown')
+                    is_numerical = var_info.get('is_numerical', False)
+                    special_values = var_info.get('special_values', [])
+                    special_info = f" (special values: {special_values})" if special_values else ""
+                    variable_info_str.append(f"- {col}: {dtype} [{var_type}] ({'numerical' if is_numerical else 'categorical'}){special_info}")
+                else:
+                    variable_info_str.append(f"- {col}: {dtype}")
+            
+            variable_datatypes_str = "\n".join(variable_info_str)
 
             # Add system message to conversation if conversation_manager is provided
             if conversation_manager:
@@ -760,21 +1113,30 @@ class DataProcessor:
                         f"- Total columns: {filtered_csv_statistics.get('total_cols', 'N/A')}\n"
                         f"- Missing values: {filtered_csv_statistics.get('missing_data', 'N/A'):,} ({filtered_csv_statistics.get('missing_percentage', 'N/A')}%)\n"
                         f"- Numeric columns: {filtered_csv_statistics.get('numeric_cols', 'N/A')}\n"
-                        f"- Categorical columns: {filtered_csv_statistics.get('categorical_cols', 'N/A')}"
+                        f"- Categorical columns: {filtered_csv_statistics.get('categorical_cols', 'N/A')}\n\n"
+                        f"IMPORTANT: For each specific test, remove rows with NaN values in the columns being compared. "
+                        f"Example: If comparing columns A and B, drop rows where either A or B has NaN values."
                     )
                 }]
                 conversation_manager.messages.extend(summarized_messages)
-
+            print(summarized_messages) # TODO: remove this
             ui.print_info(f"✅ Manual preprocessing completed successfully!")
             ui.print_info(f"📊 Filtered data saved to: {filtered_csv_path}")
             
-            # Return the information needed for enhanced planning
+            # Return the information needed for enhanced planning including preprocessed data dictionary
             return {
                 'success': True,
                 'hypothesis': hypothesis,
                 'filtered_csv_statistics': filtered_csv_statistics,
                 'relevant_variables': relevant_variables,
-                'filtered_csv_path': filtered_csv_path
+                'filtered_csv_path': filtered_csv_path,
+                'preprocessed_data': {
+                    'dataframe': preprocessed_df,
+                    'variable_datatypes': variable_datatypes,
+                    'categorical_columns': filtered_csv_statistics.get('categorical_column_names', []),
+                    'numerical_columns': filtered_csv_statistics.get('numeric_column_names', []),
+                    'missing_values_count': filtered_csv_statistics.get('missing_data', 0)
+                }
             }
             
         except Exception as e:
