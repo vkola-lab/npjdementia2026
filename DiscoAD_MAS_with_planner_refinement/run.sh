@@ -43,12 +43,12 @@ VERBOSE=true  # Set to "true" for detailed output, "false" for quiet mode
 # ------------------------------------------------------------------------------
 
 # Change to the DiscoAD_MAS directory
-cd /projectnb/vkolagrp/ketanss/adrd_agent_custom/DiscoADRD/DiscoAD_MAS_with_planner_refinement
+cd /projectnb/vkolagrp/kelzokm/DiscoADRD/DiscoAD_MAS_with_planner_refinement
 
 # nvidia-smi
 module load miniconda
 module load cuda
-conda activate llms
+conda activate NeuroLM
 
 # ------------------------------------------------------------------------------
 # Run Discovery Agent with Configuration

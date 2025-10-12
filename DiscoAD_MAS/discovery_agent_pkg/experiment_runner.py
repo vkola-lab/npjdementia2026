@@ -106,11 +106,13 @@ class ExperimentRunner:
                 # Sample keywords
                 sampled_keywords = self.hypothesis_manager.sample_keywords(keywords, self.config.num_keywords)
                 ui.print_info(f"🎯 Sampled keywords: {', '.join(sampled_keywords)}", verbose=verbose)
-            
             # Create hypothesis from sampled keywords (for non-direct modes)
-            if keywords is not None:
                 hypothesis_input = f"{', '.join(sampled_keywords)}"
-                ui.print_info(f"📝 Generated hypothesis: {hypothesis_input}", verbose=verbose)
+                ui.print_info(f"📝 Generated hypothesis: {hypothesis_input}", verbose=verbose) ######## can be moved into above else statement
+            
+            # if keywords is not None:
+            #     hypothesis_input = f"{', '.join(sampled_keywords)}"
+            #     ui.print_info(f"📝 Generated hypothesis: {hypothesis_input}", verbose=verbose) ######## can be moved into above else statement
             
             # Get hypothesis mode from config
             hypothesis_mode = self.config.hypothesis_mode
@@ -229,7 +231,7 @@ class ExperimentRunner:
                     "content": f"PREVIOUS ITERATION SUMMARY:\n{previous_conversation_summary}\n\nThis is iteration {outer_iteration} of {outer_loop_iterations}. Use the above summary to avoid repeating the same approaches and try different variables or methods."
                 })
             
-            # Add user input (will be at index 0 if no summary, or index 1 if summary exists)
+            # Add hypothesis as user input (will be at index 0 if no summary, or index 1 if summary exists)
             self.conversation_manager.add_user_input(hypothesis)
             
             # Run manual preprocessing for this specific hypothesis and iteration
@@ -339,7 +341,7 @@ class ExperimentRunner:
         """
         approved = False
         num_turns_to_approve = None
-        num_turns_to_autoapprove = self.config.auto_approve_after_attempts
+        num_turns_to_autoapprove = self.config.auto_approve_after_attempts ### Do not need in this loop
                 
         # Planning agent round (only on first turn)
         if self.conversation_manager.get_turns() == 0:
@@ -412,7 +414,7 @@ class ExperimentRunner:
             ui.print_info(f"⏱️ Response generated in {generation_time:.2f} seconds")
             
             if not response or not response.strip():
-                raise ValueError(f"Empty response from {agent_name}")
+                raise ValueError(f"Empty response from {agent_name}") #### Maybe redundant check because it is already in ModelClient.generate
             
             # Execute code if present (except for critic agents)
             code_output = ""
@@ -473,7 +475,7 @@ class ExperimentRunner:
 
                         else:
                             code_output = f"Error: {execution_result.get('error', 'Unknown error')}"
-                            ui.print_warning(f"⚠️ Code execution returned an error output: {code_output}")
+                            ui.print_warning(f"⚠️ Code execution returned an error output: {code_output}") ###################### Add if statement to only print warnings if error field is not empty
                             ui.print_warning("⚠️ But continuing...")
                             ui.print_agent_response(agent_name, response, code_output)
 

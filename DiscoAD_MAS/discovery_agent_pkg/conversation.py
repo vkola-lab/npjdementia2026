@@ -41,7 +41,7 @@ class ConversationManager:
         if len(self.messages) <= self.config.max_conversation_length:
             return
         
-        # Check if first message is an outer summary (System role with "PREVIOUS ITERATION SUMMARY")
+        # Check if first message is an outer summary of previous outer loop iteration (System role with "PREVIOUS ITERATION SUMMARY")
         has_outer_summary = (len(self.messages) > 0 and 
                            self.messages[0].get("role") == "System" and 
                            "PREVIOUS ITERATION SUMMARY" in self.messages[0].get("content", ""))
@@ -72,7 +72,6 @@ class ConversationManager:
             
             self.messages = [user_message, preprocessing_message, planning_message] + summarized_messages + recent_messages
 
-    
     def summarize(self, messages: List[Dict[str, Any]], preprocessing: bool = False) -> List[Dict[str, Any]]:
         """Summarize messages using the model client."""
         if not messages:
@@ -91,7 +90,7 @@ class ConversationManager:
                     f"Please summarize the following conversation in 3-4 lines maximum. "
                     f"Remember to mention who said what, the roles are mentioned in the conversation text."
                     f"Focus on the key points, decisions, and outcomes:\n\n"
-                    f"If the data preprocessor filtered out any columns, mention them in the summary, along with the summary above."
+                    f"If the data preprocessor filtered out any columns, mention them in the summary, along with the summary mentioned above."
                     f"{conversation_text}\n"
                     f"Provide only the summary and the relevant columns, no other text."
                 )

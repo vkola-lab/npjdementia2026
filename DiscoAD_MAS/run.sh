@@ -12,7 +12,7 @@
 #$ -N discoAD
 #$ -j y
 #$ -m ea
-#$ -o /projectnb/vkolagrp/ketanss/adrd_agent_custom/adrd_agent/DiscoAD_MAS_with_planner_refinement/qsub_runs
+#$ -o /projectnb/vkolagrp/kelzokm/DiscoADRD/DiscoAD_MAS/qsub_runs
 
 # ------------------------------------------------------------------------------
 # Configuration - Edit these values to customize your setup
@@ -44,12 +44,12 @@ VERBOSE=true  # Set to "true" for detailed output, "false" for quiet mode
 # ------------------------------------------------------------------------------
 
 # Change to the DiscoAD_MAS directory
-cd /projectnb/vkolagrp/ketanss/adrd_agent_custom/DiscoADRD/DiscoAD_MAS
+cd /projectnb/vkolagrp/kelzokm/DiscoADRD/DiscoAD_MAS
 
 # nvidia-smi
 module load miniconda
 module load cuda
-conda activate llms
+conda activate /projectnb/vkolagrp/ketanss/.conda/envs/llms
 
 # ------------------------------------------------------------------------------
 # Run Discovery Agent with Configuration
