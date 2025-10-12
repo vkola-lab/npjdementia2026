@@ -11,7 +11,7 @@ Main Components:
 - ConversationManager: Manages conversation flow
 - CodeExecutor: Executes Python code safely
 - UI: User interface components
-- DataProcessor: Handles dataset operations and preprocessing
+- SimplifiedDataProcessor: Handles dataset operations and preprocessing
 - HypothesisManager: Manages hypothesis generation and tracking
 - ExperimentRunner: Orchestrates experiment execution
 - FileManager: Handles file operations and tracking
@@ -23,7 +23,7 @@ from .conversation import ConversationManager
 from .code_executor import CodeExecutor
 from .ui import ui
 from .config import config
-from .data_processing import DataProcessor
+from .simplified_data_processing import SimplifiedDataProcessor
 from .hypothesis_management import HypothesisManager
 from .experiment_runner import ExperimentRunner
 from .file_management import FileManager
@@ -42,7 +42,7 @@ __all__ = [
     "CodeExecutor",
     "ui",
     "config",
-    "DataProcessor",
+    "SimplifiedDataProcessor",
     "HypothesisManager",
     "ExperimentRunner",
     "FileManager"

@@ -1,0 +1,240 @@
+
+======================================================================
+🧠           Discovery Agent    🔬
+    AI-Powered Scientific Discovery    🚀
+======================================================================
+
+ℹ️ Info: 🔧 Initializing Discovery Agent System...
+ℹ️ Info: ⚙️ Initializing Discovery Agent...
+ℹ️ Info: 🗑️ Deleted existing working directory
+ℹ️ Info: 📁 Created fresh working directory
+ℹ️ Info: 📊 Created new CSV tracking file: results/hypothesis_approval_tracking_model_Qwen3_4B_Instruct_2507_mode_direct hypothesis_kw_3_runs_10_outer_2_auto_4_20251011_194549.csv
+ℹ️ Info: 🔧 CodeExecutor initialized with 30s timeout
+✅ Success: 🎉 Discovery Agent initialized successfully!
+ℹ️ Info: 🚀 Starting Discovery Agent...
+ℹ️ Info: 🎯 Using direct hypothesis mode with provided hypothesis
+────────────────────────────────────────────────────────────
+ℹ️ Info: 🎯 Direct Hypothesis Run 1/1
+ℹ️ Info: 📝 Using provided direct hypothesis: Higher age is associated with increased dementia incidence.
+ℹ️ Info: 📝 Setting direct hypothesis: Higher age is associated with increased dementia incidence.
+
+📝 Using Input as Hypothesis:
+  1. Higher age is associated with increased dementia incidence.
+
+📊 Progress: 1/1 hypothesiss (100.0%)
+────────────────────────────────────────────────────────────
+ℹ️ Info: 🔍 Working on hypothesis 1: Higher age is associated with increased dementia incidence.
+────────────────────────────────────────────────────────────
+ℹ️ Info: 🔄 OUTER LOOP ITERATION 1/2
+👤 User Input: Higher age is associated with increased dementia incidence.
+ℹ️ Info: 🔧 Running manual preprocessing for hypothesis 1, iteration 1...
+ℹ️ Info: 🔧 Starting manual preprocessing conversation...
+ℹ️ Info: 📁 Using dataset folder from config: /projectnb/vkolagrp/ketanss/adrd_agent_custom/adrd_agent/datasets/NACC
+ℹ️ Info: 🔍 Auto-detected files:
+ℹ️ Info:    📊 CSV: NACC.csv
+ℹ️ Info:    📚 JSON: NACC.json
+✅ Success: ✅ JSON dictionary file is valid: NACC.json
+ℹ️ Info: 🔬 Hypothesis: Higher age is associated with increased dementia incidence.
+ℹ️ Info: 📁 Dataset folder: /projectnb/vkolagrp/ketanss/adrd_agent_custom/adrd_agent/datasets/NACC
+ℹ️ Info: 📊 CSV file: /projectnb/vkolagrp/ketanss/adrd_agent_custom/adrd_agent/datasets/NACC/NACC.csv
+ℹ️ Info: 📚 JSON dictionary: /projectnb/vkolagrp/ketanss/adrd_agent_custom/adrd_agent/datasets/NACC/NACC.json
+ℹ️ Info: 🔍 Analyzing hypothesis to find relevant variables...
+ℹ️ Info: 🔍 Categorizing variables from dictionary...
+ℹ️ Info: 📊 Variable categorization summary:
+ℹ️ Info:    • Categorical: 645
+ℹ️ Info:    • Numerical: 20
+ℹ️ Info:    • Mixed: 145
+ℹ️ Info:    • Unknown: 0
+ℹ️ Info:    • Total: 810
+ℹ️ Info: 🎯 Selected 14 variables with categorization:
+ℹ️ Info:    • NACCAGE: numerical (numerical)
+ℹ️ Info:    • DEMENTED: categorical (categorical)
+ℹ️ Info:    • NACCAGEB: numerical (numerical)
+ℹ️ Info:    • SEX: categorical (categorical)
+ℹ️ Info:    • EDUC: mixed (numerical)
+ℹ️ Info:    • HISPANIC: categorical (categorical)
+ℹ️ Info:    • RACE: categorical (categorical)
+ℹ️ Info:    • HYPERTEN: categorical (categorical)
+ℹ️ Info:    • CVDCOG: categorical (categorical)
+ℹ️ Info:    • NACCALZD: categorical (categorical)
+ℹ️ Info:    • NACCMMSE: mixed (numerical)
+ℹ️ Info:    • NACCMOCA: mixed (numerical)
+ℹ️ Info:    • NACCDIED: categorical (categorical)
+ℹ️ Info:    • NACCYOD: mixed (numerical)
+ℹ️ Info: 🎯 Found 14 relevant variables:
+ℹ️ Info:    • NACCAGE: Subject's age at visit [numerical] (numerical)
+ℹ️ Info:    • DEMENTED: Met criteria for dementia [categorical] (categorical)
+ℹ️ Info:    • NACCAGEB: Subject's age at initial visit [numerical] (numerical)
+ℹ️ Info:    • SEX: Subject's sex [categorical] (categorical)
+ℹ️ Info:    • EDUC: Years of education [mixed] (numerical)
+ℹ️ Info:    • HISPANIC: Hispanic/Latino ethnicity [categorical] (categorical)
+ℹ️ Info:    • RACE: Race [categorical] (categorical)
+ℹ️ Info:    • HYPERTEN: Hypertension [categorical] (categorical)
+ℹ️ Info:    • CVDCOG: Cerebrovascular disease contributing to cognitive impairment [categorical] (categorical)
+ℹ️ Info:    • NACCALZD: Presumptive etiologic diagnosis of the cognitive disorder - Alzheimer's disease [categorical] (categorical)
+ℹ️ Info:    • NACCMMSE: Total MMSE score (using D-L-R-O-W) [mixed] (numerical)
+ℹ️ Info:    • NACCMOCA: MoCA Total Score - corrected for education [mixed] (numerical)
+ℹ️ Info:    • NACCDIED: Subject is known to be deceased [categorical] (categorical)
+ℹ️ Info:    • NACCYOD: Year of death [mixed] (numerical)
+ℹ️ Info: 🔍 Filtering CSV files with relevant variables...
+ℹ️ Info: 📊 Processing CSV file: NACC.csv
+ℹ️ Info: 📈 Original CSV has 26778 rows and 2117 columns
+ℹ️ Info: 🎯 Found 13 relevant columns: ['NACCAGE', 'DEMENTED', 'SEX', 'EDUC', 'HISPANIC', 'RACE', 'HYPERTEN', 'CVDCOG', 'NACCALZD', 'NACCMMSE', 'NACCMOCA', 'NACCDIED', 'NACCYOD']
+ℹ️ Info: 🔄 Renamed columns to descriptions: {'NACCAGE': 'Subjects_age_at_visit', 'DEMENTED': 'Met_criteria_for_dementia', 'SEX': 'Subjects_sex', 'EDUC': 'Years_of_education', 'HISPANIC': 'HispanicLatino_ethnicity', 'RACE': 'Race', 'HYPERTEN': 'Hypertension', 'CVDCOG': 'Cerebrovascular_disease_contributing_to_cognitive_impairment', 'NACCALZD': 'Presumptive_etiologic_diagnosis_of_the_cognitive_disorder_Alzheimers_disease', 'NACCMMSE': 'Total_MMSE_score_using_DLROW', 'NACCMOCA': 'MoCA_Total_Score_corrected_for_education', 'NACCDIED': 'Subject_is_known_to_be_deceased', 'NACCYOD': 'Year_of_death'}
+ℹ️ Info: 🔧 Starting data preprocessing with JSON-based categorization...
+ℹ️ Info: 📊 Original data shape: 26778 rows, 13 columns
+ℹ️ Info: 🔧 Processing data with dictionary mapping...
+ℹ️ Info: 🔧 Replacing variable names with descriptions...
+ℹ️ Info:    📋 Processing 14 variables from dictionary...
+ℹ️ Info:    🔍 Checking variable: NACCAGE
+ℹ️ Info:       📖 Description: Subject's age at visit
+ℹ️ Info:       ⚠️ Column not found in dataframe
+ℹ️ Info:    🔍 Checking variable: DEMENTED
+ℹ️ Info:       📖 Description: Met criteria for dementia
+ℹ️ Info:       ⚠️ Column not found in dataframe
+ℹ️ Info:    🔍 Checking variable: NACCAGEB
+ℹ️ Info:       📖 Description: Subject's age at initial visit
+ℹ️ Info:       ⚠️ Column not found in dataframe
+ℹ️ Info:    🔍 Checking variable: SEX
+ℹ️ Info:       📖 Description: Subject's sex
+ℹ️ Info:       ⚠️ Column not found in dataframe
+ℹ️ Info:    🔍 Checking variable: EDUC
+ℹ️ Info:       📖 Description: Years of education
+ℹ️ Info:       ⚠️ Column not found in dataframe
+ℹ️ Info:    🔍 Checking variable: HISPANIC
+ℹ️ Info:       📖 Description: Hispanic/Latino ethnicity
+ℹ️ Info:       ⚠️ Column not found in dataframe
+ℹ️ Info:    🔍 Checking variable: RACE
+ℹ️ Info:       📖 Description: Race
+ℹ️ Info:       ℹ️ Already has descriptive name: Race
+ℹ️ Info:    🔍 Checking variable: HYPERTEN
+ℹ️ Info:       📖 Description: Hypertension
+ℹ️ Info:       ⚠️ Column not found in dataframe
+ℹ️ Info:    🔍 Checking variable: CVDCOG
+ℹ️ Info:       📖 Description: Cerebrovascular disease contributing to cognitive impairment
+ℹ️ Info:       ⚠️ Column not found in dataframe
+ℹ️ Info:    🔍 Checking variable: NACCALZD
+ℹ️ Info:       📖 Description: Presumptive etiologic diagnosis of the cognitive disorder - Alzheimer's disease
+ℹ️ Info:       ⚠️ Column not found in dataframe
+ℹ️ Info:    🔍 Checking variable: NACCMMSE
+ℹ️ Info:       📖 Description: Total MMSE score (using D-L-R-O-W)
+ℹ️ Info:       ⚠️ Column not found in dataframe
+ℹ️ Info:    🔍 Checking variable: NACCMOCA
+ℹ️ Info:       📖 Description: MoCA Total Score - corrected for education
+ℹ️ Info:       ⚠️ Column not found in dataframe
+ℹ️ Info:    🔍 Checking variable: NACCDIED
+ℹ️ Info:       📖 Description: Subject is known to be deceased
+ℹ️ Info:       ⚠️ Column not found in dataframe
+ℹ️ Info:    🔍 Checking variable: NACCYOD
+ℹ️ Info:       📖 Description: Year of death
+ℹ️ Info:       ⚠️ Column not found in dataframe
+ℹ️ Info:    📊 Total columns to rename: 0
+ℹ️ Info:    ✅ Column renaming completed!
+ℹ️ Info: 🔧 Replacing unknown codes with NaN...
+ℹ️ Info:    🔍 Processing variable: NACCAGE
+ℹ️ Info:       📍 Column name: NACCAGE
+ℹ️ Info:       ⚠️ Column 'NACCAGE' not found in dataframe
+ℹ️ Info:    🔍 Processing variable: DEMENTED
+ℹ️ Info:       📍 Column name: DEMENTED
+ℹ️ Info:       ⚠️ Column 'DEMENTED' not found in dataframe
+ℹ️ Info:    🔍 Processing variable: NACCAGEB
+ℹ️ Info:       📍 Column name: NACCAGEB
+ℹ️ Info:       ⚠️ Column 'NACCAGEB' not found in dataframe
+ℹ️ Info:    🔍 Processing variable: SEX
+ℹ️ Info:       📍 Column name: SEX
+ℹ️ Info:       ⚠️ Column 'SEX' not found in dataframe
+ℹ️ Info:    🔍 Processing variable: EDUC
+ℹ️ Info:       📍 Column name: EDUC
+ℹ️ Info:       ⚠️ Column 'EDUC' not found in dataframe
+ℹ️ Info:    🔍 Processing variable: HISPANIC
+ℹ️ Info:       📍 Column name: HISPANIC
+ℹ️ Info:       ⚠️ Column 'HISPANIC' not found in dataframe
+ℹ️ Info:    🔍 Processing variable: RACE
+ℹ️ Info:       📍 Column name: RACE
+ℹ️ Info:       ⚠️ Column 'RACE' not found in dataframe
+ℹ️ Info:    🔍 Processing variable: HYPERTEN
+ℹ️ Info:       📍 Column name: HYPERTEN
+ℹ️ Info:       ⚠️ Column 'HYPERTEN' not found in dataframe
+ℹ️ Info:    🔍 Processing variable: CVDCOG
+ℹ️ Info:       📍 Column name: CVDCOG
+ℹ️ Info:       ⚠️ Column 'CVDCOG' not found in dataframe
+ℹ️ Info:    🔍 Processing variable: NACCALZD
+ℹ️ Info:       📍 Column name: NACCALZD
+ℹ️ Info:       ⚠️ Column 'NACCALZD' not found in dataframe
+ℹ️ Info:    🔍 Processing variable: NACCMMSE
+ℹ️ Info:       📍 Column name: NACCMMSE
+ℹ️ Info:       ⚠️ Column 'NACCMMSE' not found in dataframe
+ℹ️ Info:    🔍 Processing variable: NACCMOCA
+ℹ️ Info:       📍 Column name: NACCMOCA
+ℹ️ Info:       ⚠️ Column 'NACCMOCA' not found in dataframe
+ℹ️ Info:    🔍 Processing variable: NACCDIED
+ℹ️ Info:       📍 Column name: NACCDIED
+ℹ️ Info:       ⚠️ Column 'NACCDIED' not found in dataframe
+ℹ️ Info:    🔍 Processing variable: NACCYOD
+ℹ️ Info:       📍 Column name: NACCYOD
+ℹ️ Info:       ⚠️ Column 'NACCYOD' not found in dataframe
+ℹ️ Info:    📊 Total unknown codes replaced: 0
+ℹ️ Info: 🔧 Creating dummy variables for categorical variables...
+ℹ️ Info:    🔍 Processing variable: NACCAGE
+ℹ️ Info:       📍 Column name: NACCAGE
+ℹ️ Info:       ⚠️ Column 'NACCAGE' not found in dataframe
+ℹ️ Info:    🔍 Processing variable: DEMENTED
+ℹ️ Info:       📍 Column name: DEMENTED
+ℹ️ Info:       ⚠️ Column 'DEMENTED' not found in dataframe
+ℹ️ Info:    🔍 Processing variable: NACCAGEB
+ℹ️ Info:       📍 Column name: NACCAGEB
+ℹ️ Info:       ⚠️ Column 'NACCAGEB' not found in dataframe
+ℹ️ Info:    🔍 Processing variable: SEX
+ℹ️ Info:       📍 Column name: SEX
+ℹ️ Info:       ⚠️ Column 'SEX' not found in dataframe
+ℹ️ Info:    🔍 Processing variable: EDUC
+ℹ️ Info:       📍 Column name: EDUC
+ℹ️ Info:       ⚠️ Column 'EDUC' not found in dataframe
+ℹ️ Info:    🔍 Processing variable: HISPANIC
+ℹ️ Info:       📍 Column name: HISPANIC
+ℹ️ Info:       ⚠️ Column 'HISPANIC' not found in dataframe
+ℹ️ Info:    🔍 Processing variable: RACE
+ℹ️ Info:       📍 Column name: RACE
+ℹ️ Info:       ⚠️ Column 'RACE' not found in dataframe
+ℹ️ Info:    🔍 Processing variable: HYPERTEN
+ℹ️ Info:       📍 Column name: HYPERTEN
+ℹ️ Info:       ⚠️ Column 'HYPERTEN' not found in dataframe
+ℹ️ Info:    🔍 Processing variable: CVDCOG
+ℹ️ Info:       📍 Column name: CVDCOG
+ℹ️ Info:       ⚠️ Column 'CVDCOG' not found in dataframe
+ℹ️ Info:    🔍 Processing variable: NACCALZD
+ℹ️ Info:       📍 Column name: NACCALZD
+ℹ️ Info:       ⚠️ Column 'NACCALZD' not found in dataframe
+ℹ️ Info:    🔍 Processing variable: NACCMMSE
+ℹ️ Info:       📍 Column name: NACCMMSE
+ℹ️ Info:       ⚠️ Column 'NACCMMSE' not found in dataframe
+ℹ️ Info:    🔍 Processing variable: NACCMOCA
+ℹ️ Info:       📍 Column name: NACCMOCA
+ℹ️ Info:       ⚠️ Column 'NACCMOCA' not found in dataframe
+ℹ️ Info:    🔍 Processing variable: NACCDIED
+ℹ️ Info:       📍 Column name: NACCDIED
+ℹ️ Info:       ⚠️ Column 'NACCDIED' not found in dataframe
+ℹ️ Info:    🔍 Processing variable: NACCYOD
+ℹ️ Info:       📍 Column name: NACCYOD
+ℹ️ Info:       ⚠️ Column 'NACCYOD' not found in dataframe
+ℹ️ Info:    📊 Total dummy variables created: 0
+ℹ️ Info: 🔧 Converting remaining object columns to numeric...
+ℹ️ Info: 🔍 Final data validation...
+⚠️ Warning: ⚠️ Dataset contains 59169 missing values (NaN)
+⚠️ Warning: ⚠️ IMPORTANT: For each specific test, remove rows with NaN values in the columns being compared
+⚠️ Warning: ⚠️ Example: If comparing columns A and B, drop rows where either A or B has NaN values
+✅ Success: ✅ Data preprocessing with categorization completed!
+ℹ️ Info: 📊 Final data shape: 26778 rows, 13 columns
+ℹ️ Info: 📈 Columns removed: 0 (all missing data preserved)
+ℹ️ Info: 📈 Columns added: 0 (dummy variables only)
+ℹ️ Info: 📋 Summary of data processing:
+ℹ️ Info:    📊 Total dummy variables created: 0
+ℹ️ Info:    ❓ Total missing values (NaN): 59169
+✅ Success: ✅ Processed CSV saved to: working/filtered_dataset.csv
+ℹ️ Info: 📊 Final processed CSV has 26778 rows and 13 columns
+ℹ️ Info: ✅ Manual preprocessing completed successfully!
+ℹ️ Info: 📊 Filtered data saved to: working/filtered_dataset.csv
+ℹ️ Info: 📋 Updated previously used variables list: 14 total variables
+ℹ️ Info: 📋 Starting Planning Agent round...
+⏳ Enhanced Planning Agent is working...
+ℹ️ Info: 🔄 Generating Enhanced Planning Agent response...

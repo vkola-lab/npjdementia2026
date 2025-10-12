@@ -14,7 +14,7 @@ from .ui import ui
 from .conversation import ConversationManager
 from .code_executor import CodeExecutor
 from .models import ModelClient, create_scientist, create_critic, create_enhanced_planning_agent
-from .data_processing import DataProcessor
+from .simplified_data_processing import SimplifiedDataProcessor
 from .hypothesis_management import HypothesisManager
 from .file_management import FileManager
 from .utils import execute_code_from_response
@@ -29,7 +29,7 @@ class ExperimentRunner:
         self.model_client = model_client
         
         # Initialize all components
-        self.data_processor = DataProcessor(model_client)
+        self.data_processor = SimplifiedDataProcessor(model_client)
         self.hypothesis_manager = HypothesisManager(model_client)
         self.file_manager = FileManager(config)
         
@@ -238,8 +238,10 @@ class ExperimentRunner:
                 ui.print_info(f"📋 Passing {len(previously_used_variables)} previously used variables to avoid repetition", verbose=verbose)
             
             try:
-                preprocessing_result = self.data_processor.run_manual_preprocessing_conversation(
-                    hypothesis, self.config.dataset_folder, previous_conversation_summary, self.conversation_manager, previously_used_variables
+                # Check if dataset_folder is available, otherwise pass None
+                dataset_folder = getattr(self.config, 'dataset_folder', None) if hasattr(self.config, 'dataset_folder') else None
+                preprocessing_result = self.data_processor.run_simplified_preprocessing(
+                    hypothesis, dataset_folder, previous_conversation_summary, self.conversation_manager, previously_used_variables
                 )
                 if not preprocessing_result.get('success', False):
                     ui.print_warning(f"⚠️ Manual preprocessing failed for hypothesis {idx}, iteration {outer_iteration}, but continuing with analysis...", verbose=verbose)

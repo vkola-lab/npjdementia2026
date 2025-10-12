@@ -21,7 +21,7 @@ class Config:
         parser.add_argument('--hypothesis-mode', choices=['generate', 'direct', 'direct hypothesis'], default='generate', 
                           help='Whether to generate multiple hypotheses (generate), use keywords directly (direct), or use provided hypothesis (direct hypothesis)')
         parser.add_argument('--hypothesis', type=str, help='Direct hypothesis to use when hypothesis-mode is "direct hypothesis"')
-        parser.add_argument('--dataset-folder', type=str, help='Path to folder containing CSV and JSON files')
+        parser.add_argument('--dataset-folder', type=str, default=None, help='Path to folder containing CSV and JSON files')
         parser.add_argument('--keywords-file', type=str, default='adrd_keywords.txt', 
                           help='Path to keywords file for sampling (default: adrd_keywords.txt)')
         parser.add_argument('--num-keywords', type=int, default=3, help='Number of keywords to sample per run (default: 3)')

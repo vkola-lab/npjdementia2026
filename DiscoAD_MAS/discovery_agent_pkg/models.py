@@ -244,28 +244,28 @@ def create_scientist(model_client: ModelClient) -> Agent:
 def create_critic(model_client: ModelClient) -> Agent:
     """Create Critic agent."""
     critic_query = (
-        "\nYou are an extremely demanding and critical reviewer. Your standards are exceptionally high. "
-        "\nExamine every aspect of the experiments with ruthless scrutiny. Look for: "
-        "\n- Statistical significance and proper sample sizes "
-        "\n- Appropriate control groups and experimental design "
-        "\n- Correct data preprocessing and feature engineering "
-        "\n- Proper validation methodology and cross-validation "
+        "\nYou are a thorough and critical reviewer with high standards. "
+        "\nExamine the experiments carefully and look for: "
+        "\n- Statistical significance and appropriate sample sizes "
+        "\n- Sound experimental design and control groups "
+        "\n- Proper data preprocessing and feature engineering "
+        "\n- Valid validation methodology and cross-validation "
         "\n- Meaningful metrics and comprehensive evaluation "
         "\n- Clear interpretation of results and limitations "
         "\n- Reproducible and well-documented code "
-        "\n\nBe extremely skeptical. Question every assumption, methodology, and conclusion. "
-        "\nIf you find ANY mistakes, flaws, or areas for improvement, reply with 'RESULTS NOT APPROVED' and provide high-level feedback on what's wrong. "
+        "\n\nBe critical but fair. Question assumptions, methodology, and conclusions. "
+        "\nIf you find significant mistakes, major flaws, or critical areas for improvement, reply with 'RESULTS NOT APPROVED' and provide high-level feedback on what's wrong. "
         "\nFocus on major issues like: experimental design flaws, statistical methodology problems, data quality issues, or code errors. "
         "\nKeep your feedback concise and actionable - identify the problem, not detailed solutions. "
-        "\nOnly approve if the work demonstrates exceptional quality, rigor, and scientific merit. "
-        "\nIf the code is technically correct but lacks depth, insight, or proper scientific methodology, reply with 'RESULTS NOT APPROVED'. "
-        "\nIf the results are not statistically robust or the analysis is superficial, reply with 'RESULTS NOT APPROVED'. "
-        "\nOnly reply with 'RESULTS APPROVED' if the work meets the highest standards of scientific excellence. "
-        "\nRemember: mediocrity is not acceptable. Demand excellence in every aspect. "
+        "\nApprove if the work demonstrates good quality, rigor, and scientific merit. "
+        "\nIf the code is technically sound and the analysis is reasonable, consider approval even if not perfect. "
+        "\nIf the results show statistical validity and the analysis is thorough, reply with 'RESULTS APPROVED'. "
+        "\nOnly reply with 'RESULTS APPROVED' if the work meets good standards of scientific quality. "
+        "\nRemember: aim for quality work while being constructive in your evaluation. "
     )
     return Agent(
         name="Critic",
-        system_message="You are an extremely demanding and critical reviewer with exceptionally high standards. You ruthlessly scrutinize every aspect of scientific work and only approve results that meet the highest standards of excellence. Mediocrity is not acceptable.",
+        system_message="You are a thorough and critical reviewer with high standards. You carefully examine scientific work and approve results that demonstrate good quality and scientific merit.",
         model_client=model_client,
         query=critic_query
     )

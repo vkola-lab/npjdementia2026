@@ -1,0 +1,137 @@
+
+======================================================================
+🧠           Discovery Agent    🔬
+    AI-Powered Scientific Discovery    🚀
+======================================================================
+
+ℹ️ Info: 🔧 Initializing Discovery Agent System...
+ℹ️ Info: ⚙️ Initializing Discovery Agent...
+ℹ️ Info: 🗑️ Deleted existing working directory
+ℹ️ Info: 📁 Created fresh working directory
+ℹ️ Info: 📊 Created new CSV tracking file: results/hypothesis_approval_tracking_model_Qwen3_4B_Instruct_2507_mode_direct hypothesis_kw_3_runs_10_outer_2_auto_4_20251009_210640.csv
+ℹ️ Info: 🔧 CodeExecutor initialized with 30s timeout
+✅ Success: 🎉 Discovery Agent initialized successfully!
+ℹ️ Info: 🚀 Starting Discovery Agent...
+ℹ️ Info: 🎯 Using direct hypothesis mode with provided hypothesis
+────────────────────────────────────────────────────────────
+ℹ️ Info: 🎯 Direct Hypothesis Run 1/1
+ℹ️ Info: 📝 Using provided direct hypothesis: Higher age is associated with increased dementia incidence.
+ℹ️ Info: 📝 Setting direct hypothesis: Higher age is associated with increased dementia incidence.
+
+📝 Using Input as Hypothesis:
+  1. Higher age is associated with increased dementia incidence.
+
+📊 Progress: 1/1 hypothesiss (100.0%)
+────────────────────────────────────────────────────────────
+ℹ️ Info: 🔍 Working on hypothesis 1: Higher age is associated with increased dementia incidence.
+────────────────────────────────────────────────────────────
+ℹ️ Info: 🔄 OUTER LOOP ITERATION 1/2
+👤 User Input: Higher age is associated with increased dementia incidence.
+ℹ️ Info: 🔧 Running manual preprocessing for hypothesis 1, iteration 1...
+ℹ️ Info: 🔧 Starting manual preprocessing conversation...
+ℹ️ Info: 📁 Using dataset folder from config: /projectnb/vkolagrp/ketanss/adrd_agent_custom/adrd_agent/datasets/NACC
+ℹ️ Info: 🔍 Auto-detected files:
+ℹ️ Info:    📊 CSV: NACC.csv
+ℹ️ Info:    📚 JSON: NACC.json
+✅ Success: ✅ JSON dictionary file is valid: NACC.json
+ℹ️ Info: 🔬 Hypothesis: Higher age is associated with increased dementia incidence.
+ℹ️ Info: 📁 Dataset folder: /projectnb/vkolagrp/ketanss/adrd_agent_custom/adrd_agent/datasets/NACC
+ℹ️ Info: 📊 CSV file: /projectnb/vkolagrp/ketanss/adrd_agent_custom/adrd_agent/datasets/NACC/NACC.csv
+ℹ️ Info: 📚 JSON dictionary: /projectnb/vkolagrp/ketanss/adrd_agent_custom/adrd_agent/datasets/NACC/NACC.json
+ℹ️ Info: 🔍 Analyzing hypothesis to find relevant variables...
+ℹ️ Info: 🔍 Categorizing variables from dictionary...
+ℹ️ Info: 📊 Variable categorization summary:
+ℹ️ Info:    • Categorical: 645
+ℹ️ Info:    • Numerical: 20
+ℹ️ Info:    • Mixed: 145
+ℹ️ Info:    • Unknown: 0
+ℹ️ Info:    • Total: 810
+ℹ️ Info: 🎯 Selected 16 variables with categorization:
+ℹ️ Info:    • NACCAGE: numerical (numerical)
+ℹ️ Info:    • DEMENTED: categorical (categorical)
+ℹ️ Info:    • NACCAGEB: numerical (numerical)
+ℹ️ Info:    • SEX: categorical (categorical)
+ℹ️ Info:    • EDUC: mixed (numerical)
+ℹ️ Info:    • HISPANIC: categorical (categorical)
+ℹ️ Info:    • RACE: categorical (categorical)
+ℹ️ Info:    • NACCMOD: mixed (numerical)
+ℹ️ Info:    • NACCYOD: mixed (numerical)
+ℹ️ Info:    • NACCDIED: categorical (categorical)
+ℹ️ Info:    • CVDIMAG1: categorical (categorical)
+ℹ️ Info:    • CVDIMAG2: categorical (categorical)
+ℹ️ Info:    • FDGAD: categorical (categorical)
+ℹ️ Info:    • NACCALZD: categorical (categorical)
+ℹ️ Info:    • NACCNE4S: categorical (categorical)
+ℹ️ Info:    • NACCAPOE: categorical (categorical)
+ℹ️ Info: 🎯 Found 16 relevant variables:
+ℹ️ Info:    • NACCAGE: Subject's age at visit [numerical] (numerical)
+ℹ️ Info:    • DEMENTED: Met criteria for dementia [categorical] (categorical)
+ℹ️ Info:    • NACCAGEB: Subject's age at initial visit [numerical] (numerical)
+ℹ️ Info:    • SEX: Subject's sex [categorical] (categorical)
+ℹ️ Info:    • EDUC: Years of education [mixed] (numerical)
+ℹ️ Info:    • HISPANIC: Hispanic/Latino ethnicity [categorical] (categorical)
+ℹ️ Info:    • RACE: Race [categorical] (categorical)
+ℹ️ Info:    • NACCMOD: Month of death [mixed] (numerical)
+ℹ️ Info:    • NACCYOD: Year of death [mixed] (numerical)
+ℹ️ Info:    • NACCDIED: Subject is known to be deceased [categorical] (categorical)
+ℹ️ Info:    • CVDIMAG1: Single strategic infarct [categorical] (categorical)
+ℹ️ Info:    • CVDIMAG2: Multiple infarcts [categorical] (categorical)
+ℹ️ Info:    • FDGAD: FDG-PET pattern of AD [categorical] (categorical)
+ℹ️ Info:    • NACCALZD: Presumptive etiologic diagnosis of the cognitive disorder - Alzheimer's disease [categorical] (categorical)
+ℹ️ Info:    • NACCNE4S: Number of APOE e4 alleles [categorical] (categorical)
+ℹ️ Info:    • NACCAPOE: APOE genotype [categorical] (categorical)
+ℹ️ Info: 🔍 Filtering CSV files with relevant variables...
+ℹ️ Info: 📊 Processing CSV file: NACC.csv
+ℹ️ Info: 📈 Original CSV has 26778 rows and 2117 columns
+ℹ️ Info: 🎯 Found 15 relevant columns: ['NACCAGE', 'DEMENTED', 'SEX', 'EDUC', 'HISPANIC', 'RACE', 'NACCMOD', 'NACCYOD', 'NACCDIED', 'CVDIMAG1', 'CVDIMAG2', 'FDGAD', 'NACCALZD', 'NACCNE4S', 'NACCAPOE']
+ℹ️ Info: 🔄 Renamed columns to descriptions: {'NACCAGE': 'Subjects_age_at_visit', 'DEMENTED': 'Met_criteria_for_dementia', 'SEX': 'Subjects_sex', 'EDUC': 'Years_of_education', 'HISPANIC': 'HispanicLatino_ethnicity', 'RACE': 'Race', 'NACCMOD': 'Month_of_death', 'NACCYOD': 'Year_of_death', 'NACCDIED': 'Subject_is_known_to_be_deceased', 'CVDIMAG1': 'Single_strategic_infarct', 'CVDIMAG2': 'Multiple_infarcts', 'FDGAD': 'FDGPET_pattern_of_AD', 'NACCALZD': 'Presumptive_etiologic_diagnosis_of_the_cognitive_disorder_Alzheimers_disease', 'NACCNE4S': 'Number_of_APOE_e4_alleles', 'NACCAPOE': 'APOE_genotype'}
+ℹ️ Info: 🔧 Starting data preprocessing with JSON-based categorization...
+ℹ️ Info: 📊 Original data shape: 26778 rows, 15 columns
+ℹ️ Info: 🔍 Analyzing missing data patterns...
+ℹ️ Info:    📊 Total missing values: 50,041 (12.5% of all data)
+ℹ️ Info:    📊 Columns with high missingness (>10%): 3
+ℹ️ Info:    📊 Top 10 columns with highest missingness:
+ℹ️ Info:      • Single_strategic_infarct: 68.4% missing
+ℹ️ Info:      • Multiple_infarcts: 68.4% missing
+ℹ️ Info:      • FDGPET_pattern_of_AD: 50.0% missing
+ℹ️ Info:      • Subjects_age_at_visit: 0.0% missing
+ℹ️ Info:      • Met_criteria_for_dementia: 0.0% missing
+ℹ️ Info:      • Subjects_sex: 0.0% missing
+ℹ️ Info:      • Years_of_education: 0.0% missing
+ℹ️ Info:      • HispanicLatino_ethnicity: 0.0% missing
+ℹ️ Info:      • Race: 0.0% missing
+ℹ️ Info:      • Month_of_death: 0.0% missing
+ℹ️ Info: 📊 Preserving all missing data - no columns will be removed...
+ℹ️ Info:    📈 Found 3 columns with high missingness (>10.0%):
+ℹ️ Info:    • Single_strategic_infarct: 68.4% missing (preserved)
+ℹ️ Info:    • Multiple_infarcts: 68.4% missing (preserved)
+ℹ️ Info:    • FDGPET_pattern_of_AD: 50.0% missing (preserved)
+ℹ️ Info:    ✅ All columns preserved - missing data will be handled by analysis methods
+ℹ️ Info: 🔍 Using JSON-based categorization for column types...
+ℹ️ Info:    📊 JSON-based categorization:
+ℹ️ Info:      • Categorical columns (1): ['Race']
+ℹ️ Info:      • Numerical columns (14): ['Subjects_age_at_visit', 'Met_criteria_for_dementia', 'Subjects_sex', 'Years_of_education', 'HispanicLatino_ethnicity', 'Month_of_death', 'Year_of_death', 'Subject_is_known_to_be_deceased', 'Single_strategic_infarct', 'Multiple_infarcts', 'FDGPET_pattern_of_AD', 'Presumptive_etiologic_diagnosis_of_the_cognitive_disorder_Alzheimers_disease', 'Number_of_APOE_e4_alleles', 'APOE_genotype']
+ℹ️ Info:      • Mixed columns (0): []
+ℹ️ Info: 🔧 Mapping unknown values to NaN based on JSON dictionary analysis...
+ℹ️ Info: 🔧 Mapping unknown values to NaN based on JSON dictionary analysis...
+ℹ️ Info: 🔍 Extracted unknown value mappings for 693 variables from JSON dictionary
+ℹ️ Info:    📊 Column Race: Mapping 4 unknown values to NaN: ['4', '99', '50', '3']
+ℹ️ Info: 🔧 Creating dummy variables for categorical columns...
+ℹ️ Info:    📊 Created 2 dummy variables for Race: ['Race_is_2.0', 'Race_is_5.0']
+ℹ️ Info: 🔧 Converting remaining object columns to numeric...
+ℹ️ Info: 🔍 Final data validation...
+⚠️ Warning: ⚠️ Dataset contains 50041 missing values (NaN)
+⚠️ Warning: ⚠️ IMPORTANT: For each specific test, remove rows with NaN values in the columns being compared
+⚠️ Warning: ⚠️ Example: If comparing columns A and B, drop rows where either A or B has NaN values
+✅ Success: ✅ Data preprocessing with categorization completed!
+ℹ️ Info: 📊 Final data shape: 26778 rows, 16 columns
+ℹ️ Info: 📈 Columns removed: 0 (all missing data preserved)
+ℹ️ Info: 📈 Columns added: 1 (dummy variables only)
+✅ Success: ✅ Processed CSV saved to: working/filtered_dataset.csv
+ℹ️ Info: 📊 Final processed CSV has 26778 rows and 16 columns
+ℹ️ Info: ✅ Manual preprocessing completed successfully!
+ℹ️ Info: 📊 Filtered data saved to: working/filtered_dataset.csv
+ℹ️ Info: 📋 Updated previously used variables list: 16 total variables
+ℹ️ Info: 📋 Starting Planning Agent round...
+⏳ Enhanced Planning Agent is working...
+ℹ️ Info: 🔄 Generating Enhanced Planning Agent response...

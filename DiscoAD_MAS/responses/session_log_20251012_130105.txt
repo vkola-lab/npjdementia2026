@@ -1,0 +1,223 @@
+
+======================================================================
+🧠           Discovery Agent    🔬
+    AI-Powered Scientific Discovery    🚀
+======================================================================
+
+ℹ️ Info: 🔧 Initializing Discovery Agent System...
+ℹ️ Info: ⚙️ Initializing Discovery Agent...
+ℹ️ Info: 🗑️ Deleted existing working directory
+ℹ️ Info: 📁 Created fresh working directory
+ℹ️ Info: 📊 Created new CSV tracking file: results/hypothesis_approval_tracking_model_Qwen3_4B_Instruct_2507_mode_direct hypothesis_kw_3_runs_10_outer_2_auto_4_20251012_130107.csv
+ℹ️ Info: 🔧 CodeExecutor initialized with 30s timeout
+✅ Success: 🎉 Discovery Agent initialized successfully!
+ℹ️ Info: 🚀 Starting Discovery Agent...
+ℹ️ Info: 🎯 Using direct hypothesis mode with provided hypothesis
+────────────────────────────────────────────────────────────
+ℹ️ Info: 🎯 Direct Hypothesis Run 1/1
+ℹ️ Info: 📝 Using provided direct hypothesis: Higher age is associated with increased dementia incidence.
+ℹ️ Info: 📝 Setting direct hypothesis: Higher age is associated with increased dementia incidence.
+
+📝 Using Input as Hypothesis:
+  1. Higher age is associated with increased dementia incidence.
+
+📊 Progress: 1/1 hypothesiss (100.0%)
+────────────────────────────────────────────────────────────
+ℹ️ Info: 🔍 Working on hypothesis 1: Higher age is associated with increased dementia incidence.
+────────────────────────────────────────────────────────────
+ℹ️ Info: 🔄 OUTER LOOP ITERATION 1/2
+👤 User Input: Higher age is associated with increased dementia incidence.
+ℹ️ Info: 🔧 Running manual preprocessing for hypothesis 1, iteration 1...
+ℹ️ Info: 🔧 Starting simplified preprocessing...
+ℹ️ Info: 🔍 Auto-detected files:
+ℹ️ Info:    📊 CSV: NACC.csv
+ℹ️ Info:    📚 JSON: NACC.json
+✅ Success: ✅ JSON dictionary file is valid: NACC.json
+ℹ️ Info: 🚀 Starting simplified data preprocessing...
+ℹ️ Info: 🔬 Hypothesis: Higher age is associated with increased dementia incidence.
+ℹ️ Info: 📊 CSV file: /projectnb/vkolagrp/ketanss/adrd_agent_custom/adrd_agent/datasets/NACC/NACC.csv
+ℹ️ Info: 📚 JSON dictionary: /projectnb/vkolagrp/ketanss/adrd_agent_custom/adrd_agent/datasets/NACC/NACC.json
+ℹ️ Info: 📖 Loading CSV data...
+ℹ️ Info: 📊 Original data shape: 26778 rows, 2117 columns
+ℹ️ Info: 🤖 Step 1: Querying LLM for variable selection...
+ℹ️ Info: 🔍 Querying LLM for variable selection...
+ℹ️ Info: LLM Response: ```python
+variable_names = [
+    "NACCAGE",           # Age at visit (directly relevant to hypothesis)
+    "NACCAGEB",          # Age at initial visit (baseline age control)
+    "DEMENTED",          # Outcome variable: met criteria for dementia
+    "NACCUDSD",          # Cognitive status at UDS visit (comprehensive clinical outcome)
+    "NACCMMSE",          # MMSE score (standard cognitive measure)
+    "NACCMOCA",          # MoCA score (sensitive cognitive screening tool)
+    "HYPERT",            # Hypertension (key vascular risk factor)
+    "STROKE",            # Stroke history (major contributor to vascular dementia)
+    "CVHATT",            # Heart attack (cardiovascular risk)
+    "HVALVE",            # Heart valve disease (related to vascular health)
+    "DIABET",            # Diabetes (metabolic comorbidity)
+    "HYPCHOL",           # Hypercholesterolemia (risk factor for vascular disease)
+    "BIPOLAR",           # Bipolar disorder (psychiatric comorbidity)
+    "DEP",               # Depression (common comorbidity affecting cognition)
+    "SEX",               # Sex (demographic control variable)
+    "EDUC",              # Education (known confounder in aging studies)
+    "RACE",              # Race (potential socioeconomic/accessibility confounder)
+    "HISPANIC",          # Ethnicity (socioeconomic and health disparities)
+    "NACCAGEB"           # Repeated here only if needed, but already included; avoid duplication
+]
+```
+
+### Rationale:
+- **Core hypothesis**: "Higher age is associated with increased dementia incidence."  
+  → Directly tested via **NACCAGE** and baseline age (**NACCAGEB**) as predictors.
+- **Outcome**: Dementia must be measurable — captured through **DEMENTED**, **NACCUDSD**, and validated tools like **NACCMMSE**, **NACCMOCA**.
+- **Key covariates**: 
+  - **Sex**, **Race**, **Ethnicity** (to control for sociodemographic biases).
+  - **Education** (strongly linked to cognitive reserve).
+- **Clinical confounders**: Major vascular risks (hypertension, stroke, diabetes, cholesterol) are key contributors to vascular dementia, which may be more common in older adults.
+- **Excluded**:
+  - Variables like `FORMVER`, `PACKSPER`, `VISITDAY` — not directly tied to age-dementia link.
+  - Redundant or overly granular imaging/biomarkers (e.g., PET scans) unless critical — these are more relevant for *specific subtypes* of dementia, not general age association.
+  - Behavioral symptoms or neuropsychiatric scales (e.g., GDS, NPI) are secondary and not core to age-dementia link.
+
+This selection focuses on clarity, relevance, and statistical power while avoiding overfitting or redundancy. It remains within the 10–20 variable range and aligns with established epidemiological models of dementia.
+ℹ️ Info: 🎯 Selected 19 variables: ['NACCAGE', 'NACCAGEB', 'DEMENTED', 'NACCUDSD', 'NACCMMSE', 'NACCMOCA', 'HYPERT', 'STROKE', 'CVHATT', 'HVALVE', 'DIABET', 'HYPCHOL', 'BIPOLAR', 'DEP', 'SEX', 'EDUC', 'RACE', 'HISPANIC', 'NACCAGEB']
+ℹ️ Info: 🎯 Filtered to 17 selected columns
+ℹ️ Info: 🔧 Step 2: Replacing unknown values with NaN...
+ℹ️ Info: 🔧 Replacing unknown values with NaN...
+ℹ️ Info: 📊 Total unknown values replaced: 0
+ℹ️ Info: 🔧 Step 3: Creating dummy variables for categorical columns...
+ℹ️ Info: 🔧 Creating dummy variables for categorical columns...
+ℹ️ Info:    🔍 Processing categorical column: DEMENTED
+ℹ️ Info:       📊 Creating dummy variables for 2 categories
+ℹ️ Info:       ✅ Created 1 dummy variables: ['DEMENTED_Yes']
+ℹ️ Info:    🔍 Processing categorical column: NACCUDSD
+ℹ️ Info:       📊 Creating dummy variables for 4 categories
+ℹ️ Info:       ✅ Created 2 dummy variables: ['NACCUDSD_MCI', 'NACCUDSD_Normal cognition']
+ℹ️ Info:    🔍 Processing categorical column: NACCMMSE
+ℹ️ Info:       📊 Creating dummy variables for 4 categories
+ℹ️ Info:       ✅ Created 36 dummy variables: ['NACCMMSE_1.0', 'NACCMMSE_10.0', 'NACCMMSE_11.0', 'NACCMMSE_12.0', 'NACCMMSE_13.0', 'NACCMMSE_14.0', 'NACCMMSE_15.0', 'NACCMMSE_16.0', 'NACCMMSE_17.0', 'NACCMMSE_18.0', 'NACCMMSE_19.0', 'NACCMMSE_2.0', 'NACCMMSE_20.0', 'NACCMMSE_21.0', 'NACCMMSE_22.0', 'NACCMMSE_23.0', 'NACCMMSE_24.0', 'NACCMMSE_25.0', 'NACCMMSE_26.0', 'NACCMMSE_27.0', 'NACCMMSE_28.0', 'NACCMMSE_29.0', 'NACCMMSE_3.0', 'NACCMMSE_30.0', 'NACCMMSE_4.0', 'NACCMMSE_5.0', 'NACCMMSE_6.0', 'NACCMMSE_7.0', 'NACCMMSE_8.0', 'NACCMMSE_88.0', 'NACCMMSE_9.0', 'NACCMMSE_95.0', 'NACCMMSE_96.0', 'NACCMMSE_97.0', 'NACCMMSE_98.0', 'NACCMMSE_nan']
+ℹ️ Info:    🔍 Processing categorical column: NACCMOCA
+ℹ️ Info:       ⚠️ Skipping NACCMOCA (insufficient categories: 1)
+ℹ️ Info:    🔍 Processing categorical column: HYPERT
+ℹ️ Info:       📊 Creating dummy variables for 3 categories
+ℹ️ Info:       ✅ Created 3 dummy variables: ['HYPERT_1.0', 'HYPERT_8.0', 'HYPERT_nan']
+ℹ️ Info:    🔍 Processing categorical column: STROKE
+ℹ️ Info:       📊 Creating dummy variables for 2 categories
+ℹ️ Info:       ✅ Created 2 dummy variables: ['STROKE_1.0', 'STROKE_nan']
+ℹ️ Info:    🔍 Processing categorical column: CVHATT
+ℹ️ Info:       📊 Creating dummy variables for 3 categories
+ℹ️ Info:       ✅ Created 4 dummy variables: ['CVHATT_1.0', 'CVHATT_2.0', 'CVHATT_9.0', 'CVHATT_nan']
+ℹ️ Info:    🔍 Processing categorical column: HVALVE
+ℹ️ Info:       📊 Creating dummy variables for 3 categories
+ℹ️ Info:       ✅ Created 3 dummy variables: ['HVALVE_1.0', 'HVALVE_8.0', 'HVALVE_nan']
+ℹ️ Info:    🔍 Processing categorical column: DIABET
+ℹ️ Info:       📊 Creating dummy variables for 4 categories
+ℹ️ Info:       ✅ Created 5 dummy variables: ['DIABET_1.0', 'DIABET_2.0', 'DIABET_3.0', 'DIABET_9.0', 'DIABET_nan']
+ℹ️ Info:    🔍 Processing categorical column: HYPCHOL
+ℹ️ Info:       📊 Creating dummy variables for 3 categories
+ℹ️ Info:       ✅ Created 3 dummy variables: ['HYPCHOL_1.0', 'HYPCHOL_8.0', 'HYPCHOL_nan']
+ℹ️ Info:    🔍 Processing categorical column: BIPOLAR
+ℹ️ Info:       📊 Creating dummy variables for 3 categories
+ℹ️ Info:       ✅ Created 4 dummy variables: ['BIPOLAR_1.0', 'BIPOLAR_2.0', 'BIPOLAR_9.0', 'BIPOLAR_nan']
+ℹ️ Info:    🔍 Processing categorical column: DEP
+ℹ️ Info:       📊 Creating dummy variables for 2 categories
+ℹ️ Info:       ✅ Created 1 dummy variables: ['DEP_Yes']
+ℹ️ Info:    🔍 Processing categorical column: SEX
+ℹ️ Info:       📊 Creating dummy variables for 2 categories
+ℹ️ Info:       ✅ Created 1 dummy variables: ['SEX_Male']
+ℹ️ Info:    🔍 Processing categorical column: EDUC
+ℹ️ Info:       ⚠️ Skipping EDUC (insufficient categories: 0)
+ℹ️ Info:    🔍 Processing categorical column: RACE
+ℹ️ Info:       📊 Creating dummy variables for 6 categories
+ℹ️ Info:       ✅ Created 6 dummy variables: ['RACE_American Indian or Alaska Native', 'RACE_Asian', 'RACE_Black or African American', 'RACE_Native Hawaiian or Other Pacific Islander', 'RACE_Other (specify)', 'RACE_White']
+ℹ️ Info:    🔍 Processing categorical column: HISPANIC
+ℹ️ Info:       📊 Creating dummy variables for 2 categories
+ℹ️ Info:       ✅ Created 2 dummy variables: ['HISPANIC_No', 'HISPANIC_Yes']
+ℹ️ Info: 🔧 Step 4: Renaming columns with descriptions...
+ℹ️ Info: 🔧 Renaming columns with descriptions...
+ℹ️ Info:    📝 DEMENTED_Yes → Met criteria for dementia_Yes
+ℹ️ Info:    📝 NACCUDSD_MCI → Cognitive status at UDS visit_MCI
+ℹ️ Info:    📝 NACCUDSD_Normal cognition → Cognitive status at UDS visit_Normal cognition
+ℹ️ Info:    📝 NACCMMSE_1.0 → Total MMSE score (using D-L-R-O-W)_1.0
+ℹ️ Info:    📝 NACCMMSE_10.0 → Total MMSE score (using D-L-R-O-W)_10.0
+ℹ️ Info:    📝 NACCMMSE_11.0 → Total MMSE score (using D-L-R-O-W)_11.0
+ℹ️ Info:    📝 NACCMMSE_12.0 → Total MMSE score (using D-L-R-O-W)_12.0
+ℹ️ Info:    📝 NACCMMSE_13.0 → Total MMSE score (using D-L-R-O-W)_13.0
+ℹ️ Info:    📝 NACCMMSE_14.0 → Total MMSE score (using D-L-R-O-W)_14.0
+ℹ️ Info:    📝 NACCMMSE_15.0 → Total MMSE score (using D-L-R-O-W)_15.0
+ℹ️ Info:    📝 NACCMMSE_16.0 → Total MMSE score (using D-L-R-O-W)_16.0
+ℹ️ Info:    📝 NACCMMSE_17.0 → Total MMSE score (using D-L-R-O-W)_17.0
+ℹ️ Info:    📝 NACCMMSE_18.0 → Total MMSE score (using D-L-R-O-W)_18.0
+ℹ️ Info:    📝 NACCMMSE_19.0 → Total MMSE score (using D-L-R-O-W)_19.0
+ℹ️ Info:    📝 NACCMMSE_2.0 → Total MMSE score (using D-L-R-O-W)_2.0
+ℹ️ Info:    📝 NACCMMSE_20.0 → Total MMSE score (using D-L-R-O-W)_20.0
+ℹ️ Info:    📝 NACCMMSE_21.0 → Total MMSE score (using D-L-R-O-W)_21.0
+ℹ️ Info:    📝 NACCMMSE_22.0 → Total MMSE score (using D-L-R-O-W)_22.0
+ℹ️ Info:    📝 NACCMMSE_23.0 → Total MMSE score (using D-L-R-O-W)_23.0
+ℹ️ Info:    📝 NACCMMSE_24.0 → Total MMSE score (using D-L-R-O-W)_24.0
+ℹ️ Info:    📝 NACCMMSE_25.0 → Total MMSE score (using D-L-R-O-W)_25.0
+ℹ️ Info:    📝 NACCMMSE_26.0 → Total MMSE score (using D-L-R-O-W)_26.0
+ℹ️ Info:    📝 NACCMMSE_27.0 → Total MMSE score (using D-L-R-O-W)_27.0
+ℹ️ Info:    📝 NACCMMSE_28.0 → Total MMSE score (using D-L-R-O-W)_28.0
+ℹ️ Info:    📝 NACCMMSE_29.0 → Total MMSE score (using D-L-R-O-W)_29.0
+ℹ️ Info:    📝 NACCMMSE_3.0 → Total MMSE score (using D-L-R-O-W)_3.0
+ℹ️ Info:    📝 NACCMMSE_30.0 → Total MMSE score (using D-L-R-O-W)_30.0
+ℹ️ Info:    📝 NACCMMSE_4.0 → Total MMSE score (using D-L-R-O-W)_4.0
+ℹ️ Info:    📝 NACCMMSE_5.0 → Total MMSE score (using D-L-R-O-W)_5.0
+ℹ️ Info:    📝 NACCMMSE_6.0 → Total MMSE score (using D-L-R-O-W)_6.0
+ℹ️ Info:    📝 NACCMMSE_7.0 → Total MMSE score (using D-L-R-O-W)_7.0
+ℹ️ Info:    📝 NACCMMSE_8.0 → Total MMSE score (using D-L-R-O-W)_8.0
+ℹ️ Info:    📝 NACCMMSE_88.0 → Total MMSE score (using D-L-R-O-W)_88.0
+ℹ️ Info:    📝 NACCMMSE_9.0 → Total MMSE score (using D-L-R-O-W)_9.0
+ℹ️ Info:    📝 NACCMMSE_95.0 → Total MMSE score (using D-L-R-O-W)_95.0
+ℹ️ Info:    📝 NACCMMSE_96.0 → Total MMSE score (using D-L-R-O-W)_96.0
+ℹ️ Info:    📝 NACCMMSE_97.0 → Total MMSE score (using D-L-R-O-W)_97.0
+ℹ️ Info:    📝 NACCMMSE_98.0 → Total MMSE score (using D-L-R-O-W)_98.0
+ℹ️ Info:    📝 NACCMMSE_nan → Total MMSE score (using D-L-R-O-W)_nan
+ℹ️ Info:    📝 HYPERT_1.0 → Hypertension present_1.0
+ℹ️ Info:    📝 HYPERT_8.0 → Hypertension present_8.0
+ℹ️ Info:    📝 HYPERT_nan → Hypertension present_nan
+ℹ️ Info:    📝 STROKE_1.0 → Presumptive etiologic diagnosis of the cognitive disorder - Stroke_1.0
+ℹ️ Info:    📝 STROKE_nan → Presumptive etiologic diagnosis of the cognitive disorder - Stroke_nan
+ℹ️ Info:    📝 CVHATT_1.0 → Heart attack/cardiac arrest_1.0
+ℹ️ Info:    📝 CVHATT_2.0 → Heart attack/cardiac arrest_2.0
+ℹ️ Info:    📝 CVHATT_9.0 → Heart attack/cardiac arrest_9.0
+ℹ️ Info:    📝 CVHATT_nan → Heart attack/cardiac arrest_nan
+ℹ️ Info:    📝 HVALVE_1.0 → Procedure: heart valve replacement or repair within the past 12 months_1.0
+ℹ️ Info:    📝 HVALVE_8.0 → Procedure: heart valve replacement or repair within the past 12 months_8.0
+ℹ️ Info:    📝 HVALVE_nan → Procedure: heart valve replacement or repair within the past 12 months_nan
+ℹ️ Info:    📝 DIABET_1.0 → Diabetes present at visit_1.0
+ℹ️ Info:    📝 DIABET_2.0 → Diabetes present at visit_2.0
+ℹ️ Info:    📝 DIABET_3.0 → Diabetes present at visit_3.0
+ℹ️ Info:    📝 DIABET_9.0 → Diabetes present at visit_9.0
+ℹ️ Info:    📝 DIABET_nan → Diabetes present at visit_nan
+ℹ️ Info:    📝 HYPCHOL_1.0 → Hypercholesterolemia present_1.0
+ℹ️ Info:    📝 HYPCHOL_8.0 → Hypercholesterolemia present_8.0
+ℹ️ Info:    📝 HYPCHOL_nan → Hypercholesterolemia present_nan
+ℹ️ Info:    📝 BIPOLAR_1.0 → bipolar disorder_1.0
+ℹ️ Info:    📝 BIPOLAR_2.0 → bipolar disorder_2.0
+ℹ️ Info:    📝 BIPOLAR_9.0 → bipolar disorder_9.0
+ℹ️ Info:    📝 BIPOLAR_nan → bipolar disorder_nan
+ℹ️ Info:    📝 DEP_Yes → Presumptive etiologic diagnosis of the cognitive disorder - Depression_Yes
+ℹ️ Info:    📝 SEX_Male → Subject's sex_Male
+ℹ️ Info:    📝 RACE_American Indian or Alaska Native → Race_American Indian or Alaska Native
+ℹ️ Info:    📝 RACE_Asian → Race_Asian
+ℹ️ Info:    📝 RACE_Black or African American → Race_Black or African American
+ℹ️ Info:    📝 RACE_Native Hawaiian or Other Pacific Islander → Race_Native Hawaiian or Other Pacific Islander
+ℹ️ Info:    📝 RACE_Other (specify) → Race_Other (specify)
+ℹ️ Info:    📝 RACE_White → Race_White
+ℹ️ Info:    📝 HISPANIC_No → Hispanic/Latino ethnicity_No
+ℹ️ Info:    📝 HISPANIC_Yes → Hispanic/Latino ethnicity_Yes
+ℹ️ Info:    📝 NACCAGE → Subjects_age_at_visit
+ℹ️ Info:    📝 NACCMOCA → MoCA_Total_Score_corrected_for_education
+ℹ️ Info:    📝 EDUC → Years_of_education
+ℹ️ Info:    ✅ Column renaming completed!
+ℹ️ Info: 💾 Step 5: Saving processed data...
+ℹ️ Info: 💾 Saving processed data to: working/processed_dataset.csv
+✅ Success: ✅ Processed data saved successfully!
+ℹ️ Info: 📊 Final data shape: 26778 rows, 76 columns
+✅ Success: ✅ Simplified data preprocessing completed!
+ℹ️ Info: 📊 Final data shape: 26778 rows, 76 columns
+✅ Success: ✅ Simplified preprocessing completed successfully!
+ℹ️ Info: 📋 Starting Planning Agent round...
+⏳ Enhanced Planning Agent is working...
+ℹ️ Info: 🔄 Generating Enhanced Planning Agent response...

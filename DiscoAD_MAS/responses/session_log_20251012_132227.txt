@@ -1,0 +1,193 @@
+
+======================================================================
+🧠           Discovery Agent    🔬
+    AI-Powered Scientific Discovery    🚀
+======================================================================
+
+ℹ️ Info: 🔧 Initializing Discovery Agent System...
+ℹ️ Info: ⚙️ Initializing Discovery Agent...
+ℹ️ Info: 🗑️ Deleted existing working directory
+ℹ️ Info: 📁 Created fresh working directory
+ℹ️ Info: 📊 Created new CSV tracking file: results/hypothesis_approval_tracking_model_Qwen3_4B_Instruct_2507_mode_direct hypothesis_kw_3_runs_10_outer_2_auto_4_20251012_132229.csv
+ℹ️ Info: 🔧 CodeExecutor initialized with 30s timeout
+✅ Success: 🎉 Discovery Agent initialized successfully!
+ℹ️ Info: 🚀 Starting Discovery Agent...
+ℹ️ Info: 🎯 Using direct hypothesis mode with provided hypothesis
+────────────────────────────────────────────────────────────
+ℹ️ Info: 🎯 Direct Hypothesis Run 1/1
+ℹ️ Info: 📝 Using provided direct hypothesis: Higher age is associated with increased dementia incidence.
+ℹ️ Info: 📝 Setting direct hypothesis: Higher age is associated with increased dementia incidence.
+
+📝 Using Input as Hypothesis:
+  1. Higher age is associated with increased dementia incidence.
+
+📊 Progress: 1/1 hypothesiss (100.0%)
+────────────────────────────────────────────────────────────
+ℹ️ Info: 🔍 Working on hypothesis 1: Higher age is associated with increased dementia incidence.
+────────────────────────────────────────────────────────────
+ℹ️ Info: 🔄 OUTER LOOP ITERATION 1/2
+👤 User Input: Higher age is associated with increased dementia incidence.
+ℹ️ Info: 🔧 Running manual preprocessing for hypothesis 1, iteration 1...
+ℹ️ Info: 🔧 Starting simplified preprocessing...
+ℹ️ Info: 🔍 Auto-detected files:
+ℹ️ Info:    📊 CSV: NACC.csv
+ℹ️ Info:    📚 JSON: NACC.json
+✅ Success: ✅ JSON dictionary file is valid: NACC.json
+ℹ️ Info: 🚀 Starting simplified data preprocessing...
+ℹ️ Info: 🔬 Hypothesis: Higher age is associated with increased dementia incidence.
+ℹ️ Info: 📊 CSV file: /projectnb/vkolagrp/ketanss/adrd_agent_custom/adrd_agent/datasets/NACC/NACC.csv
+ℹ️ Info: 📚 JSON dictionary: /projectnb/vkolagrp/ketanss/adrd_agent_custom/adrd_agent/datasets/NACC/NACC.json
+ℹ️ Info: 📖 Loading CSV data...
+ℹ️ Info: 📊 Original data shape: 26778 rows, 2117 columns
+ℹ️ Info: 🤖 Step 1: Querying LLM for variable selection...
+ℹ️ Info: 🔍 Querying LLM for variable selection...
+ℹ️ Info: LLM Response: ```python
+variable_names = [
+    "NACCAGE",           # Age at visit — direct exposure variable
+    "NACCAGEB",          # Age at initial visit — baseline age for longitudinal comparison
+    "DEMENTED",          # Outcome variable: met criteria for dementia
+    "NACCUDSD",          # Cognitive status at UDS visit — key clinical endpoint
+    "NACCAGEB",          # Baseline age (to assess trajectory)
+    "SEX",               # Control variable (gender differences)
+    "RACE",              # Important sociodemographic factor (potential confounder)
+    "HISPANIC",          # Ethnicity control variable
+    "EDUC",              # Education — known modifier of cognitive aging
+    "HYPERTEN",          # Hypertension — major vascular risk factor linked to dementia
+    "DIABET",            # Diabetes — comorbidity linked to cognitive decline
+    "CVHATT",            # Heart attack — cardiovascular risk factor
+    "STROKE",            # Stroke — strong association with vascular dementia
+    "CVDIMAG",           # Imaging evidence of vascular pathology — supports vascular etiology
+    "APOE",              # APOE genotype — genetic risk factor for AD
+    "NACCNE4S",          # Number of APOE ε4 alleles — quantitative genetic risk
+    "NACCALZD",          # Presumptive diagnosis of Alzheimer’s disease — outcome alignment
+    "NACCFTDM",          # Hereditary FTLD mutation — alternative etiology
+    "NACCADMU",          # Dominant AD mutation — genetic risk
+    "NACCMCIA",          # MCI domain — early marker of cognitive decline
+    "NACCMCIL"           # MCI domain — additional specificity if needed
+]
+```
+
+### Rationale:
+- **Core hypothesis**: "Higher age → higher dementia incidence."  
+  → Central variable: `NACCAGE` and `NACCAGEB` capture age at key points.
+- **Outcome**: Dementia diagnosis (`DEMENTED`, `NACCUDSD`) is essential to define the event of interest.
+- **Controls**: Sex, race, Hispanic status, and education are standard covariates in aging studies.
+- **Clinical risk factors**: Hypertension, diabetes, stroke, and vascular imaging are strongly tied to both age-related and vascular dementia.
+- **Genetic risk**: APOE status and allele count provide biological plausibility and adjustment for genetic predisposition.
+- **Redundancy avoided**:
+  - Removed duplicate age variables (only kept one baseline).
+  - Excluded lifestyle, meds, or sleep variables unless directly linked to dementia pathophysiology.
+  - Did not include cognitive test scores (like MMSE) as they are downstream outcomes, not predictors of *incidence*.
+
+This set focuses on **age**, **dementia status**, **key comorbidities**, and **confounders**, enabling a clean, interpretable test of the age-dementia relationship while accounting for important biological and demographic influences. ✅
+ℹ️ Info: 🎯 Selected 21 variables: ['NACCAGE', 'NACCAGEB', 'DEMENTED', 'NACCUDSD', 'NACCAGEB', 'SEX', 'RACE', 'HISPANIC', 'EDUC', 'HYPERTEN', 'DIABET', 'CVHATT', 'STROKE', 'CVDIMAG', 'APOE', 'NACCNE4S', 'NACCALZD', 'NACCFTDM', 'NACCADMU', 'NACCMCIA', 'NACCMCIL']
+ℹ️ Info: 🎯 Filtered to 18 selected columns
+ℹ️ Info: 🔧 Step 2: Replacing unknown values with NaN...
+ℹ️ Info: 🔧 Replacing unknown values with NaN...
+ℹ️ Info: 📊 Total unknown values replaced: 0
+ℹ️ Info: 🔧 Step 3: Creating dummy variables for categorical columns...
+ℹ️ Info: 🔧 Creating dummy variables for categorical columns...
+ℹ️ Info:    🔍 Processing categorical column: DEMENTED
+ℹ️ Info:       📊 Creating dummy variables for 2 categories
+ℹ️ Info:       ✅ Created 2 dummy variables: ['DEMENTED_No', 'DEMENTED_Yes']
+ℹ️ Info:    🔍 Processing categorical column: NACCUDSD
+ℹ️ Info:       📊 Creating dummy variables for 4 categories
+ℹ️ Info:       ✅ Created 3 dummy variables: ['NACCUDSD_Dementia', 'NACCUDSD_MCI', 'NACCUDSD_Normal cognition']
+ℹ️ Info:    🔍 Processing categorical column: SEX
+ℹ️ Info:       📊 Creating dummy variables for 2 categories
+ℹ️ Info:       ✅ Created 2 dummy variables: ['SEX_Female', 'SEX_Male']
+ℹ️ Info:    🔍 Processing categorical column: RACE
+ℹ️ Info:       📊 Creating dummy variables for 6 categories
+ℹ️ Info:       ✅ Created 6 dummy variables: ['RACE_American Indian or Alaska Native', 'RACE_Asian', 'RACE_Black or African American', 'RACE_Native Hawaiian or Other Pacific Islander', 'RACE_Other (specify)', 'RACE_White']
+ℹ️ Info:    🔍 Processing categorical column: HISPANIC
+ℹ️ Info:       📊 Creating dummy variables for 2 categories
+ℹ️ Info:       ✅ Created 2 dummy variables: ['HISPANIC_No', 'HISPANIC_Yes']
+ℹ️ Info:    🔍 Processing categorical column: HYPERTEN
+ℹ️ Info:       📊 Creating dummy variables for 3 categories
+ℹ️ Info:       ✅ Created 3 dummy variables: ['HYPERTEN_Absent', 'HYPERTEN_Recent/Active', 'HYPERTEN_Remote/Inactive']
+ℹ️ Info:    🔍 Processing categorical column: DIABET
+ℹ️ Info:       📊 Creating dummy variables for 4 categories
+ℹ️ Info:       ✅ Created 4 dummy variables: ['DIABET_No', 'DIABET_Yes, Type I', 'DIABET_Yes, Type II', 'DIABET_Yes, other type']
+ℹ️ Info:    🔍 Processing categorical column: CVHATT
+ℹ️ Info:       📊 Creating dummy variables for 3 categories
+ℹ️ Info:       ✅ Created 3 dummy variables: ['CVHATT_Absent', 'CVHATT_Recent/Active', 'CVHATT_Remote/Inactive']
+ℹ️ Info:    🔍 Processing categorical column: STROKE
+ℹ️ Info:       📊 Creating dummy variables for 2 categories
+ℹ️ Info:       ✅ Created 2 dummy variables: ['STROKE_No', 'STROKE_Yes']
+ℹ️ Info:    🔍 Processing categorical column: CVDIMAG
+ℹ️ Info:       📊 Creating dummy variables for 2 categories
+ℹ️ Info:       ✅ Created 2 dummy variables: ['CVDIMAG_No', 'CVDIMAG_Yes']
+ℹ️ Info:    🔍 Processing categorical column: NACCNE4S
+ℹ️ Info:       📊 Creating dummy variables for 3 categories
+ℹ️ Info:       ✅ Created 3 dummy variables: ['NACCNE4S_1 copy of e4 allele', 'NACCNE4S_2 copies of e4 allele', 'NACCNE4S_No e4 allele']
+ℹ️ Info:    🔍 Processing categorical column: NACCALZD
+ℹ️ Info:       📊 Creating dummy variables for 3 categories
+ℹ️ Info:       ✅ Created 3 dummy variables: ['NACCALZD_No (assumed assessed and found not present)', 'NACCALZD_No cognitive impairment', 'NACCALZD_Yes']
+ℹ️ Info:    🔍 Processing categorical column: NACCFTDM
+ℹ️ Info:       ⚠️ Skipping NACCFTDM (insufficient categories: 1)
+ℹ️ Info:    🔍 Processing categorical column: NACCADMU
+ℹ️ Info:       ⚠️ Skipping NACCADMU (insufficient categories: 1)
+ℹ️ Info:    🔍 Processing categorical column: NACCMCIA
+ℹ️ Info:       📊 Creating dummy variables for 3 categories
+ℹ️ Info:       ✅ Created 3 dummy variables: ['NACCMCIA_No', 'NACCMCIA_Not diagnosed with MCI', 'NACCMCIA_Yes']
+ℹ️ Info:    🔍 Processing categorical column: NACCMCIL
+ℹ️ Info:       📊 Creating dummy variables for 3 categories
+ℹ️ Info:       ✅ Created 3 dummy variables: ['NACCMCIL_No', 'NACCMCIL_Not diagnosed with MCI', 'NACCMCIL_Yes']
+ℹ️ Info: 🔧 Step 4: Renaming columns with descriptions...
+ℹ️ Info: 🔧 Renaming columns with descriptions...
+ℹ️ Info:    📝 DEMENTED_No → Met criteria for dementia_No
+ℹ️ Info:    📝 DEMENTED_Yes → Met criteria for dementia_Yes
+ℹ️ Info:    📝 NACCUDSD_Dementia → Cognitive status at UDS visit_Dementia
+ℹ️ Info:    📝 NACCUDSD_MCI → Cognitive status at UDS visit_MCI
+ℹ️ Info:    📝 NACCUDSD_Normal cognition → Cognitive status at UDS visit_Normal cognition
+ℹ️ Info:    📝 SEX_Female → Subject's sex_Female
+ℹ️ Info:    📝 SEX_Male → Subject's sex_Male
+ℹ️ Info:    📝 RACE_American Indian or Alaska Native → Race_American Indian or Alaska Native
+ℹ️ Info:    📝 RACE_Asian → Race_Asian
+ℹ️ Info:    📝 RACE_Black or African American → Race_Black or African American
+ℹ️ Info:    📝 RACE_Native Hawaiian or Other Pacific Islander → Race_Native Hawaiian or Other Pacific Islander
+ℹ️ Info:    📝 RACE_Other (specify) → Race_Other (specify)
+ℹ️ Info:    📝 RACE_White → Race_White
+ℹ️ Info:    📝 HISPANIC_No → Hispanic/Latino ethnicity_No
+ℹ️ Info:    📝 HISPANIC_Yes → Hispanic/Latino ethnicity_Yes
+ℹ️ Info:    📝 HYPERTEN_Absent → Hypertension_Absent
+ℹ️ Info:    📝 HYPERTEN_Recent/Active → Hypertension_Recent/Active
+ℹ️ Info:    📝 HYPERTEN_Remote/Inactive → Hypertension_Remote/Inactive
+ℹ️ Info:    📝 DIABET_No → Diabetes present at visit_No
+ℹ️ Info:    📝 DIABET_Yes, Type I → Diabetes present at visit_Yes, Type I
+ℹ️ Info:    📝 DIABET_Yes, Type II → Diabetes present at visit_Yes, Type II
+ℹ️ Info:    📝 DIABET_Yes, other type → Diabetes present at visit_Yes, other type
+ℹ️ Info:    📝 CVHATT_Absent → Heart attack/cardiac arrest_Absent
+ℹ️ Info:    📝 CVHATT_Recent/Active → Heart attack/cardiac arrest_Recent/Active
+ℹ️ Info:    📝 CVHATT_Remote/Inactive → Heart attack/cardiac arrest_Remote/Inactive
+ℹ️ Info:    📝 STROKE_No → Presumptive etiologic diagnosis of the cognitive disorder - Stroke_No
+ℹ️ Info:    📝 STROKE_Yes → Presumptive etiologic diagnosis of the cognitive disorder - Stroke_Yes
+ℹ️ Info:    📝 CVDIMAG_No → Imaging evidence_No
+ℹ️ Info:    📝 CVDIMAG_Yes → Imaging evidence_Yes
+ℹ️ Info:    📝 NACCNE4S_1 copy of e4 allele → Number of APOE e4 alleles_1 copy of e4 allele
+ℹ️ Info:    📝 NACCNE4S_2 copies of e4 allele → Number of APOE e4 alleles_2 copies of e4 allele
+ℹ️ Info:    📝 NACCNE4S_No e4 allele → Number of APOE e4 alleles_No e4 allele
+ℹ️ Info:    📝 NACCALZD_No (assumed assessed and found not present) → Presumptive etiologic diagnosis of the cognitive disorder - Alzheimer's disease_No (assumed assessed and found not present)
+ℹ️ Info:    📝 NACCALZD_No cognitive impairment → Presumptive etiologic diagnosis of the cognitive disorder - Alzheimer's disease_No cognitive impairment
+ℹ️ Info:    📝 NACCALZD_Yes → Presumptive etiologic diagnosis of the cognitive disorder - Alzheimer's disease_Yes
+ℹ️ Info:    📝 NACCMCIA_No → MCI domain affected - attention_No
+ℹ️ Info:    📝 NACCMCIA_Not diagnosed with MCI → MCI domain affected - attention_Not diagnosed with MCI
+ℹ️ Info:    📝 NACCMCIA_Yes → MCI domain affected - attention_Yes
+ℹ️ Info:    📝 NACCMCIL_No → MCI domain affected - language_No
+ℹ️ Info:    📝 NACCMCIL_Not diagnosed with MCI → MCI domain affected - language_Not diagnosed with MCI
+ℹ️ Info:    📝 NACCMCIL_Yes → MCI domain affected - language_Yes
+ℹ️ Info:    📝 NACCAGE → Subjects_age_at_visit
+ℹ️ Info:    📝 EDUC → Years_of_education
+ℹ️ Info:    📝 NACCFTDM → Does_the_subject_have_an_hereditary_FTLD_mutation
+ℹ️ Info:    📝 NACCADMU → Does_the_subject_have_a_dominantly_inherited_AD_mutation
+ℹ️ Info:    ✅ Column renaming completed!
+ℹ️ Info: 💾 Step 5: Saving processed data...
+ℹ️ Info: 💾 Saving processed data to: working/processed_dataset.csv
+✅ Success: ✅ Processed data saved successfully!
+ℹ️ Info: 📊 Final data shape: 26778 rows, 45 columns
+✅ Success: ✅ Simplified data preprocessing completed!
+ℹ️ Info: 📊 Final data shape: 26778 rows, 45 columns
+✅ Success: ✅ Simplified preprocessing completed successfully!
+ℹ️ Info: 📋 Starting Planning Agent round...
+⏳ Enhanced Planning Agent is working...
+ℹ️ Info: 🔄 Generating Enhanced Planning Agent response...
