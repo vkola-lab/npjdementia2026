@@ -137,7 +137,7 @@ class ModelClient:
                     time.sleep(1)
                     continue
                 else:
-                    raise RuntimeError(f"Generation failed after {max_retries} attempts: {e}") from e ### Think about this error message. Could be misleading that it already tried max_retries. Could be generation failed on attempt.
+                    raise RuntimeError(f"Generation failed on {attempt}: {e}") from e 
         
         raise RuntimeError("All generation attempts failed")
 

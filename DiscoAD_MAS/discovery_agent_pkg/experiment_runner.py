@@ -109,7 +109,7 @@ class ExperimentRunner:
                 ui.print_info(f"🎯 Sampled keywords: {', '.join(sampled_keywords)}", verbose=verbose)
             # Create hypothesis from sampled keywords (for non-direct modes)
                 hypothesis_input = f"{', '.join(sampled_keywords)}"
-                ui.print_info(f"📝 Generated hypothesis: {hypothesis_input}", verbose=verbose) ######## can be moved into above else statement
+                ui.print_info(f"📝 Generated hypothesis: {hypothesis_input}", verbose=verbose) 
             
             # if keywords is not None:
             #     hypothesis_input = f"{', '.join(sampled_keywords)}"
@@ -414,8 +414,8 @@ class ExperimentRunner:
             generation_time = time.time() - start_time
             ui.print_info(f"⏱️ Response generated in {generation_time:.2f} seconds")
             
-            if not response or not response.strip():
-                raise ValueError(f"Empty response from {agent_name}") #### Maybe redundant check because it is already in ModelClient.generate
+            # if not response or not response.strip():
+            #     raise ValueError(f"Empty response from {agent_name}") #### Maybe redundant check because it is already in ModelClient.generate
             
             # Execute code if present (except for critic agents)
             code_output = ""
@@ -476,7 +476,7 @@ class ExperimentRunner:
 
                         else:
                             code_output = f"Error: {execution_result.get('error', 'Unknown error')}"
-                            ui.print_warning(f"⚠️ Code execution returned an error output: {code_output}") ###################### Add if statement to only print warnings if error field is not empty
+                            ui.print_warning(f"⚠️ Code execution returned an error output: {code_output}") 
                             ui.print_warning("⚠️ But continuing...")
                             ui.print_agent_response(agent_name, response, code_output)
 
