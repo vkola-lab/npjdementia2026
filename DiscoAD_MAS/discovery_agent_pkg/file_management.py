@@ -155,6 +155,11 @@ class FileManager:
             hypothesis_approved (bool): Whether the hypothesis was approved
             turns_to_approve (Optional[int]): Number of turns to approval (if approved)
         """
+        # Check if CSV file path is initialized
+        if self.csv_file_path is None:
+            ui.print_warning("⚠️ CSV tracking file not initialized. Cannot write entry.")
+            return
+        
         timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         keywords_str = ', '.join(keywords)
         

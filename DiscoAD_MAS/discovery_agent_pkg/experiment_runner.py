@@ -23,7 +23,7 @@ from .utils import execute_code_from_response
 class ExperimentRunner:
     """Handles all experiment execution operations for the Discovery Agent."""
     
-    def __init__(self, model_client: ModelClient, config=None):
+    def __init__(self, model_client: ModelClient, config=None, file_manager=None):
         """Initialize the experiment runner with all required components."""
         self.config = config
         self.model_client = model_client
@@ -31,7 +31,8 @@ class ExperimentRunner:
         # Initialize all components
         self.data_processor = SimplifiedDataProcessor(model_client)
         self.hypothesis_manager = HypothesisManager(model_client)
-        self.file_manager = FileManager(config)
+        # Use provided file manager or create a new one
+        self.file_manager = file_manager if file_manager is not None else FileManager(config)
         
         # Initialize agents
         self.scientist = create_scientist(model_client)
@@ -418,7 +419,7 @@ class ExperimentRunner:
             
             # Execute code if present (except for critic agents)
             code_output = ""
-            should_execute_code = "```python" in response and agent_name not in ["Data Critic", "Critic", "Planning Agent"]
+            should_execute_code = "```python" in response and agent_name not in ["Critic", "Planning Agent"]
             
             # Apply special conditions if provided
             if special_code_conditions:
@@ -584,7 +585,7 @@ class ExperimentRunner:
         # Use the existing enhanced planning agent
         self.execute_agent_round(
             agent=self.enhanced_planning_agent,
-            agent_name="Enhanced Planning Agent",
+            agent_name="Planning Agent",
             conversation_manager=self.conversation_manager,
             verbose=verbose
         )

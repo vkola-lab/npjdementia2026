@@ -49,7 +49,7 @@ class DiscoveryAgentSystem:
             self.file_manager.initialize_csv_tracking()
             
             # Initialize experiment runner with all components
-            self.experiment_runner = ExperimentRunner(self.model_client, self.config)
+            self.experiment_runner = ExperimentRunner(self.model_client, self.config, self.file_manager)
             
             # Setup signal handlers
             signal.signal(signal.SIGINT, signal_handler)
