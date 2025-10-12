@@ -653,6 +653,14 @@ class SimplifiedDataProcessor:
         ui.print_info(f"🔧 Starting simplified preprocessing...")
         
         try:
+            # Check if dataset_folder is provided
+            if not dataset_folder:
+                ui.print_warning("⚠️ No dataset folder provided. Cannot proceed with preprocessing.")
+                return {
+                    'success': False,
+                    'error': 'No dataset folder provided'
+                }
+            
             # Auto-detect CSV and JSON files
             csv_path, json_path = detect_dataset_files(dataset_folder)
             

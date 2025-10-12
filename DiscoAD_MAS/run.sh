@@ -30,7 +30,8 @@ OUTER_LOOP_ITERATIONS=2
 
 # User input configuration - Edit these values for your specific analysis
 HYPOTHESIS_MODE="direct hypothesis"  # Options: "generate" or "direct hypothesis"
-HYPOTHESIS="Higher age is associated with increased dementia incidence."  # Direct hypothesis when HYPOTHESIS_MODE is "direct hypothesis"
+# HYPOTHESIS="Higher age is associated with increased dementia incidence."  # Direct hypothesis when HYPOTHESIS_MODE is "direct hypothesis"
+HYPOTHESIS="Greater years of education are linked to lower dementia incidence (cognitive reserve)."
 KEYWORDS_FILE="adrd_keywords.txt"  # Path to keywords file for sampling
 # NUM_KEYWORDS will be set in the loop (2 and 3)
 DATASET_FOLDER="/projectnb/vkolagrp/ketanss/adrd_agent_custom/adrd_agent/datasets/NACC"

@@ -1,2 +1,0 @@
-
-Examine the relationship between Age, APOE4 and gender.
