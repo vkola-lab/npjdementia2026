@@ -1,0 +1,300 @@
+[15:10:18] ℹ️  🔧 Initializing Discovery Agent System...
+[15:10:18] ℹ️  ⚙️ Initializing Discovery Agent...
+[15:10:20] ℹ️  🗑️ Deleted existing working directory
+[15:10:20] ℹ️  📁 Created fresh working directory
+[15:10:20] ℹ️  📊 Created new CSV tracking file: analysis/results/hypothesis_approval_tracking_model_Qwen3_4B_Instruct_2507_mode_direct hypothesis_kw_3_runs_10_outer_2_auto_4_20251013_151020.csv
+[15:10:20] ℹ️  📊 Initializing data cache from dataset folder: /projectnb/vkolagrp/ketanss/adrd_agent_custom/adrd_agent/datasets/NACC
+[15:10:20] ℹ️  🔍 Initializing data cache from folder: /projectnb/vkolagrp/ketanss/adrd_agent_custom/adrd_agent/datasets/NACC
+[15:10:20] ℹ️  🔍 Auto-detected files:
+[15:10:20] ℹ️     📊 CSV: NACC.csv
+[15:10:20] ℹ️     📚 JSON: NACC.json
+[15:10:20] ✅ ✅ JSON dictionary file is valid: NACC.json
+[15:10:20] ℹ️  📊 Loading original CSV data from: /projectnb/vkolagrp/ketanss/adrd_agent_custom/adrd_agent/datasets/NACC/NACC.csv
+[15:10:26] ℹ️  📚 Loading JSON dictionary from: /projectnb/vkolagrp/ketanss/adrd_agent_custom/adrd_agent/datasets/NACC/NACC.json
+[15:10:26] ℹ️  📝 Pre-computing column descriptions...
+[15:10:26] ℹ️  📊 Pre-computing dataset statistics...
+[15:10:30] ✅ ✅ Data cache initialized successfully!
+[15:10:30] ℹ️     📊 Original data shape: 26778 rows, 2117 columns
+[15:10:30] ℹ️     📚 JSON dictionary: 810 variables
+[15:10:30] ℹ️     📝 Column descriptions: 2117 descriptions
+[15:10:30] ✅ 🎉 Discovery Agent initialized successfully!
+[15:10:30] ℹ️  🚀 Starting Discovery Agent...
+[15:10:30] ℹ️  🎯 Using direct hypothesis mode with provided hypothesis
+==================================================
+[15:10:30] ℹ️  🎯 Direct Hypothesis Run 1/1
+[15:10:30] ℹ️  📝 Using provided direct hypothesis: Greater years of education are linked to lower dementia incidence (cognitive reserve).
+📝 Direct hypotheses:
+   1. Greater years of education are linked to lower dementia incidence (cognitive reserve).
+📊 Progress: 1/1 (100.0%)
+==================================================
+[15:10:30] ℹ️  🔍 Working on hypothesis 1: Greater years of education are linked to lower dementia incidence (cognitive reserve).
+==================================================
+[15:10:30] ℹ️  🔄 OUTER LOOP ITERATION 1/2
+[15:10:30] ℹ️  🔧 Running manual preprocessing for hypothesis 1, iteration 1...
+[15:10:30] ℹ️  🔧 Starting simplified preprocessing...
+[15:10:30] ℹ️  🚀 Starting simplified data preprocessing...
+[15:10:30] ℹ️  🔬 Hypothesis: Greater years of education are linked to lower dementia incidence (cognitive reserve).
+[15:10:30] ℹ️  📖 Getting original CSV data from cache...
+[15:10:30] ℹ️  📊 Original data shape: 26778 rows, 2117 columns
+[15:10:30] ℹ️  🤖 Step 1: Querying LLM for variable selection...
+[15:10:30] ℹ️  🔍 Querying LLM for variable selection...
+[15:10:51] ℹ️  LLM Response: ```python
+variable_names = [
+    "EDUC",              # Direct exposure: years of education
+    "NACCAGE",           # Age as control variable (confounder)
+    "SEX",               # Sex as key demographic control
+    "NACCAGEB",          # Age at initial visit (for longitudinal context)
+    "NACCADMU",          # Hereditary AD mutation (potential confounder/cognitive reserve proxy)
+    "NACCNE4S",          # Number of APOE ε4 alleles (genetic risk factor)
+    "NACCUDSD",          # Cognitive status at UDS visit (primary outcome)
+    "NACCMMSE",          # MMSE score (common cognitive performance measure)
+    "NACCMOCA",          # MoCA score (more sensitive cognitive screening tool)
+    "CDRGR",             # Global CDR score (cognitive impairment severity)
+    "NACCMCIA",          # MCI domain affected (if applicable)
+    "NACCFTDM",          # Hereditary FTLD mutation (to exclude alternative etiologies)
+    "HYPERT",            # Hypertension (vascular risk factor)
+    "STROKE",            # Stroke history (major vascular contributor to dementia)
+    "CVHATT",            # Heart attack (cardiovascular risk)
+    "DEP",               # Depression (known comorbidity affecting cognition)
+    "ALCABUSE",          # Alcohol abuse (impairment factor)
+    "BIPOLAR",           # Bipolar disorder (psychiatric comorbidity)
+    "CVDIMAG",           # Imaging evidence of vascular pathology
+    "APOE",              # APOE genotype (genetic influence on Alzheimer’s)
+    "NACCNE4S"           # Repeated for consistency if needed
+]
+```
+
+### Justification:
+
+1. **Core Hypothesis Variable**:  
+   `EDUC` – direct exposure to the proposed cognitive reserve mechanism.
+
+2. **Demographic & Control Variables**:  
+   `NACCAGE`, `SEX`, `NACCAGEB` – essential controls for age-related effects and gender differences.
+
+3. **Key Clinical/Cognitive Outcomes**:  
+   `NACCUDSD` – overall cognitive status (dementia vs. normal).  
+   `NACCMMSE`, `NACCMOCA` – validated cognitive tests to assess dementia incidence.  
+   `CDRGR` – standard clinical rating of cognitive decline severity.
+
+4. **Genetic & Biological Risk Factors**:  
+   `NACCNE4S`, `NACCADMU`, `APOE` – genetic factors influencing both AD risk and cognitive reserve.
+
+5. **Medical Comorbidities**:  
+   `HYPERT`, `STROKE`, `CVHATT`, `DEP`, `ALCABUSE`, `BIPOLAR` – known contributors to dementia that must be controlled for.
+
+6. **Imaging & Pathology (Optional but informative)**:  
+   `CVDIMAG` – indicates vascular contribution to cognitive decline, helping distinguish vascular vs. pure Alzheimer’s pathways.
+
+7. **Excluded**:
+   - Redundant or overly complex variables (e.g., full neuropsychology battery scores).
+   - Variables like `INEDUC` (co-participant) or lifestyle factors not directly tied to the core hypothesis.
+   - Variables related only to medication use or specific behavioral symptoms unless they impact cognition directly.
+
+This set focuses on **causal inference**, **controlling for confounders**, and measuring **cognitive outcomes** while keeping the model interpretable and statistically sound — ideal for testing the “greater education → lower dementia” hypothesis.
+[15:10:51] ℹ️  🎯 Selected 21 variables: ['EDUC', 'NACCAGE', 'SEX', 'NACCAGEB', 'NACCADMU', 'NACCNE4S', 'NACCUDSD', 'NACCMMSE', 'NACCMOCA', 'CDRGR', 'NACCMCIA', 'NACCFTDM', 'HYPERT', 'STROKE', 'CVHATT', 'DEP', 'ALCABUSE', 'BIPOLAR', 'CVDIMAG', 'APOE', 'NACCNE4S']
+[15:10:51] ℹ️  🎯 Filtered to 18 selected columns
+[15:10:51] ℹ️  🔧 Step 2: Replacing unknown values with NaN...
+[15:10:51] ℹ️  🔧 Replacing unknown values with NaN...
+[15:10:51] ℹ️     📊 EDUC: Replaced 190 instances of '99' with NaN
+[15:10:51] ℹ️     ✅ EDUC: Total replacements = 190
+[15:10:51] ℹ️     📊 NACCADMU: Replaced 26715 instances of '0' with NaN
+[15:10:51] ℹ️     ✅ NACCADMU: Total replacements = 26715
+[15:10:51] ❌ Simplified preprocessing failed: "None of [Index([('N', 'A', 'C', 'C', 'N', 'E', '4', 'S'), ('N', 'A', 'C', 'C', 'N', 'E', '4', 'S')], dtype='object')] are in the [index]" (Context: simplified_preprocessing)
+[15:10:51] ⚠️  ⚠️ Manual preprocessing failed for hypothesis 1, iteration 1, but continuing with analysis...
+[15:10:51] ℹ️  📋 Planning Agent is disabled, skipping planning round...
+[15:10:51] ℹ️  🔄 Conversation turn 1
+[15:10:51] ℹ️  🧪 Starting Scientist round...
+[15:10:51] ℹ️  📚 Adding variable descriptions to conversation context...
+[15:10:51] ℹ️  🔍 Adding variable descriptions to conversation context...
+[15:10:51] ❌ ❌ Error adding variable descriptions to conversation: No processed data available. Call set_processed_data() first.
+⏳ Scientist is working...
+[15:10:51] ℹ️  🔄 Generating Scientist response...
+[15:11:14] ℹ️  ⏱️ Response generated in 22.95 seconds
+[15:11:14] ℹ️  💻 Executing code from Scientist response...
+[15:11:14] ℹ️  🔍 About to call execute_code_from_response...
+[15:11:14] ℹ️  💻 Executing code block 1/1...
+[15:11:15] ❌ ❌ Code block 1 failed: Dataset not found at: ./working/filtered_dataset.csv
+
+Traceback:
+Traceback (most recent call last):
+  File "/projectnb/vkolagrp/ketanss/adrd_agent_custom/DiscoADRD/DiscoAD_MAS/discovery_agent_pkg/execution/executor.py", line 104, in execute_code
+    exec(code, self.global_namespace)
+  File "<string>", line 16, in <module>
+FileNotFoundError: Dataset not found at: ./working/filtered_dataset.csv
+
+[15:11:15] ℹ️  🔍 execute_code_from_response completed successfully
+
+🤖 Scientist Response:
+```python
+import os
+import pandas as pd
+import numpy as np
+from scipy import stats
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# Check if working directory exists and contains the dataset
+working_dir = "./working/"
+csv_file = os.path.join(working_dir, "filtered_dataset.csv")
+
+if not os.path.exists(working_dir):
+    raise FileNotFoundError(f"Working directory not found: {working_dir}")
+
+if not os.path.isfile(csv_file):
+    raise FileNotFoundError(f"Dataset not found at: {csv_file}")
+
+# Load the dataset
+try:
+    df = pd.read_csv(csv_file)
+    print(f"Dataset loaded successfully. Shape: {df.shape}")
+    print("\nFirst few rows:")
+    print(df.head())
+    
+    # Display data types and missing values
+    print("\nData types:")
+    print(df.dtypes)
+    
+    print("\nMissing values per column:")
+    print(df.isnull().sum())
+    
+except Exception as e:
+    print(f"Error loading dataset: {e}")
+    raise
+
+# --- EXPLORATORY DATA ANALYSIS ---
+print("\n" + "="*50)
+print("EXPLORATORY DATA ANALYSIS")
+print("="*50)
+
+# Summary statistics for numerical columns
+numerical_cols = df.select_dtypes(include=[np.number]).columns.tolist()
+print(f"\nNumerical columns: {numerical_cols}")
+
+if len(numerical_cols) > 0:
+    print("\nDescriptive statistics for numerical variables:")
+    print(df[numerical_cols].describe())
+
+# Check for key variables relevant to the hypothesis
+# We're testing: Greater years of education → Lower dementia incidence
+# Identify candidate columns
+education_col = None
+dementia_col = None
+
+for col in df.columns:
+    if 'education' in col.lower() or 'years' in col.lower():
+        education_col = col
+    elif 'dementia' in col.lower() or 'incidence' in col.lower() or 'cognition' in col.lower():
+        dementia_col = col
+
+# If we didn't find relevant columns, warn and exit
+if education_col is None or dementia_col is None:
+    print("Warning: Could not identify education or dementia-related columns.")
+    print("Please ensure the dataset includes columns such as 'years_of_education', 'dementia_incidence', etc.")
+else:
+    print(f"\nIdentified education variable: {education_col}")
+    print(f"Identified dementia variable: {dementia_col}")
+
+# Remove rows with missing values in both education and dementia variables
+df_filtered = df.dropna(subset=[education_col, dementia_col])
+
+print(f"\nAfter removing missing values in key variables: {df_filtered.shape[0]} observations remain.")
+
+# Check distributions
+print("\nDistribution of education years (after filtering):")
+print(df_filtered[education_col].describe())
+
+print("\nDistribution of dementia incidence (after filtering):")
+print(df_filtered[dementia_col].value_counts(dropna=False))
+
+# Visualize relationship between education and dementia incidence
+plt.figure(figsize=(12, 6))
+sns.boxplot(data=df_filtered, x=education_col, y=dementia_col)
+plt.title(f"Dementia Incidence by Years of Education")
+plt.xlabel("Years of Education")
+plt.ylabel("Dementia Incidence")
+plt.grid(True, alpha=0.3)
+plt.tight_layout()
+plt.show()
+
+# Perform correlation analysis (Spearman since education may be skewed, and dementia often binary)
+# First, ensure dementia is numeric — if it’s binary (e.g., 0/1), we’ll treat it appropriately
+
+# Convert dementia to numeric if necessary
+if df_filtered[dementia_col].dtype == 'object':
+    try:
+        df_filtered[dementia_col] = pd.to_numeric(df_filtered[dementia_col], errors='coerce')
+    except:
+        pass
+
+# Drop any remaining NaNs after conversion
+df_filtered = df_filtered.dropna(subset=[dementia_col])
+
+# Now compute Spearman correlation (non-parametric, suitable for ordinal or skewed data)
+correlation, p_value = stats.spearmanr(
+    df_filtered[education_col],
+    df_filtered[dementia_col]
+)
+
+print(f"\nSpearman Correlation between Education and Dementia Incidence: {correlation:.3f} (p-value: {p_value:.4f})")
+
+# Interpretation
+if p_value < 0.05:
+    print("Result: There is a statistically significant negative association between years of education and dementia incidence.")
+else:
+    print("Result: No statistically significant association found between years of education and dementia incidence.")
+
+# Additional check: Are there differences in mean dementia incidence across education levels?
+# Use Kruskal-Wallis test (non-parametric alternative to ANOVA) for grouped comparisons
+# Group by education level (e.g., quartiles)
+
+if df_filtered[education_col].nunique() >= 4:
+    # Create quartile groups
+    df_filtered['education_quartile'] = pd.qcut(df_filtered[education_col], q=4, labels=['Q1', 'Q2', 'Q3', 'Q4'])
+    
+    # Test for difference in median dementia incidence across quartiles
+    from scipy.stats import kruskal
+    
+    groups = df_filtered.groupby('education_quartile')[dementia_col].apply(lambda x: x.dropna()).values
+    group_labels = df_filtered['education_quartile'].cat.categories.tolist()
+    
+    kruskal_stat, kruskal_pval = kruskal(*groups)
+    
+    print(f"\nKruskal-Wallis Test Results (by education quartile):")
+    print(f"Test Statistic: {kruskal_stat:.3f}, p-value: {kruskal_pval:.4f}")
+    
+    if kruskal_pval < 0.05:
+        print("Conclusion: There is a statistically significant difference in dementia incidence across education quartiles.")
+    else:
+        print("Conclusion: No statistically significant difference in dementia incidence across education quartiles.")
+        
+else:
+    print("Not enough distinct education levels to perform quartile grouping.")
+
+# Save processed data for future use
+df_filtered.to_csv(os.path.join(working_dir, "analyzed_filtered_dataset.csv"), index=False)
+print(f"\nProcessed data saved to: {os.path.join(working_dir, 'analyzed_filtered_dataset.csv')}")
+```
+
+💻 Code Output:
+Dataset not found at: ./working/filtered_dataset.csv
+
+Traceback:
+Traceback (most recent call last):
+  File "/projectnb/vkolagrp/ketanss/adrd_agent_custom/DiscoADRD/DiscoAD_MAS/discovery_agent_pkg/execution/executor.py", line 104, in execute_code
+    exec(code, self.global_namespace)
+  File "<string>", line 16, in <module>
+FileNotFoundError: Dataset not found at: ./working/filtered_dataset.csv
+
+[15:11:15] ⚠️  ⚠️ Code execution error: Dataset not found at: ./working/filtered_dataset.csv
+
+Traceback:
+Traceback (most recent call last):
+  File "/projectnb/vkolagrp/ketanss/adrd_agent_custom/DiscoADRD/DiscoAD_MAS/discovery_agent_pkg/execution/executor.py", line 104, in execute_code
+    exec(code, self.global_namespace)
+  File "<string>", line 16, in <module>
+FileNotFoundError: Dataset not found at: ./working/filtered_dataset.csv
+
+[15:11:15] ℹ️  🔍 Starting Critic round...
+⏳ Critic is working...
+[15:11:15] ℹ️  🔄 Generating Critic response...

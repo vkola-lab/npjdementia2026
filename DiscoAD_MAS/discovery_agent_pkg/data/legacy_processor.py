@@ -247,14 +247,27 @@ def map_unknown_values_to_nan(df: pd.DataFrame, relevant_variables: Dict[str, Di
                 if found_codes:
                     # Count how many values will be replaced
                     total_replacements = 0
+                    replacement_dict = {}
                     for code in found_codes:
-                        count = (processed_df[col] == code).sum()
-                        total_replacements += count
+                        # Convert code to appropriate type for replacement
+                        try:
+                            code_numeric = int(code)
+                            count = (processed_df[col] == code_numeric).sum()
+                            if count > 0:
+                                replacement_dict[code_numeric] = np.nan
+                                total_replacements += count
+                        except ValueError:
+                            # If not numeric, keep as string
+                            count = (processed_df[col].astype(str) == code).sum()
+                            if count > 0:
+                                replacement_dict[code] = np.nan
+                                total_replacements += count
                     
-                    ui.print_info(f"   📊 Categorical column {col}:")
-                    ui.print_info(f"      🔍 Unknown codes found: {found_codes}")
-                    ui.print_info(f"      🔄 Replacing {total_replacements} values with NaN")
-                    processed_df[col] = processed_df[col].replace(found_codes, np.nan)
+                    if replacement_dict:
+                        ui.print_info(f"   📊 Categorical column {col}:")
+                        ui.print_info(f"      🔍 Unknown codes found: {found_codes}")
+                        ui.print_info(f"      🔄 Replacing {total_replacements} values with NaN")
+                        processed_df[col] = processed_df[col].replace(replacement_dict)
     
     return processed_df
 

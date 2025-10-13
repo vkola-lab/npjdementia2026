@@ -182,6 +182,38 @@ class UI:
         # Current progress trackers
         self.current_progress_tracker = None
         self.current_experiment_progress = None
+        
+        # Log saving state
+        self.log_saved = False
+        self.log_file = None
+        self.log_file_path = None
+        
+        # Initialize real-time logging
+        self._init_realtime_logging()
+        
+        # Register cleanup function to save log on exit
+        import atexit
+        atexit.register(self.close_log)
+    
+    def _init_realtime_logging(self):
+        """Initialize real-time logging to a file."""
+        try:
+            import os
+            import time
+            
+            # Create log file path
+            responses_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), "analysis", "responses")
+            os.makedirs(responses_dir, exist_ok=True)
+            timestamp = time.strftime("%Y%m%d_%H%M%S")
+            self.log_file_path = os.path.join(responses_dir, f"session_log_{timestamp}.txt")
+            
+            # Open log file for real-time writing
+            self.log_file = open(self.log_file_path, 'w', encoding='utf-8')
+            
+        except Exception as e:
+            print(f"❌ Failed to initialize real-time logging: {str(e)}")
+            self.log_file = None
+            self.log_file_path = None
     
     def _print_colored(self, text: str, color_code: str, verbose: bool = True) -> None:
         """
@@ -201,7 +233,17 @@ class UI:
             print(text)
         
         # Log to session
-        self.session_log.append(remove_ansi_color_codes(text))
+        clean_text = remove_ansi_color_codes(text)
+        self.session_log.append(clean_text)
+        
+        # Write to real-time log file
+        if self.log_file:
+            try:
+                self.log_file.write(clean_text + '\n')
+                self.log_file.flush()  # Ensure immediate write
+            except Exception as e:
+                # If real-time logging fails, continue without it
+                pass
     
     def print_info(self, message: str, verbose: bool = True) -> None:
         """
@@ -504,10 +546,39 @@ class UI:
         print()  # Add spacing
     
     def close_log(self) -> None:
-        """Close the session log (placeholder for compatibility)."""
-        # This is a placeholder method for compatibility
-        # The session log is automatically saved when the UI object is destroyed
-        pass
+        """Close the session log and real-time log file."""
+        if self.log_saved:
+            return
+        
+        try:
+            # Close real-time log file if it exists
+            if self.log_file:
+                self.log_file.close()
+                self.log_file = None
+                if self.log_file_path:
+                    print(f"📝 Real-time session log saved to: {self.log_file_path}")
+            
+            # If no real-time log file was created, create one from session log
+            elif self.session_log:
+                import os
+                import time
+                
+                # Create log file path directly
+                responses_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), "analysis", "responses")
+                os.makedirs(responses_dir, exist_ok=True)
+                timestamp = time.strftime("%Y%m%d_%H%M%S")
+                log_file_path = os.path.join(responses_dir, f"session_log_{timestamp}.txt")
+                
+                # Save the session log
+                with open(log_file_path, 'w', encoding='utf-8') as f:
+                    f.write('\n'.join(self.session_log))
+                
+                print(f"📝 Session log saved to: {log_file_path}")
+            
+            self.log_saved = True
+            
+        except Exception as e:
+            print(f"❌ Failed to save session log: {str(e)}")
     
     # ==================== NEW PRODUCTION-LEVEL METHODS ====================
     

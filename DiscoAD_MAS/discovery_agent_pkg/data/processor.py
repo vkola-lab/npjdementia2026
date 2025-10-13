@@ -156,7 +156,7 @@ def replace_unknown_values_with_nan(df: pd.DataFrame, data_cache: DataCache) -> 
     total_replacements = 0
     
     # Keywords that indicate unknown/missing values
-    unknown_keywords = ['unknown', 'not applicable', 'not available', 'refused', 'missing', 'n/a']
+    unknown_keywords = ['unknown', 'not applicable', 'not administered', 'not available', 'refused', 'missing', 'n/a']
     
     for col in processed_df.columns:
         # Find matching variable in dictionary (case-insensitive)
@@ -170,7 +170,7 @@ def replace_unknown_values_with_nan(df: pd.DataFrame, data_cache: DataCache) -> 
             values_info = var_info['Values']
             unknown_codes = []
             
-            # Find unknown codes
+            # Find unknown codes (process all non-range entries, including when range is present)
             for value, description in values_info.items():
                 if value == 'range':  # Skip range entries
                     continue
@@ -184,12 +184,23 @@ def replace_unknown_values_with_nan(df: pd.DataFrame, data_cache: DataCache) -> 
             if unknown_codes:
                 col_replacements = 0
                 for code in unknown_codes:
-                    if code in processed_df[col].values:
-                        mask = processed_df[col] == code
-                        count = mask.sum()
-                        processed_df.loc[mask, col] = np.nan
-                        col_replacements += count
-                        ui.print_info(f"   📊 {col}: Replaced {count} instances of '{code}' with NaN")
+                    # Convert code to appropriate type for comparison
+                    try:
+                        code_numeric = int(code)
+                        if code_numeric in processed_df[col].values:
+                            mask = processed_df[col] == code_numeric
+                            count = mask.sum()
+                            processed_df.loc[mask, col] = np.nan
+                            col_replacements += count
+                            ui.print_info(f"   📊 {col}: Replaced {count} instances of '{code}' with NaN")
+                    except ValueError:
+                        # If not numeric, compare as string
+                        if code in processed_df[col].astype(str).values:
+                            mask = processed_df[col].astype(str) == code
+                            count = mask.sum()
+                            processed_df.loc[mask, col] = np.nan
+                            col_replacements += count
+                            ui.print_info(f"   📊 {col}: Replaced {count} instances of '{code}' with NaN")
                 
                 total_replacements += col_replacements
                 if col_replacements > 0:
