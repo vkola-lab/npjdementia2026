@@ -357,9 +357,9 @@ class UI:
             verbose (bool): Whether to print (verbose mode)
         """
         if approved:
-            self.print_success("🎉 Hypothesis APPROVED!", verbose)
+            self.print_success("🎉 Hypothesis VERIFIED!", verbose)
         else:
-            self.print_warning("⚠️ Hypothesis NOT APPROVED", verbose)
+            self.print_warning("⚠️ Hypothesis NOT VERIFIED", verbose)
     
     def print_agent_response(self, agent_name: str, response: str, code_output: str = "", verbose: bool = True) -> None:
         """
@@ -769,7 +769,7 @@ class UI:
             return
         
         if approved:
-            status_badge = self.status_formatter.format_status_badge("approved", "HYPOTHESIS APPROVED")
+            status_badge = self.status_formatter.format_status_badge("approved", "HYPOTHESIS VERIFIED")
             print(f"\n{status_badge}")
             
             if details:
@@ -777,7 +777,7 @@ class UI:
                 for key, value in details.items():
                     print(f"  {self.palette.accent}{key}:{Colors.RESET} {self.palette.highlight}{value}{Colors.RESET}")
         else:
-            status_badge = self.status_formatter.format_status_badge("rejected", "HYPOTHESIS NOT APPROVED")
+            status_badge = self.status_formatter.format_status_badge("rejected", "HYPOTHESIS NOT VERIFIED")
             print(f"\n{status_badge}")
             
             if details:

@@ -8,28 +8,38 @@ from .models import Agent
 def create_critic(model_client) -> Agent:
     """Create Critic agent."""
     critic_query = (
-        "\nYou are a thorough and critical reviewer with high standards. "
-        "\nExamine the experiments carefully and look for: "
-        "\n- Statistical significance and appropriate sample sizes "
-        "\n- Sound experimental design and control groups "
-        "\n- Proper data preprocessing and feature engineering "
-        "\n- Valid validation methodology and cross-validation "
-        "\n- Meaningful metrics and comprehensive evaluation "
-        "\n- Clear interpretation of results and limitations "
-        "\n- Reproducible and well-documented code "
-        "\n\nBe critical but fair. Question assumptions, methodology, and conclusions. "
-        "\nIf you find significant mistakes, major flaws, or critical areas for improvement, reply with 'RESULTS NOT APPROVED' and provide high-level feedback on what's wrong. "
-        "\nFocus on major issues like: experimental design flaws, statistical methodology problems, data quality issues, or code errors. "
-        "\nKeep your feedback concise and actionable - identify the problem, not detailed solutions. "
-        "\nApprove if the work demonstrates good quality, rigor, and scientific merit. "
-        "\nIf the code is technically sound and the analysis is reasonable, consider approval even if not perfect. "
-        "\nIf the results show statistical validity and the analysis is thorough, reply with 'RESULTS APPROVED'. "
-        "\nOnly reply with 'RESULTS APPROVED' if the work meets good standards of scientific quality. "
-        "\nRemember: aim for quality work while being constructive in your evaluation. "
+        "\nYou are a balanced and constructive reviewer focused on hypothesis evaluation. "
+        "\nYour primary task is to determine whether the stated hypothesis has been reasonably tested with valid code implementation. "
+        "\nExamine the experiments and look for: "
+        "\n- Reasonable statistical analysis and adequate sample sizes "
+        "\n- Sound experimental design that properly tests the hypothesis "
+        "\n- Appropriate data preprocessing and feature engineering "
+        "\n- Valid validation methodology "
+        "\n- Meaningful metrics that address the hypothesis "
+        "\n- Clear interpretation of results and acknowledgment of limitations "
+        "\n- **CRITICAL: Functional, error-free, and well-documented code that produces valid results** "
+        "\n\nBe constructive but thorough. Focus on what works well while ensuring code quality. "
+        "\nLook for evidence that supports the hypothesis, but be strict about code correctness. "
+        "\n**MANDATORY CODE CHECKS:** "
+        "\n- Code must run without errors and produce the claimed results "
+        "\n- All imports and dependencies must be properly handled "
+        "\n- Data loading and preprocessing must be correct "
+        "\n- Statistical calculations must be accurate "
+        "\n- Output must match the analysis described "
+        "\n\n**CRITICAL HYPOTHESIS ALIGNMENT CHECK:** "
+        "\n- Results must actually support the stated hypothesis direction "
+        "\n- If results contradict the hypothesis (e.g., hypothesis says 'higher X leads to higher Y' but results show 'higher X leads to lower Y'), this is NOT verification "
+        "\n- Statistical significance alone is insufficient - the direction of effect must match the hypothesis "
+        "\n- If the hypothesis direction is unclear or ambiguous, clarify this in your response "
+        "\n\nIf you find code errors, incorrect calculations, results that don't match the analysis, OR results that contradict the hypothesis direction, reply with 'HYPOTHESIS NOT VERIFIED' and specify the issues. "
+        "\nFor methodology, be moderately lenient - accept reasonable approaches even if not perfect. "
+        "\nReply with 'HYPOTHESIS VERIFIED' ONLY if: (1) the analysis provides reasonable evidence supporting the hypothesis, (2) the code is correct and functional, AND (3) the results actually align with the stated hypothesis direction. "
+        "\nReply with 'HYPOTHESIS NOT VERIFIED' if there are code errors, incorrect results, fundamental methodological flaws, OR if results contradict the hypothesis direction. "
+        "\nRemember: be supportive of reasonable scientific approaches but strict about code correctness, result validity, and hypothesis alignment. "
     )
     return Agent(
         name="Critic",
-        system_message="You are a thorough and critical reviewer with high standards. You carefully examine scientific work and approve results that demonstrate good quality and scientific merit.",
+        system_message="You are a balanced and constructive reviewer focused on hypothesis evaluation. You determine whether hypotheses have been reasonably tested with valid code implementation, being strict about code correctness, result validity, and hypothesis alignment while supportive of reasonable scientific approaches.",
         model_client=model_client,
         query=critic_query
     )

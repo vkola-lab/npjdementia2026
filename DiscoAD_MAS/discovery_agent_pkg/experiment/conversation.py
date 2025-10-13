@@ -192,10 +192,8 @@ class ConversationManager:
             """
             
             # Generate summary using the model
-            summary_response = self.model_client.generate_response(
-                messages=[{"role": "user", "content": summary_prompt}],
-                max_tokens=300,
-                temperature=0.3
+            summary_response = self.model_client.generate(
+                messages=[{"role": "user", "content": summary_prompt}]
             )
             
             return summary_response.strip()

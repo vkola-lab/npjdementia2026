@@ -21,6 +21,7 @@
 # User input configuration - Edit these values for your specific analysis
 HYPOTHESIS_MODE="direct hypothesis"  # Options: "generate", "direct", "direct hypothesis", or "csv_batch"
 HYPOTHESIS="Greater years of education are linked to lower dementia incidence (cognitive reserve)."
+# HYPOTHESIS="Greater years of education are linked to higher dementia incidence"
 CSV_FILE=""  # Path to CSV file containing hypotheses (only needed for csv_batch mode)
 DATASET_FOLDER="/projectnb/vkolagrp/ketanss/adrd_agent_custom/adrd_agent/datasets/NACC"
 

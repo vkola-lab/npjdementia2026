@@ -94,10 +94,8 @@ class HypothesisManager:
             context += "\n\nEach hypothesis should be specific, measurable, and testable with the available data. Format each hypothesis on a new line starting with 'HYPOTHESIS:'"
             
             # Generate hypotheses using the model
-            response = self.model_client.generate_response(
-                messages=[{"role": "user", "content": context}],
-                max_tokens=500,
-                temperature=0.7
+            response = self.model_client.generate(
+                messages=[{"role": "user", "content": context}]
             )
             
             # Parse hypotheses from response

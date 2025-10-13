@@ -353,13 +353,13 @@ class ExperimentRunner:
             total_outer_iterations = outer_iteration
             final_iteration_turns = iteration_turns_to_approve if iteration_approved else iteration_turns_to_autoapprove
             
-            ui.print_info(f"📊 Iteration {outer_iteration} result: {'✅ APPROVED' if iteration_approved else '❌ NOT APPROVED'}", verbose=verbose)
+            ui.print_info(f"📊 Iteration {outer_iteration} result: {'✅ VERIFIED' if iteration_approved else '❌ NOT VERIFIED'}", verbose=verbose)
             
             if iteration_approved:
                 # If approved, we're done with this hypothesis
                 approved = True
                 num_turns_to_approve = iteration_turns_to_approve
-                ui.print_success(f"🎉 Hypothesis {idx} APPROVED in iteration {outer_iteration}!", verbose=verbose)
+                ui.print_success(f"🎉 Hypothesis {idx} VERIFIED in iteration {outer_iteration}!", verbose=verbose)
                 break
             else:
                 # If not approved, create summary for next iteration
@@ -368,7 +368,7 @@ class ExperimentRunner:
                     previous_conversation_summary = self.conversation_manager.create_outer_loop_summary()
                     ui.print_info(f"🔄 Will try different approach in iteration {outer_iteration + 1}...", verbose=verbose)
                 else:
-                    ui.print_warning(f"⚠️ Hypothesis {idx} NOT APPROVED after {outer_loop_iterations} iterations", verbose=verbose)
+                    ui.print_warning(f"⚠️ Hypothesis {idx} NOT VERIFIED after {outer_loop_iterations} iterations", verbose=verbose)
         
         ui.print_approval_status(approved, verbose=verbose)
         
@@ -647,7 +647,7 @@ class ExperimentRunner:
             agent_name="Critic",
             conversation_manager=self.conversation_manager,
             return_approval=True,
-            approval_keyword="RESULTS APPROVED",
+            approval_keyword="HYPOTHESIS VERIFIED",
             verbose=verbose
         )
     
