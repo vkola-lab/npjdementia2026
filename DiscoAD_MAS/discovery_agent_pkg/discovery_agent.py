@@ -18,14 +18,14 @@ except ImportError:
     def emojize(text):
         return text  # Return text without emoji processing
 
-from .config import config as default_config
-from .models import ModelClient
-from .ui import ui
-from .experiment_runner import ExperimentRunner
-from .file_management import FileManager
+from .core.config import config as default_config
+from .agents.models import ModelClient
+from .ui.interface import ui
+from .experiment.runner import ExperimentRunner
+from .data.file_manager import FileManager
 
 # Import cleanup functions from utils
-from .utils import cleanup_gpu_processes, signal_handler, sigtstp_handler, cleanup_resources
+from .core.utils import cleanup_gpu_processes, signal_handler, sigtstp_handler, cleanup_resources
 
 
 class DiscoveryAgentSystem:
@@ -50,6 +50,12 @@ class DiscoveryAgentSystem:
             
             # Initialize experiment runner with all components
             self.experiment_runner = ExperimentRunner(self.model_client, self.config, self.file_manager)
+            
+            # Initialize data cache if dataset folder is provided
+            if hasattr(self.config, 'dataset_folder') and self.config.dataset_folder:
+                ui.print_info(f"📊 Initializing data cache from dataset folder: {self.config.dataset_folder}")
+                if not self.experiment_runner.initialize_data_cache(self.config.dataset_folder):
+                    ui.print_warning("⚠️ Failed to initialize data cache. Some features may not work properly.")
             
             # Setup signal handlers
             signal.signal(signal.SIGINT, signal_handler)

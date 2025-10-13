@@ -135,9 +135,10 @@ DiscoAD_MAS_with_planner_refinement/
 │   ├── ui.py                 # User interface
 │   └── utils.py              # Utility functions
 ├── outputs/                  # Analysis results
-├── results/                  # Final outputs
-├── responses/                # Agent responses
-├── qsub_runs/               # Job submission logs
+├── analysis/
+│   ├── results/             # Final outputs
+│   ├── responses/           # Agent responses
+│   └── qsub_runs/          # Job submission logs
 └── working/                 # Temporary working files
 ```
 
@@ -176,9 +177,9 @@ qsub run.sh
 Results are organized in several directories:
 
 - **`outputs/`**: Intermediate analysis results
-- **`results/`**: Final research findings and summaries
-- **`responses/`**: Detailed agent conversation logs
-- **`qsub_runs/`**: Job execution logs and monitoring
+- **`analysis/results/`**: Final research findings and summaries
+- **`analysis/responses/`**: Detailed agent conversation logs
+- **`analysis/qsub_runs/`**: Job execution logs and monitoring
 
 ## 🔧 Troubleshooting
 
