@@ -7,7 +7,8 @@ datasets/
 ./datasets/*
 # C extensions
 *.so
-
+analysis/
+working/
 # Distribution / packaging
 .Python
 build/

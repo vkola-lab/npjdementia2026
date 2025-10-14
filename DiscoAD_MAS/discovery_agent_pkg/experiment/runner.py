@@ -100,8 +100,21 @@ class ExperimentRunner:
                 ui.print_error("❌ No hypotheses found in CSV file.", "initialization")
                 return None, None, None, 0, 0
             
-            num_runs = len(hypotheses_data)
-            ui.print_info(f"📚 Found {num_runs} hypotheses in CSV file", verbose=verbose)
+            # Get start index (default to 1)
+            start_index = getattr(self.config, 'start_index', 1)
+            
+            # Validate start index
+            if start_index < 1 or start_index > len(hypotheses_data):
+                ui.print_error(f"❌ Start index {start_index} is invalid. Must be between 1 and {len(hypotheses_data)}.", "initialization")
+                return None, None, None, 0, 0
+            
+            # Calculate number of runs from start index to end
+            num_runs = len(hypotheses_data) - start_index + 1
+            
+            if start_index > 1:
+                ui.print_info(f"📚 Found {len(hypotheses_data)} hypotheses in CSV file, starting from index {start_index} ({num_runs} runs)", verbose=verbose)
+            else:
+                ui.print_info(f"📚 Found {num_runs} hypotheses in CSV file", verbose=verbose)
             return None, num_runs, verbose, 0, 0
         
         # Load ADRD keywords for generate/direct modes
@@ -209,12 +222,23 @@ class ExperimentRunner:
                     # Load hypothesis from CSV file for this run
                     ui.print_info(f"📊 Loading hypothesis from CSV file for run {run_idx}...", verbose=verbose)
                     hypotheses_data = self.hypothesis_manager.load_hypotheses_from_csv(self.config.csv_file)
-                    if not hypotheses_data or run_idx > len(hypotheses_data):
-                        ui.print_error(f"❌ No hypothesis found for run {run_idx} in CSV file.", "csv_batch")
+                    if not hypotheses_data:
+                        ui.print_error(f"❌ No hypotheses found in CSV file.", "csv_batch")
                         continue
                     
-                    # Get the hypothesis for this run (run_idx is 1-based)
-                    hypothesis_data = hypotheses_data[run_idx - 1]
+                    # Get start index (default to 1)
+                    start_index = getattr(self.config, 'start_index', 1)
+                    
+                    # Calculate the actual CSV row index (1-based)
+                    csv_row_index = start_index + run_idx - 1
+                    
+                    # Check if we have enough data
+                    if csv_row_index > len(hypotheses_data):
+                        ui.print_error(f"❌ No hypothesis found for run {run_idx} (CSV row {csv_row_index}) in CSV file.", "csv_batch")
+                        continue
+                    
+                    # Get the hypothesis for this run (convert to 0-based index for array access)
+                    hypothesis_data = hypotheses_data[csv_row_index - 1]
                     hypothesis_text = hypothesis_data['hypothesis']
                     hypothesis_index = hypothesis_data['index']
                     
@@ -246,14 +270,20 @@ class ExperimentRunner:
                         if self.config.hypothesis_mode == "csv_batch":
                             try:
                                 hypotheses_data = self.hypothesis_manager.load_hypotheses_from_csv(self.config.csv_file)
-                                if hypotheses_data and run_idx <= len(hypotheses_data):
-                                    hypothesis_data = hypotheses_data[run_idx - 1]
-                                    csv_hypothesis_index = hypothesis_data['index']
-                                    self.hypothesis_manager.update_csv_status(
-                                        self.config.csv_file, 
-                                        csv_hypothesis_index, 
-                                        "failed"
-                                    )
+                                if hypotheses_data:
+                                    # Get start index (default to 1)
+                                    start_index = getattr(self.config, 'start_index', 1)
+                                    # Calculate the actual CSV row index (1-based)
+                                    csv_row_index = start_index + run_idx - 1
+                                    
+                                    if csv_row_index <= len(hypotheses_data):
+                                        hypothesis_data = hypotheses_data[csv_row_index - 1]
+                                        csv_hypothesis_index = hypothesis_data['index']
+                                        self.hypothesis_manager.update_csv_status(
+                                            self.config.csv_file, 
+                                            csv_hypothesis_index, 
+                                            "failed"
+                                        )
                             except Exception as csv_error:
                                 ui.print_error(f"❌ Failed to update CSV status: {str(csv_error)}", "csv_update")
                         
@@ -355,11 +385,17 @@ class ExperimentRunner:
                     hypothesis, None, previous_conversation_summary, self.conversation_manager, previously_used_variables
                 )
                 if not preprocessing_result.get('success', False):
-                    ui.print_warning(f"⚠️ Manual preprocessing failed for hypothesis {idx}, iteration {outer_iteration}, but continuing with analysis...", verbose=verbose)
-                    # Set default values for failed preprocessing
-                    filtered_csv_statistics = None
-                    relevant_variables = None
-                    json_dictionary_path = None
+                    # Check if this is a "no relevant variables" case
+                    if preprocessing_result.get('no_relevant_variables', False):
+                        ui.print_warning(f"❌ No relevant variables found for hypothesis {idx}. Marking as not verified.", verbose=verbose)
+                        # Mark hypothesis as not verified and return early
+                        return self._mark_hypothesis_not_verified(hypothesis, idx, run_idx, verbose)
+                    else:
+                        ui.print_warning(f"⚠️ Manual preprocessing failed for hypothesis {idx}, iteration {outer_iteration}, but continuing with analysis...", verbose=verbose)
+                        # Set default values for failed preprocessing
+                        filtered_csv_statistics = None
+                        relevant_variables = None
+                        json_dictionary_path = None
                 else:
                     # Extract information for enhanced planning
                     filtered_csv_statistics = preprocessing_result.get('filtered_csv_statistics')
@@ -473,6 +509,64 @@ class ExperimentRunner:
         self.file_manager.cleanup_working_directory(recreate=False)
         
         return approved
+    
+    def _mark_hypothesis_not_verified(self, hypothesis: str, idx: int, run_idx: int, verbose: bool) -> bool:
+        """
+        Mark a hypothesis as not verified when no relevant variables are found.
+        
+        Args:
+            hypothesis (str): The hypothesis text
+            idx (int): Hypothesis index
+            run_idx (int): Run index
+            verbose (bool): Whether to print verbose output
+            
+        Returns:
+            bool: Always returns False (not approved)
+        """
+        ui.print_info(f"📝 Marking hypothesis {idx} as not verified due to no relevant variables...", verbose=verbose)
+        
+        # Record in CSV tracking file
+        self.file_manager.write_csv_entry(
+            run_number=run_idx,
+            keywords=[],  # No keywords for not verified
+            hypothesis_index=idx,
+            hypothesis_text=hypothesis,
+            outer_iterations_used=0,  # No iterations used
+            inner_iterations_used=0,  # No iterations used
+            hypothesis_approved=False,
+            turns_to_approve=None
+        )
+        
+        # If using CSV batch mode, update the source CSV file
+        if self.config.hypothesis_mode == "csv_batch":
+            try:
+                hypotheses_data = self.hypothesis_manager.load_hypotheses_from_csv(self.config.csv_file)
+                if hypotheses_data and run_idx <= len(hypotheses_data):
+                    hypothesis_data = hypotheses_data[run_idx - 1]
+                    csv_hypothesis_index = hypothesis_data['index']
+                    
+                    # Update CSV with not verified status
+                    additional_data = {
+                        'outer_iterations_used': 0,
+                        'inner_iterations_used': 0,
+                        'turns_to_approve': None,
+                        'reason_for_rejection': 'No relevant variables found in dataset'
+                    }
+                    
+                    self.hypothesis_manager.update_csv_status(
+                        self.config.csv_file, 
+                        csv_hypothesis_index, 
+                        "not_verified", 
+                        additional_data
+                    )
+            except Exception as e:
+                ui.print_error(f"❌ Failed to update CSV status for not verified hypothesis: {str(e)}", "csv_update")
+        
+        # Clean up working directory
+        ui.print_info(f"🧹 Cleaning up working directory after marking hypothesis {idx} as not verified...", verbose=verbose)
+        self.file_manager.cleanup_working_directory(recreate=False)
+        
+        return False  # Not approved
     
     def run_conversation_until_approved(self, verbose: bool, hypothesis: str = None, 
                                       filtered_csv_statistics: Dict[str, Any] = None, 

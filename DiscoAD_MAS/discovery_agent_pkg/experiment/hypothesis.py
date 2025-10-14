@@ -253,7 +253,7 @@ class HypothesisManager:
         Args:
             csv_file_path (str): Path to the CSV file
             hypothesis_index (int): Index of the hypothesis to update
-            status (str): Status to set (e.g., "done", "processing", "failed")
+            status (str): Status to set (e.g., "done", "processing", "failed", "not_verified")
             additional_data (Optional[Dict[str, Any]]): Additional data to add
         
         Returns:

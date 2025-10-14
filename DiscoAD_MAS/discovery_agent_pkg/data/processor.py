@@ -52,7 +52,7 @@ def query_llm_for_variable_selection(model_client: ModelClient, hypothesis: str,
         data_cache (DataCache): Data cache containing the JSON dictionary
     
     Returns:
-        List[str]: List of selected variable names
+        List[str]: List of selected variable names, or empty list if no relevant variables found
     """
     ui.print_info(f"🔍 Querying LLM for variable selection...")
     
@@ -129,8 +129,10 @@ Aim for 10-20 variables maximum for a focused analysis."""
             ui.print_warning(f"Failed to parse Python list: {e}")
     
     if not variable_names:
-        ui.print_warning("No variable names found in LLM response. Using all available variables.")
-        variable_names = list(dictionary.keys())
+        ui.print_warning("No variable names found in LLM response. This may indicate no relevant variables for this hypothesis.")
+        # Return empty list instead of falling back to all variables
+        # This allows the calling code to detect and handle the "no relevant variables" case
+        return []
     
     # Remove duplicates while preserving order
     variable_names = list(dict.fromkeys(variable_names))
@@ -528,6 +530,12 @@ def simplified_data_preprocessing(model_client: ModelClient, hypothesis: str, da
     ui.print_info(f"🤖 Step 1: Querying LLM for variable selection...")
     selected_variables = query_llm_for_variable_selection(model_client, hypothesis, data_cache)
     
+    # Check if no relevant variables were found
+    if not selected_variables:
+        ui.print_warning("❌ No relevant variables found for this hypothesis. Cannot proceed with analysis.")
+        # Return a special indicator that no variables were found
+        raise ValueError("NO_RELEVANT_VARIABLES")
+    
     # Filter dataframe to only include selected variables
     available_columns = []
     missing_columns = []
@@ -621,12 +629,23 @@ class SimplifiedDataProcessor:
             
             # Run the simplified preprocessing using cached data
             output_path = "working/processed_dataset.csv"
-            processed_df = simplified_data_preprocessing(
-                model_client=self.model_client,
-                hypothesis=hypothesis,
-                data_cache=self.data_cache,
-                output_path=output_path
-            )
+            try:
+                processed_df = simplified_data_preprocessing(
+                    model_client=self.model_client,
+                    hypothesis=hypothesis,
+                    data_cache=self.data_cache,
+                    output_path=output_path
+                )
+            except ValueError as e:
+                if str(e) == "NO_RELEVANT_VARIABLES":
+                    ui.print_warning("❌ No relevant variables found for this hypothesis. Marking as not verified.")
+                    return {
+                        'success': False,
+                        'error': 'No relevant variables found',
+                        'no_relevant_variables': True
+                    }
+                else:
+                    raise  # Re-raise other ValueError exceptions
             
             # Store processed data in cache
             self.data_cache.set_processed_data(processed_df)

@@ -10,6 +10,8 @@ import io
 import contextlib
 import signal
 import traceback
+import threading
+import time
 from typing import Dict, Any, Optional, Union
 from ..ui.interface import ui
 
@@ -66,13 +68,9 @@ class CodeExecutor:
             'globals': globals,
         }
     
-    def _timeout_handler(self, signum, frame):
-        """Handle timeout signal."""
-        raise TimeoutException(f"Code execution timed out after {self.timeout_seconds} seconds")
-    
     def execute_code(self, code: str, local_namespace: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
         """
-        Execute Python code with timeout and error handling.
+        Execute Python code with timeout and error handling using threading.
         
         Args:
             code (str): Python code to execute
@@ -84,79 +82,99 @@ class CodeExecutor:
         if local_namespace is None:
             local_namespace = {}
         
-        # Capture stdout and stderr
-        old_stdout = sys.stdout
-        old_stderr = sys.stderr
-        captured_output = io.StringIO()
-        captured_error = io.StringIO()
+        # Result container for thread communication
+        result_container = {'result': None, 'exception': None, 'completed': False}
+        
+        def execute_in_thread():
+            """Execute code in a separate thread."""
+            try:
+                # Capture stdout and stderr
+                old_stdout = sys.stdout
+                old_stderr = sys.stderr
+                captured_output = io.StringIO()
+                captured_error = io.StringIO()
+                
+                try:
+                    # Redirect stdout and stderr
+                    sys.stdout = captured_output
+                    sys.stderr = captured_error
+                    
+                    # Execute the code - use global namespace for variable persistence
+                    exec(code, self.global_namespace)
+                    
+                    # Get output
+                    output = captured_output.getvalue()
+                    error_output = captured_error.getvalue()
+                    
+                    result_container['result'] = {
+                        "success": True,
+                        "output": output,
+                        "error": error_output if error_output else None,
+                        "code": code
+                    }
+                    
+                finally:
+                    # Restore stdout and stderr
+                    sys.stdout = old_stdout
+                    sys.stderr = old_stderr
+                
+                result_container['completed'] = True
+                
+            except Exception as e:
+                error_traceback = traceback.format_exc()
+                result_container['exception'] = e
+                result_container['result'] = {
+                    "success": False,
+                    "output": "",
+                    "error": f"{str(e)}\n\nTraceback:\n{error_traceback}",
+                    "code": code
+                }
+                result_container['completed'] = True
         
         try:
-            # Redirect stdout and stderr
-            sys.stdout = captured_output
-            sys.stderr = captured_error
+            # Create and start execution thread
+            execution_thread = threading.Thread(target=execute_in_thread)
+            execution_thread.daemon = False  # Don't kill thread when main thread exits
+            execution_thread.start()
             
-            # Set up timeout with proper signal handling
-            old_sigalrm_handler = None
-            if hasattr(signal, 'SIGALRM'):  # Unix-like systems
-                # Store the old handler to restore later
-                old_sigalrm_handler = signal.signal(signal.SIGALRM, self._timeout_handler)
-                signal.alarm(self.timeout_seconds)
+            # Wait for completion with timeout
+            execution_thread.join(timeout=self.timeout_seconds)
             
-            # Execute the code - use global namespace for variable persistence
-            exec(code, self.global_namespace)
+            if execution_thread.is_alive():
+                # Thread is still running, timeout occurred
+                # Force kill the thread if it's still running
+                import ctypes
+                try:
+                    ctypes.pythonapi.PyThreadState_SetAsyncExc(
+                        ctypes.c_long(execution_thread.ident),
+                        ctypes.py_object(SystemExit)
+                    )
+                except:
+                    pass  # Ignore if thread is already dead
+                
+                return {
+                    "success": False,
+                    "output": "",
+                    "error": f"Code execution timed out after {self.timeout_seconds} seconds",
+                    "code": code
+                }
             
-            # Cancel timeout and restore old handler
-            if hasattr(signal, 'SIGALRM'):
-                signal.alarm(0)
-                if old_sigalrm_handler is not None:
-                    signal.signal(signal.SIGALRM, old_sigalrm_handler)
+            # Check if there was an exception
+            if result_container['exception']:
+                raise result_container['exception']
             
-            # Get output
-            output = captured_output.getvalue()
-            error_output = captured_error.getvalue()
+            # Return the result
+            return result_container['result']
             
-            return {
-                "success": True,
-                "output": output,
-                "error": error_output if error_output else None,
-                "code": code
-            }
-            
-        except TimeoutException as e:
-            # Ensure signal handler is restored
-            if hasattr(signal, 'SIGALRM'):
-                signal.alarm(0)
-                if old_sigalrm_handler is not None:
-                    signal.signal(signal.SIGALRM, old_sigalrm_handler)
-            return {
-                "success": False,
-                "output": "",
-                "error": str(e),
-                "code": code
-            }
         except Exception as e:
-            # Ensure signal handler is restored
-            if hasattr(signal, 'SIGALRM'):
-                signal.alarm(0)
-                if old_sigalrm_handler is not None:
-                    signal.signal(signal.SIGALRM, old_sigalrm_handler)
+            # Handle any unexpected errors
             error_traceback = traceback.format_exc()
             return {
                 "success": False,
                 "output": "",
-                "error": f"{str(e)}\n\nTraceback:\n{error_traceback}",
+                "error": f"Unexpected error: {str(e)}\n\nTraceback:\n{error_traceback}",
                 "code": code
             }
-        finally:
-            # Restore stdout and stderr
-            sys.stdout = old_stdout
-            sys.stderr = old_stderr
-            
-            # Ensure signal handler is always restored
-            if hasattr(signal, 'SIGALRM'):
-                signal.alarm(0)
-                if old_sigalrm_handler is not None:
-                    signal.signal(signal.SIGALRM, old_sigalrm_handler)
     
     def execute_code_block(self, code_block: str) -> Dict[str, Any]:
         """

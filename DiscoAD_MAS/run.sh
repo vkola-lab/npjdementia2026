@@ -19,10 +19,11 @@
 
 # User input configuration - Edit these values for your specific analysis
 HYPOTHESIS_MODE="csv_batch"  # Options: "generate", "direct", "direct hypothesis", or "csv_batch"
-HYPOTHESIS="APOE ε4 carriage increases risk for Alzheimer’s disease across ethnicities."
+HYPOTHESIS="APOE ε4 carriage increases risk for Alzheimer's disease across ethnicities."
 # HYPOTHESIS="Greater years of education are linked to lower dementia incidence (cognitive reserve)."
 # HYPOTHESIS="Greater years of education are linked to higher dementia incidence"
 CSV_FILE="/projectnb/vkolagrp/ketanss/adrd_agent_custom/DiscoADRD/DiscoAD_MAS/batch.csv"  # Path to CSV file containing hypotheses (only needed for csv_batch mode)
+START_INDEX=25  # Start processing CSV from this index (1-based, default: 1)
 DATASET_FOLDER="/projectnb/vkolagrp/ketanss/adrd_agent_custom/adrd_agent/datasets/NACC"
 
 # Output verbosity control
@@ -51,6 +52,9 @@ if [ "$HYPOTHESIS_MODE" = "direct hypothesis" ]; then
     echo "   Direct hypothesis: $HYPOTHESIS"
 elif [ "$HYPOTHESIS_MODE" = "csv_batch" ]; then
     echo "   CSV file: $CSV_FILE"
+    if [ "$START_INDEX" != "1" ]; then
+        echo "   Start index: $START_INDEX"
+    fi
 fi
 echo "   Dataset folder: $DATASET_FOLDER"
 echo "   Verbose output: $VERBOSE"
@@ -86,12 +90,14 @@ elif [ "$HYPOTHESIS_MODE" = "csv_batch" ]; then
         python discover.py \
             --hypothesis-mode "$HYPOTHESIS_MODE" \
             --csv-file "$CSV_FILE" \
+            --start-index "$START_INDEX" \
             --dataset-folder "$DATASET_FOLDER" \
             --verbose
     else
         python discover.py \
             --hypothesis-mode "$HYPOTHESIS_MODE" \
             --csv-file "$CSV_FILE" \
+            --start-index "$START_INDEX" \
             --dataset-folder "$DATASET_FOLDER"
     fi
     
