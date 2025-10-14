@@ -567,7 +567,9 @@ def simplified_data_preprocessing(model_client: ModelClient, hypothesis: str, da
         df = df[available_columns]
         ui.print_info(f"🎯 Filtered to {len(available_columns)} selected columns")
     else:
-        ui.print_warning("⚠️ No selected columns found in data. Using all columns.")
+        ui.print_warning("⚠️ No selected columns found in data. Cannot proceed with analysis.")
+        # Return a special indicator that no variables were found
+        raise ValueError("NO_RELEVANT_VARIABLES")
     
     # Step 3: Replace unknown values with NaN
     ui.print_info(f"🔧 Step 2: Replacing unknown values with NaN...")
