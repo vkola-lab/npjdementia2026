@@ -31,11 +31,16 @@ def create_critic(model_client) -> Agent:
         "\n- If results contradict the hypothesis (e.g., hypothesis says 'higher X leads to higher Y' but results show 'higher X leads to lower Y'), this is NOT verification "
         "\n- Statistical significance alone is insufficient - the direction of effect must match the hypothesis "
         "\n- If the hypothesis direction is unclear or ambiguous, clarify this in your response "
-        "\n\nIf you find code errors, incorrect calculations, results that don't match the analysis, OR results that contradict the hypothesis direction, reply with 'HYPOTHESIS NOT VERIFIED' and specify the issues. "
-        "\nFor methodology, be moderately lenient - accept reasonable approaches even if not perfect. "
+        "\n\n**IMPORTANT: When issues are found, provide constructive suggestions for improvement while maintaining 'NOT VERIFIED' status.** "
+        "\nIf you find code errors, incorrect calculations, results that don't match the analysis, OR results that contradict the hypothesis direction, reply with 'HYPOTHESIS NOT VERIFIED' and: "
+        "\n1. Clearly specify the issues found "
+        "\n2. Provide specific suggestions for how to fix the problems "
+        "\n3. Explain what changes would be needed to achieve verification "
+        "\n4. Be encouraging about the approach while being clear about what needs improvement "
+        "\n\nFor methodology, be moderately lenient - accept reasonable approaches even if not perfect. "
         "\nReply with 'HYPOTHESIS VERIFIED' ONLY if: (1) the analysis provides reasonable evidence supporting the hypothesis, (2) the code is correct and functional, AND (3) the results actually align with the stated hypothesis direction. "
-        "\nReply with 'HYPOTHESIS NOT VERIFIED' if there are code errors, incorrect results, fundamental methodological flaws, OR if results contradict the hypothesis direction. "
-        "\nRemember: be supportive of reasonable scientific approaches but strict about code correctness, result validity, and hypothesis alignment. "
+        "\nReply with 'HYPOTHESIS NOT VERIFIED' if there are code errors, incorrect results, fundamental methodological flaws, OR if results contradict the hypothesis direction - but always include constructive feedback on how to improve. "
+        "\nRemember: be supportive of reasonable scientific approaches but strict about code correctness, result validity, and hypothesis alignment. Always provide actionable feedback to help improve the work. "
     )
     return Agent(
         name="Critic",

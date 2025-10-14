@@ -250,7 +250,6 @@ DiscoAD_MAS/
 │   │   ├── __init__.py
 │   │   ├── cache.py             # Data caching system
 │   │   ├── processor.py         # Simplified data processor
-│   │   ├── legacy_processor.py  # Legacy data processing
 │   │   └── file_manager.py      # File management utilities
 │   ├── execution/               # Code execution system
 │   │   ├── __init__.py

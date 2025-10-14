@@ -132,6 +132,9 @@ Aim for 10-20 variables maximum for a focused analysis."""
         ui.print_warning("No variable names found in LLM response. Using all available variables.")
         variable_names = list(dictionary.keys())
     
+    # Remove duplicates while preserving order
+    variable_names = list(dict.fromkeys(variable_names))
+    
     ui.print_info(f"🎯 Selected {len(variable_names)} variables: {variable_names}")
     return variable_names
 
@@ -527,16 +530,30 @@ def simplified_data_preprocessing(model_client: ModelClient, hypothesis: str, da
     
     # Filter dataframe to only include selected variables
     available_columns = []
+    missing_columns = []
+    
     for var_name in selected_variables:
+        # Ensure var_name is a string
+        if not isinstance(var_name, str):
+            ui.print_warning(f"⚠️ Skipping non-string variable name: {var_name} (type: {type(var_name)})")
+            continue
+            
         # Try exact match first
         if var_name in df.columns:
             available_columns.append(var_name)
         else:
             # Try case-insensitive match
+            found = False
             for col in df.columns:
                 if col.upper() == var_name.upper():
                     available_columns.append(col)
+                    found = True
                     break
+            if not found:
+                missing_columns.append(var_name)
+    
+    if missing_columns:
+        ui.print_warning(f"⚠️ Could not find {len(missing_columns)} selected columns in data: {missing_columns}")
     
     if available_columns:
         df = df[available_columns]

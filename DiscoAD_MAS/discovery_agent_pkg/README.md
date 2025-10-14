@@ -29,7 +29,6 @@ discovery_agent_pkg/
 │   ├── __init__.py
 │   ├── cache.py               # Data caching system
 │   ├── processor.py           # Simplified data processing
-│   ├── legacy_processor.py    # Legacy data processing
 │   └── file_manager.py        # File management utilities
 │
 ├── experiment/                 # Experiment execution
@@ -64,7 +63,6 @@ discovery_agent_pkg/
 ### Data Module (`data/`)
 - **`cache.py`**: Centralized data cache for CSV and JSON data
 - **`processor.py`**: Simplified data processing pipeline
-- **`legacy_processor.py`**: Legacy data processing with more features
 - **`file_manager.py`**: File operations and directory management
 
 ### Experiment Module (`experiment/`)
@@ -172,7 +170,7 @@ The package has been reorganized from a flat structure to a modular one. Key cha
 - `discovery_agent.py` → `core/agent.py`
 - `models.py` → `agents/models.py`
 - `experiment_runner.py` → `experiment/runner.py`
-- `data_processing.py` → `data/processor.py` and `data/legacy_processor.py`
+- `data_processing.py` → `data/processor.py`
 - `ui.py` → `ui/interface.py`
 - `utils.py` → `core/utils.py` and `execution/utils.py`
 

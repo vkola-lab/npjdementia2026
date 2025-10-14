@@ -550,7 +550,7 @@ class ExperimentRunner:
                         # Handle string error case
                         code_output = execution_result
                         ui.print_agent_response(agent_name, response, code_output)
-                        ui.print_warning(f"⚠️ Code execution error: {execution_result}")
+                        ui.print_warning(f"⚠️ Code execution error")
                         
                         if return_success:
                             conversation_manager.add_agent_response(agent_name, response, code_output)
@@ -572,7 +572,7 @@ class ExperimentRunner:
 
                         else:
                             code_output = f"Error: {execution_result.get('error', 'Unknown error')}"
-                            ui.print_warning(f"⚠️ Code execution returned an error output: {code_output}")
+                            ui.print_warning(f"⚠️ Code execution returned an error output")
                             ui.print_warning("⚠️ But continuing...")
                             ui.print_agent_response(agent_name, response, code_output)
 
