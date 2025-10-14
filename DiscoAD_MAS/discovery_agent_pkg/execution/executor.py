@@ -95,17 +95,21 @@ class CodeExecutor:
             sys.stdout = captured_output
             sys.stderr = captured_error
             
-            # Set up timeout
+            # Set up timeout with proper signal handling
+            old_sigalrm_handler = None
             if hasattr(signal, 'SIGALRM'):  # Unix-like systems
-                signal.signal(signal.SIGALRM, self._timeout_handler)
+                # Store the old handler to restore later
+                old_sigalrm_handler = signal.signal(signal.SIGALRM, self._timeout_handler)
                 signal.alarm(self.timeout_seconds)
             
             # Execute the code - use global namespace for variable persistence
             exec(code, self.global_namespace)
             
-            # Cancel timeout
+            # Cancel timeout and restore old handler
             if hasattr(signal, 'SIGALRM'):
                 signal.alarm(0)
+                if old_sigalrm_handler is not None:
+                    signal.signal(signal.SIGALRM, old_sigalrm_handler)
             
             # Get output
             output = captured_output.getvalue()
@@ -119,6 +123,11 @@ class CodeExecutor:
             }
             
         except TimeoutException as e:
+            # Ensure signal handler is restored
+            if hasattr(signal, 'SIGALRM'):
+                signal.alarm(0)
+                if old_sigalrm_handler is not None:
+                    signal.signal(signal.SIGALRM, old_sigalrm_handler)
             return {
                 "success": False,
                 "output": "",
@@ -126,6 +135,11 @@ class CodeExecutor:
                 "code": code
             }
         except Exception as e:
+            # Ensure signal handler is restored
+            if hasattr(signal, 'SIGALRM'):
+                signal.alarm(0)
+                if old_sigalrm_handler is not None:
+                    signal.signal(signal.SIGALRM, old_sigalrm_handler)
             error_traceback = traceback.format_exc()
             return {
                 "success": False,
@@ -138,9 +152,11 @@ class CodeExecutor:
             sys.stdout = old_stdout
             sys.stderr = old_stderr
             
-            # Cancel timeout if still active
+            # Ensure signal handler is always restored
             if hasattr(signal, 'SIGALRM'):
                 signal.alarm(0)
+                if old_sigalrm_handler is not None:
+                    signal.signal(signal.SIGALRM, old_sigalrm_handler)
     
     def execute_code_block(self, code_block: str) -> Dict[str, Any]:
         """

@@ -1,0 +1,41 @@
+🚀 Starting DiscoAD_MAS Discovery Agent...
+🔧 Configuration:
+   Hypothesis mode: csv_batch
+   CSV file: /projectnb/vkolagrp/ketanss/adrd_agent_custom/DiscoADRD/DiscoAD_MAS/batch.csv
+   Dataset folder: /projectnb/vkolagrp/ketanss/adrd_agent_custom/adrd_agent/datasets/NACC
+   Verbose output: true
+   (Other settings loaded from config.yml)
+
+📊 Running with CSV batch mode...
+==========================================
+📄 Loaded configuration from config.yml
+🔧 Configuration loaded:
+   Model: Qwen/Qwen3-4B-Instruct-2507
+   Device: auto
+   Max tokens: 16384
+   Code timeout: 30s
+   Planning agent: disabled
+   Hypothesis mode: csv_batch
+   Keywords file: adrd_keywords.txt
+   Number of keywords per run: 3
+   Number of sampling runs: 10
+   Outer loop iterations: 2
+   Verbose output: True
+   Dataset folder: /projectnb/vkolagrp/ketanss/adrd_agent_custom/adrd_agent/datasets/NACC
+[96m╔══════════════════════════════════════════════════════════════════════════════╗[0m
+[96m║                              🔬 Discovery Agent                               ║[0m
+[96m║                    AI-Powered Scientific Discovery System                    ║[0m
+[96m║                                                                              ║[0m
+[96m║           Multi-Agent System • Hypothesis Testing • Data Analysis            ║[0m
+[96m║                                Version 1.0.0                                 ║[0m
+[96m╚══════════════════════════════════════════════════════════════════════════════╝[0m
+
+[90m[22:26:07][0m [94mℹ️  🔧 Initializing Discovery Agent System...[0m
+[90m[22:26:07][0m [94mℹ️  ⚙️ Initializing Discovery Agent...[0m
+Loading model: Qwen/Qwen3-4B-Instruct-2507
+📝 Loading tokenizer...
+✅ Tokenizer loaded successfully
+🧠 Loading model...
+Loading checkpoint shards:   0%|          | 0/3 [00:00<?, ?it/s]Loading checkpoint shards:  33%|███▎      | 1/3 [00:02<00:04,  2.48s/it]Loading checkpoint shards:  67%|██████▋   | 2/3 [00:04<00:02,  2.42s/it]Loading checkpoint shards: 100%|██████████| 3/3 [00:05<00:00,  1.38s/it]Loading checkpoint shards: 100%|██████████| 3/3 [00:05<00:00,  1.67s/it]
+/projectnb/vkolagrp/ketanss/adrd_agent_custom/DiscoADRD/DiscoAD_MAS/discovery_agent_pkg/data/cache.py:47: DtypeWarning: Columns (20,22,24,26,28,40,43,45,47,50,91,92,93,94,95,96,97,98,99,100,101,102,103,104,105,106,164,175,178,216,219,221,223,225,227,229,231,233,235,237,239,241,243,245,247,249,251,253,255,257,259,261,263,265,267,269,271,396,398,400,420,422,431,444,453,492,571,599,607,663,679,696,699,716,727,733,808,819,821,823,825,831,892,947,948,949,957,958,959,960,970,992,995,998,1017,1022,1192,1196,1199,1395,1397,1399,1400,1402,1409,1411,1413,1414,1421,1423,1425,1427,1428,1435,1450,1464,1478,1492,1494,1530,1546,1548,1550,1552,1554,1556,1558,1560,1562,1564,1566,1568,1570,1572,1574,1576,1578,1580,1582,1584,1586,1588,1590,1592,1594,1596,1598,1600,1650,1651,1653,1654,1657,1658,1661,1662,1665,1666,1669,1670,1744,1803,1812,1814,1816,1818,1829,1831,1833,1841,1843,1845,1847,1855,1857,1859,1861,1887) have mixed types. Specify dtype option on import or set low_memory=False.
+  self._original_csv_data = pd.read_csv(csv_path)

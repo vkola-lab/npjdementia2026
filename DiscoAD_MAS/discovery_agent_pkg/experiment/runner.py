@@ -138,115 +138,162 @@ class ExperimentRunner:
             Tuple[int, int]: Updated total_hypotheses and total_approved counts
         """
         for run_idx in range(1, num_runs + 1):
-            ui.print_separator(verbose=verbose)
-            
-            # Handle different modes
-            if keywords is None:  # Direct hypothesis or CSV batch mode
-                if self.config.hypothesis_mode == "direct hypothesis":
-                    ui.print_info(f"🎯 Direct Hypothesis Run {run_idx}/{num_runs}", verbose=verbose)
-                    sampled_keywords = []  # No keywords needed for direct hypothesis
-                elif self.config.hypothesis_mode == "csv_batch":
-                    ui.print_info(f"📊 CSV Batch Run {run_idx}/{num_runs}", verbose=verbose)
-                    sampled_keywords = []  # No keywords needed for CSV batch mode
+            try:
+                ui.print_separator(verbose=verbose)
+                
+                # Handle different modes
+                if keywords is None:  # Direct hypothesis or CSV batch mode
+                    if self.config.hypothesis_mode == "direct hypothesis":
+                        ui.print_info(f"🎯 Direct Hypothesis Run {run_idx}/{num_runs}", verbose=verbose)
+                        sampled_keywords = []  # No keywords needed for direct hypothesis
+                    elif self.config.hypothesis_mode == "csv_batch":
+                        ui.print_info(f"📊 CSV Batch Run {run_idx}/{num_runs}", verbose=verbose)
+                        sampled_keywords = []  # No keywords needed for CSV batch mode
+                    else:
+                        ui.print_info(f"🎯 Direct Hypothesis Run {run_idx}/{num_runs}", verbose=verbose)
+                        sampled_keywords = []  # No keywords needed for direct hypothesis
                 else:
-                    ui.print_info(f"🎯 Direct Hypothesis Run {run_idx}/{num_runs}", verbose=verbose)
-                    sampled_keywords = []  # No keywords needed for direct hypothesis
-            else:
-                ui.print_info(f"🎲 Sampling Run {run_idx}/{num_runs}", verbose=verbose)
-                # Sample keywords
-                sampled_keywords = self.hypothesis_manager.sample_keywords(keywords, self.config.num_keywords)
-                ui.print_info(f"🎯 Sampled keywords: {', '.join(sampled_keywords)}", verbose=verbose)
-            
-            # Create hypothesis from sampled keywords (for non-direct modes)
-            if keywords is not None:
-                hypothesis_input = f"{', '.join(sampled_keywords)}"
-                ui.print_info(f"📝 Generated hypothesis: {hypothesis_input}", verbose=verbose)
-            
-            # Get hypothesis mode from config
-            hypothesis_mode = self.config.hypothesis_mode
-            
-            if hypothesis_mode == "generate":
-                # Generate multiple hypotheses from sampled keywords
-                ui.print_info(f"🔬 Generating multiple hypotheses from sampled keywords...", verbose=verbose)
+                    ui.print_info(f"🎲 Sampling Run {run_idx}/{num_runs}", verbose=verbose)
+                    # Sample keywords
+                    sampled_keywords = self.hypothesis_manager.sample_keywords(keywords, self.config.num_keywords)
+                    ui.print_info(f"🎯 Sampled keywords: {', '.join(sampled_keywords)}", verbose=verbose)
                 
-                # Get dataset dictionary and CSV statistics from cache if available
-                dataset_dictionary = None
-                csv_statistics = None
-                if self.data_cache.is_initialized():
+                # Create hypothesis from sampled keywords (for non-direct modes)
+                if keywords is not None:
+                    hypothesis_input = f"{', '.join(sampled_keywords)}"
+                    ui.print_info(f"📝 Generated hypothesis: {hypothesis_input}", verbose=verbose)
+                
+                # Get hypothesis mode from config
+                hypothesis_mode = self.config.hypothesis_mode
+                
+                if hypothesis_mode == "generate":
+                    # Generate multiple hypotheses from sampled keywords
+                    ui.print_info(f"🔬 Generating multiple hypotheses from sampled keywords...", verbose=verbose)
+                    
+                    # Get dataset dictionary and CSV statistics from cache if available
+                    dataset_dictionary = None
+                    csv_statistics = None
+                    if self.data_cache.is_initialized():
+                        try:
+                            # Get the JSON dictionary from cache
+                            dataset_dictionary = self.data_cache.get_json_dictionary()
+                            
+                            # Get CSV statistics from cache
+                            csv_statistics = self.data_cache.get_dataset_statistics()
+                            
+                            ui.print_info(f"📚 Loaded dataset dictionary with {len(dataset_dictionary)} variables from cache", verbose=verbose)
+                            if 'error' not in csv_statistics:
+                                ui.print_info(f"📊 CSV statistics: {csv_statistics['total_rows']:,} rows, {csv_statistics['total_cols']} cols, {csv_statistics['missing_percentage']}% missing", verbose=verbose)
+                            else:
+                                ui.print_warning(f"⚠️ Could not get CSV statistics from cache: {csv_statistics['error']}", verbose=verbose)
+                        except Exception as e:
+                            ui.print_warning(f"⚠️ Could not get dataset dictionary or CSV from cache: {str(e)}", verbose=verbose)
+                            dataset_dictionary = None
+                            csv_statistics = None
+                    
+                    # Generate hypotheses with dataset information
+                    hypotheses = self.hypothesis_manager.generate_hypotheses_from_keywords(
+                        sampled_keywords, dataset_dictionary, csv_statistics
+                    )
+                    ui.print_hypothesis_list(hypotheses, generated=True, verbose=verbose)
+                elif hypothesis_mode == "direct hypothesis":
+                    # Use the provided direct hypothesis
+                    if not self.config.hypothesis:
+                        ui.print_error("❌ Direct hypothesis mode specified but no hypothesis provided. Please use --hypothesis parameter.", "hypothesis_mode")
+                        continue
+                    
+                    ui.print_info(f"📝 Using provided direct hypothesis: {self.config.hypothesis}", verbose=verbose)
+                    hypotheses = self.hypothesis_manager.set_direct_hypothesis(self.config.hypothesis)
+                    ui.print_hypothesis_list(hypotheses, generated=False, verbose=verbose)
+                elif hypothesis_mode == "csv_batch":
+                    # Load hypothesis from CSV file for this run
+                    ui.print_info(f"📊 Loading hypothesis from CSV file for run {run_idx}...", verbose=verbose)
+                    hypotheses_data = self.hypothesis_manager.load_hypotheses_from_csv(self.config.csv_file)
+                    if not hypotheses_data or run_idx > len(hypotheses_data):
+                        ui.print_error(f"❌ No hypothesis found for run {run_idx} in CSV file.", "csv_batch")
+                        continue
+                    
+                    # Get the hypothesis for this run (run_idx is 1-based)
+                    hypothesis_data = hypotheses_data[run_idx - 1]
+                    hypothesis_text = hypothesis_data['hypothesis']
+                    hypothesis_index = hypothesis_data['index']
+                    
+                    ui.print_info(f"📝 Using hypothesis from CSV (row {hypothesis_index}): {hypothesis_text}", verbose=verbose)
+                    hypotheses = self.hypothesis_manager.set_direct_hypothesis(hypothesis_text)
+                    ui.print_hypothesis_list(hypotheses, generated=False, verbose=verbose)
+                    
+                    # Mark as processing in CSV
+                    self.hypothesis_manager.update_csv_status(self.config.csv_file, hypothesis_index, "processing")
+                else:  # "direct" mode
+                    # Use sampled keywords directly as a single hypothesis
+                    ui.print_info(f"📝 Using sampled keywords directly as hypothesis...", verbose=verbose)
+                    hypotheses = self.hypothesis_manager.create_single_hypothesis_from_keywords(sampled_keywords)
+                    ui.print_hypothesis_list(hypotheses, generated=False, verbose=verbose)
+                
+                # Process each generated hypothesis
+                run_approved_count = 0
+                for idx, hypothesis in enumerate(hypotheses, 1):
                     try:
-                        # Get the JSON dictionary from cache
-                        dataset_dictionary = self.data_cache.get_json_dictionary()
-                        
-                        # Get CSV statistics from cache
-                        csv_statistics = self.data_cache.get_dataset_statistics()
-                        
-                        ui.print_info(f"📚 Loaded dataset dictionary with {len(dataset_dictionary)} variables from cache", verbose=verbose)
-                        if 'error' not in csv_statistics:
-                            ui.print_info(f"📊 CSV statistics: {csv_statistics['total_rows']:,} rows, {csv_statistics['total_cols']} cols, {csv_statistics['missing_percentage']}% missing", verbose=verbose)
-                        else:
-                            ui.print_warning(f"⚠️ Could not get CSV statistics from cache: {csv_statistics['error']}", verbose=verbose)
+                        approved = self.process_hypothesis(hypothesis, idx, run_idx, sampled_keywords, verbose)
+                        if approved:
+                            run_approved_count += 1
                     except Exception as e:
-                        ui.print_warning(f"⚠️ Could not get dataset dictionary or CSV from cache: {str(e)}", verbose=verbose)
-                        dataset_dictionary = None
-                        csv_statistics = None
+                        # Handle unhandled exceptions in hypothesis processing
+                        ui.print_error(f"❌ Hypothesis {idx} failed with exception: {str(e)}", "hypothesis_processing")
+                        ui.print_info(f"🔄 Continuing with next hypothesis...", verbose=verbose)
+                        
+                        # Mark hypothesis as failed in CSV if using CSV batch mode
+                        if self.config.hypothesis_mode == "csv_batch":
+                            try:
+                                hypotheses_data = self.hypothesis_manager.load_hypotheses_from_csv(self.config.csv_file)
+                                if hypotheses_data and run_idx <= len(hypotheses_data):
+                                    hypothesis_data = hypotheses_data[run_idx - 1]
+                                    csv_hypothesis_index = hypothesis_data['index']
+                                    self.hypothesis_manager.update_csv_status(
+                                        self.config.csv_file, 
+                                        csv_hypothesis_index, 
+                                        "failed"
+                                    )
+                            except Exception as csv_error:
+                                ui.print_error(f"❌ Failed to update CSV status: {str(csv_error)}", "csv_update")
+                        
+                        # Continue to next hypothesis instead of terminating the job
+                        continue
                 
-                # Generate hypotheses with dataset information
-                hypotheses = self.hypothesis_manager.generate_hypotheses_from_keywords(
-                    sampled_keywords, dataset_dictionary, csv_statistics
-                )
-                ui.print_hypothesis_list(hypotheses, generated=True, verbose=verbose)
-            elif hypothesis_mode == "direct hypothesis":
-                # Use the provided direct hypothesis
-                if not self.config.hypothesis:
-                    ui.print_error("❌ Direct hypothesis mode specified but no hypothesis provided. Please use --hypothesis parameter.", "hypothesis_mode")
-                    continue
+                # Print run summary
+                run_approval_rate = (run_approved_count / len(hypotheses)) if hypotheses else 0
+                ui.print_info(f"📊 Run {run_idx} Summary:", verbose=verbose)
+                ui.print_info(f"   🎯 Keywords: {', '.join(sampled_keywords)}", verbose=verbose)
+                ui.print_info(f"   📝 Generated hypotheses: {len(hypotheses)}", verbose=verbose)
+                ui.print_info(f"   ✅ Approved hypotheses: {run_approved_count}", verbose=verbose)
+                ui.print_info(f"   📈 Approval rate: {run_approval_rate:.2%}", verbose=verbose)
                 
-                ui.print_info(f"📝 Using provided direct hypothesis: {self.config.hypothesis}", verbose=verbose)
-                hypotheses = self.hypothesis_manager.set_direct_hypothesis(self.config.hypothesis)
-                ui.print_hypothesis_list(hypotheses, generated=False, verbose=verbose)
-            elif hypothesis_mode == "csv_batch":
-                # Load hypothesis from CSV file for this run
-                ui.print_info(f"📊 Loading hypothesis from CSV file for run {run_idx}...", verbose=verbose)
-                hypotheses_data = self.hypothesis_manager.load_hypotheses_from_csv(self.config.csv_file)
-                if not hypotheses_data or run_idx > len(hypotheses_data):
-                    ui.print_error(f"❌ No hypothesis found for run {run_idx} in CSV file.", "csv_batch")
-                    continue
+                # Update totals
+                total_hypotheses += len(hypotheses)
+                total_approved += run_approved_count
                 
-                # Get the hypothesis for this run (run_idx is 1-based)
-                hypothesis_data = hypotheses_data[run_idx - 1]
-                hypothesis_text = hypothesis_data['hypothesis']
-                hypothesis_index = hypothesis_data['index']
+            except Exception as e:
+                # Handle unhandled exceptions in run processing
+                ui.print_error(f"❌ Run {run_idx} failed with exception: {str(e)}", "run_processing")
+                ui.print_info(f"🔄 Continuing with next run...", verbose=verbose)
                 
-                ui.print_info(f"📝 Using hypothesis from CSV (row {hypothesis_index}): {hypothesis_text}", verbose=verbose)
-                hypotheses = self.hypothesis_manager.set_direct_hypothesis(hypothesis_text)
-                ui.print_hypothesis_list(hypotheses, generated=False, verbose=verbose)
+                # Mark hypothesis as failed in CSV if using CSV batch mode
+                if self.config.hypothesis_mode == "csv_batch":
+                    try:
+                        hypotheses_data = self.hypothesis_manager.load_hypotheses_from_csv(self.config.csv_file)
+                        if hypotheses_data and run_idx <= len(hypotheses_data):
+                            hypothesis_data = hypotheses_data[run_idx - 1]
+                            csv_hypothesis_index = hypothesis_data['index']
+                            self.hypothesis_manager.update_csv_status(
+                                self.config.csv_file, 
+                                csv_hypothesis_index, 
+                                "failed"
+                            )
+                    except Exception as csv_error:
+                        ui.print_error(f"❌ Failed to update CSV status: {str(csv_error)}", "csv_update")
                 
-                # Mark as processing in CSV
-                self.hypothesis_manager.update_csv_status(self.config.csv_file, hypothesis_index, "processing")
-            else:  # "direct" mode
-                # Use sampled keywords directly as a single hypothesis
-                ui.print_info(f"📝 Using sampled keywords directly as hypothesis...", verbose=verbose)
-                hypotheses = self.hypothesis_manager.create_single_hypothesis_from_keywords(sampled_keywords)
-                ui.print_hypothesis_list(hypotheses, generated=False, verbose=verbose)
-            
-            # Process each generated hypothesis
-            run_approved_count = 0
-            for idx, hypothesis in enumerate(hypotheses, 1):
-                approved = self.process_hypothesis(hypothesis, idx, run_idx, sampled_keywords, verbose)
-                if approved:
-                    run_approved_count += 1
-            
-            # Print run summary
-            run_approval_rate = (run_approved_count / len(hypotheses)) if hypotheses else 0
-            ui.print_info(f"📊 Run {run_idx} Summary:", verbose=verbose)
-            ui.print_info(f"   🎯 Keywords: {', '.join(sampled_keywords)}", verbose=verbose)
-            ui.print_info(f"   📝 Generated hypotheses: {len(hypotheses)}", verbose=verbose)
-            ui.print_info(f"   ✅ Approved hypotheses: {run_approved_count}", verbose=verbose)
-            ui.print_info(f"   📈 Approval rate: {run_approval_rate:.2%}", verbose=verbose)
-            
-            # Update totals
-            total_hypotheses += len(hypotheses)
-            total_approved += run_approved_count
+                # Continue to next run instead of terminating the job
+                continue
         
         return total_hypotheses, total_approved
     
@@ -373,9 +420,22 @@ class ExperimentRunner:
         ui.print_approval_status(approved, verbose=verbose)
         
         # Write CSV entry for this hypothesis (only once, after all outer loop iterations are complete)
+        # For CSV batch mode, use category as keywords if available
+        tracking_keywords = sampled_keywords
+        if self.config.hypothesis_mode == "csv_batch":
+            # Try to get category from CSV data for better tracking
+            try:
+                hypotheses_data = self.hypothesis_manager.load_hypotheses_from_csv(self.config.csv_file)
+                if hypotheses_data and run_idx <= len(hypotheses_data):
+                    hypothesis_data = hypotheses_data[run_idx - 1]
+                    if 'Category' in hypothesis_data:
+                        tracking_keywords = [hypothesis_data['Category']]
+            except:
+                pass  # Fall back to empty list if there's an issue
+        
         self.file_manager.write_csv_entry(
             run_number=run_idx,
-            keywords=sampled_keywords,
+            keywords=tracking_keywords,
             hypothesis_index=idx,
             hypothesis_text=hypothesis,
             outer_iterations_used=total_outer_iterations,  # This will be the final iteration number
@@ -457,8 +517,15 @@ class ExperimentRunner:
                 self.add_variable_descriptions_to_conversation(json_dictionary_path)
                 scientist_success = self.scientist_round(verbose=verbose)
                 
-                ui.print_info("🔍 Starting Critic round...", verbose=verbose)
-                approved = self.critic_round(verbose=verbose)
+                # If Scientist's code execution failed, run Critic with debugging query
+                if not scientist_success:
+                    ui.print_warning("⚠️ Scientist code execution failed. Running Critic with debugging query...", verbose=verbose)
+                    
+                    # Run Critic with a specialized debugging query
+                    approved = self.critic_debugging_round(verbose=verbose)
+                else:
+                    ui.print_info("🔍 Starting Critic round...", verbose=verbose)
+                    approved = self.critic_round(verbose=verbose)
 
                 self.conversation_manager.increment_turns()
                 ui.print_info(f"✅ Turn {self.conversation_manager.get_turns()} completed. Approved: {approved}", verbose=verbose)
@@ -650,6 +717,69 @@ class ExperimentRunner:
             approval_keyword="HYPOTHESIS VERIFIED",
             verbose=verbose
         )
+    
+    def critic_debugging_round(self, verbose: bool = True) -> bool:
+        """Handle Critic debugging round when code execution fails."""
+        ui.print_loading("Critic is analyzing the code failure...")
+        
+        try:
+            # Create a specialized debugging query for the Critic
+            debugging_query = (
+                "CODE EXECUTION FAILED - DEBUGGING MODE\n\n"
+                "The Scientist's code failed to execute properly. As a Critic, please analyze the failure and provide specific guidance.\n\n"
+                "Your task is to:\n"
+                "1. Identify the likely cause of the code execution failure\n"
+                "2. Provide specific, actionable feedback to help the Scientist fix the code\n"
+                "3. Suggest improvements for code robustness and error handling\n"
+                "4. Guide the Scientist toward a working solution\n\n"
+                "Focus on:\n"
+                "- Syntax and import errors\n"
+                "- Data access and file path issues\n"
+                "- Logic errors and assumptions\n"
+                "- Code complexity and simplification opportunities\n"
+                "- Best practices for error handling\n\n"
+                "Provide constructive, specific feedback that will help the Scientist succeed in the next iteration.\n"
+                "Do not approve the hypothesis - the code must work first."
+            )
+            
+            # Add the debugging query to conversation
+            self.conversation_manager.add_user_input(debugging_query)
+            
+            # Generate Critic response with debugging focus
+            start_time = time.time()
+            ui.print_info("🔄 Generating Critic debugging response...")
+            response = self.critic.generate(
+                self.conversation_manager.get_conversation_history()
+            )
+            generation_time = time.time() - start_time
+            ui.print_info(f"⏱️ Response generated in {generation_time:.2f} seconds")
+            
+            if not response or not response.strip():
+                raise ValueError("Empty response from Critic")
+            
+            # Remove the debugging query from conversation history (clean up)
+            if self.conversation_manager.messages and self.conversation_manager.messages[-1]["role"] == "user":
+                self.conversation_manager.messages.pop()
+            
+            # Add the response to conversation (no code execution needed)
+            self.conversation_manager.add_agent_response("Critic", response, "")
+            ui.print_agent_response("Critic", response, "")
+            
+            # Always return False for debugging rounds - code needs to be fixed first
+            return False
+            
+        except Exception as e:
+            ui.print_error(f"Critic debugging round error: {str(e)}", "critic_debugging", verbose=verbose)
+            # Fallback to manual message if Critic fails
+            fallback_message = (
+                "CODE EXECUTION FAILED\n\n"
+                "The Scientist's code failed to execute. Please review the error message and fix the code issues before proceeding.\n"
+                "Common issues include syntax errors, missing imports, data access problems, or logic errors.\n"
+                "Please provide corrected code in the next iteration."
+            )
+            self.conversation_manager.add_agent_response("Critic", fallback_message, "")
+            ui.print_agent_response("Critic", fallback_message, "")
+            return False
     
     def planning_agent_round(self, hypothesis: str = None, filtered_csv_statistics: Dict[str, Any] = None, verbose: bool = True) -> None:
         """Handle Enhanced Planning Agent round."""

@@ -11,15 +11,15 @@ model:
 agents:
   max_conversation_length: 7
   auto_approve_after_attempts: 4
-  code_timeout: 30  # seconds
+  code_timeout: 120  # seconds
   enable_planning_agent: false
   enable_code_execution: true
 
 # Experiment Configuration
 experiment:
-  hypothesis_mode: "direct hypothesis"  # generate, direct, direct hypothesis, csv_batch
+  hypothesis_mode: "csv_batch"  # generate, direct, direct hypothesis, csv_batch
   hypothesis: "Greater years of education are linked to lower dementia incidence (cognitive reserve)."
-  csv_file: ""  # Path to CSV file containing hypotheses (only needed for csv_batch mode)
+  csv_file: "/projectnb/vkolagrp/ketanss/adrd_agent_custom/DiscoADRD/DiscoAD_MAS/batch.csv"  # Path to CSV file containing hypotheses (only needed for csv_batch mode)
   num_keywords: 3
   num_sampling_runs: 10
   outer_loop_iterations: 2

@@ -53,23 +53,30 @@ def execute_code_from_response(code_executor: CodeExecutor, response: str) -> Un
             # Clean up the code block
             code_block = code_block.strip()
             
-            # Execute the code
-            result = code_executor.execute_code_block(code_block)
-            results.append(result)
-            
-            # Print execution result
-            if result["success"]:
-                if result["output"]:
-                    ui.print_info(f"✅ Code block {i + 1} executed successfully")
-                    ui.print_info(f"📊 Output: {result['output']}")
-                else:
-                    ui.print_info(f"✅ Code block {i + 1} executed successfully (no output)")
+            # Execute the code with robust exception handling
+            try:
+                result = code_executor.execute_code_block(code_block)
+                results.append(result)
                 
-                if result["error"]:
-                    ui.print_warning(f"⚠️ Code block {i + 1} had warnings: {result['error']}")
-            else:
-                ui.print_error(f"❌ Code block {i + 1} failed: {result['error']}")
-                return result["error"]  # Return error string for failed execution
+                # Print execution result
+                if result["success"]:
+                    if result["output"]:
+                        ui.print_info(f"✅ Code block {i + 1} executed successfully")
+                        ui.print_info(f"📊 Output: {result['output']}")
+                    else:
+                        ui.print_info(f"✅ Code block {i + 1} executed successfully (no output)")
+                    
+                    if result["error"]:
+                        ui.print_warning(f"⚠️ Code block {i + 1} had warnings: {result['error']}")
+                else:
+                    ui.print_error(f"❌ Code block {i + 1} failed: {result['error']}")
+                    return result["error"]  # Return error string for failed execution
+                    
+            except Exception as e:
+                # Handle unhandled exceptions that could terminate the session
+                error_msg = f"Code block {i + 1} execution failed with exception: {str(e)}"
+                ui.print_error(f"❌ {error_msg}")
+                return error_msg
         
         # Return the last successful result
         if results:

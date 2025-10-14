@@ -1,6 +1,1 @@
-# reduce columns as much as possible, 
-# maybe in next outer iteration, we can choose different columns based on insights
-# for each of the filtered columns, do some preprocessing for unknown values
-# instead of scientist critic loop, make it stage-wise, first stage is EDA and second is analysis
-# first stage and second stage could have different queries for the scientist and the critic
-# look into what types of analyses could be done
+# if there is an error in code, critic APPROVAL checks can be skipped
