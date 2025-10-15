@@ -263,8 +263,7 @@ class ExperimentRunner:
                     hypotheses = self.hypothesis_manager.set_direct_hypothesis(hypothesis_text)
                     ui.print_hypothesis_list(hypotheses, generated=False, verbose=verbose)
                     
-                    # Mark as processing in CSV
-                    self.hypothesis_manager.update_csv_status(self.config.csv_file, hypothesis_index, "processing")
+                    # Note: CSV status updates removed to preserve original batch.csv
                 else:  # "direct" mode
                     # Use sampled keywords directly as a single hypothesis
                     ui.print_info(f"📝 Using sampled keywords directly as hypothesis...", verbose=verbose)
@@ -283,34 +282,7 @@ class ExperimentRunner:
                         ui.print_error(f"❌ Hypothesis {idx} failed with exception: {str(e)}", "hypothesis_processing")
                         ui.print_info(f"🔄 Continuing with next hypothesis...", verbose=verbose)
                         
-                        # Mark hypothesis as failed in CSV if using CSV batch mode
-                        if self.config.hypothesis_mode == "csv_batch":
-                            try:
-                                hypotheses_data = self.hypothesis_manager.load_hypotheses_from_csv(self.config.csv_file)
-                                if hypotheses_data:
-                                    # Get start and end indices with proper null handling
-                                    start_index = getattr(self.config, 'start_index', None)
-                                    end_index = getattr(self.config, 'end_index', None)
-                                    
-                                    # Set defaults for null values
-                                    if start_index is None:
-                                        start_index = 0
-                                    if end_index is None:
-                                        end_index = len(hypotheses_data) - 1
-                                    
-                                    # Calculate the actual CSV row index (0-based)
-                                    csv_row_index = start_index + run_idx - 1
-                                    
-                                    if csv_row_index <= end_index and csv_row_index < len(hypotheses_data):
-                                        hypothesis_data = hypotheses_data[csv_row_index]
-                                        csv_hypothesis_index = hypothesis_data['index']
-                                        self.hypothesis_manager.update_csv_status(
-                                            self.config.csv_file, 
-                                            csv_hypothesis_index, 
-                                            "failed"
-                                        )
-                            except Exception as csv_error:
-                                ui.print_error(f"❌ Failed to update CSV status: {str(csv_error)}", "csv_update")
+                        # Note: CSV status updates removed to preserve original batch.csv
                         
                         # Continue to next hypothesis instead of terminating the job
                         continue
@@ -332,20 +304,7 @@ class ExperimentRunner:
                 ui.print_error(f"❌ Run {run_idx} failed with exception: {str(e)}", "run_processing")
                 ui.print_info(f"🔄 Continuing with next run...", verbose=verbose)
                 
-                # Mark hypothesis as failed in CSV if using CSV batch mode
-                if self.config.hypothesis_mode == "csv_batch":
-                    try:
-                        hypotheses_data = self.hypothesis_manager.load_hypotheses_from_csv(self.config.csv_file)
-                        if hypotheses_data and run_idx <= len(hypotheses_data):
-                            hypothesis_data = hypotheses_data[run_idx - 1]
-                            csv_hypothesis_index = hypothesis_data['index']
-                            self.hypothesis_manager.update_csv_status(
-                                self.config.csv_file, 
-                                csv_hypothesis_index, 
-                                "failed"
-                            )
-                    except Exception as csv_error:
-                        ui.print_error(f"❌ Failed to update CSV status: {str(csv_error)}", "csv_update")
+                # Note: CSV status updates removed to preserve original batch.csv
                 
                 # Continue to next run instead of terminating the job
                 continue
@@ -505,29 +464,7 @@ class ExperimentRunner:
             turns_to_approve=num_turns_to_approve
         )
         
-        # If using CSV batch mode, update the source CSV file with completion status
-        if self.config.hypothesis_mode == "csv_batch":
-            # Get the hypothesis data from CSV to find the correct index
-            hypotheses_data = self.hypothesis_manager.load_hypotheses_from_csv(self.config.csv_file)
-            if hypotheses_data and run_idx <= len(hypotheses_data):
-                hypothesis_data = hypotheses_data[run_idx - 1]
-                csv_hypothesis_index = hypothesis_data['index']
-                
-                # Update CSV with completion status and results
-                additional_data = {
-                    'approved': approved,
-                    'outer_iterations_used': total_outer_iterations,
-                    'inner_iterations_used': final_iteration_turns,
-                    'turns_to_approve': num_turns_to_approve if approved else None
-                }
-                
-                status = "done" if approved else "failed"
-                self.hypothesis_manager.update_csv_status(
-                    self.config.csv_file, 
-                    csv_hypothesis_index, 
-                    status, 
-                    additional_data
-                )
+        # Note: CSV batch mode no longer updates the source CSV file to preserve original data
         
         # Clean up working directory after each hypothesis (approved or not)
         ui.print_info(f"🧹 Cleaning up working directory after hypothesis {idx}...", verbose=verbose)
@@ -562,30 +499,7 @@ class ExperimentRunner:
             turns_to_approve=None
         )
         
-        # If using CSV batch mode, update the source CSV file
-        if self.config.hypothesis_mode == "csv_batch":
-            try:
-                hypotheses_data = self.hypothesis_manager.load_hypotheses_from_csv(self.config.csv_file)
-                if hypotheses_data and run_idx <= len(hypotheses_data):
-                    hypothesis_data = hypotheses_data[run_idx - 1]
-                    csv_hypothesis_index = hypothesis_data['index']
-                    
-                    # Update CSV with not verified status
-                    additional_data = {
-                        'outer_iterations_used': 0,
-                        'inner_iterations_used': 0,
-                        'turns_to_approve': None,
-                        'reason_for_rejection': 'No relevant variables found in dataset'
-                    }
-                    
-                    self.hypothesis_manager.update_csv_status(
-                        self.config.csv_file, 
-                        csv_hypothesis_index, 
-                        "not_verified", 
-                        additional_data
-                    )
-            except Exception as e:
-                ui.print_error(f"❌ Failed to update CSV status for not verified hypothesis: {str(e)}", "csv_update")
+        # Note: CSV status updates removed to preserve original batch.csv
         
         # Clean up working directory
         ui.print_info(f"🧹 Cleaning up working directory after marking hypothesis {idx} as not verified...", verbose=verbose)
