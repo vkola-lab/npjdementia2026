@@ -100,21 +100,31 @@ class ExperimentRunner:
                 ui.print_error("❌ No hypotheses found in CSV file.", "initialization")
                 return None, None, None, 0, 0
             
-            # Get start index (default to 1)
-            start_index = getattr(self.config, 'start_index', 1)
+            # Get start and end indices with proper null handling
+            start_index = getattr(self.config, 'start_index', None)
+            end_index = getattr(self.config, 'end_index', None)
+            
+            # Set defaults for null values
+            if start_index is None:
+                start_index = 0
+            if end_index is None:
+                end_index = len(hypotheses_data) - 1
             
             # Validate start index
-            if start_index < 1 or start_index > len(hypotheses_data):
-                ui.print_error(f"❌ Start index {start_index} is invalid. Must be between 1 and {len(hypotheses_data)}.", "initialization")
+            if start_index < 0 or start_index >= len(hypotheses_data):
+                ui.print_error(f"❌ Start index {start_index} is invalid. Must be between 0 and {len(hypotheses_data)-1}.", "initialization")
                 return None, None, None, 0, 0
             
-            # Calculate number of runs from start index to end
-            num_runs = len(hypotheses_data) - start_index + 1
+            # Validate end index
+            if end_index < start_index or end_index >= len(hypotheses_data):
+                ui.print_error(f"❌ End index {end_index} is invalid. Must be between {start_index} and {len(hypotheses_data)-1} (inclusive).", "initialization")
+                return None, None, None, 0, 0
             
-            if start_index > 1:
-                ui.print_info(f"📚 Found {len(hypotheses_data)} hypotheses in CSV file, starting from index {start_index} ({num_runs} runs)", verbose=verbose)
-            else:
-                ui.print_info(f"📚 Found {num_runs} hypotheses in CSV file", verbose=verbose)
+            # Calculate number of runs in the range
+            num_runs = end_index - start_index + 1
+            
+            # Show range information
+            ui.print_info(f"📚 Found {len(hypotheses_data)} hypotheses in CSV file, processing range {start_index} to {end_index} ({num_runs} runs)", verbose=verbose)
             return None, num_runs, verbose, 0, 0
         
         # Load ADRD keywords for generate/direct modes
@@ -226,19 +236,26 @@ class ExperimentRunner:
                         ui.print_error(f"❌ No hypotheses found in CSV file.", "csv_batch")
                         continue
                     
-                    # Get start index (default to 1)
-                    start_index = getattr(self.config, 'start_index', 1)
+                    # Get start and end indices with proper null handling
+                    start_index = getattr(self.config, 'start_index', None)
+                    end_index = getattr(self.config, 'end_index', None)
                     
-                    # Calculate the actual CSV row index (1-based)
+                    # Set defaults for null values
+                    if start_index is None:
+                        start_index = 0
+                    if end_index is None:
+                        end_index = len(hypotheses_data) - 1
+                    
+                    # Calculate the actual CSV row index (0-based)
                     csv_row_index = start_index + run_idx - 1
                     
-                    # Check if we have enough data
-                    if csv_row_index > len(hypotheses_data):
-                        ui.print_error(f"❌ No hypothesis found for run {run_idx} (CSV row {csv_row_index}) in CSV file.", "csv_batch")
+                    # Check if we have enough data and within range
+                    if csv_row_index > end_index or csv_row_index >= len(hypotheses_data):
+                        ui.print_error(f"❌ No hypothesis found for run {run_idx} (CSV row {csv_row_index}) in CSV file. Range is {start_index} to {end_index}.", "csv_batch")
                         continue
                     
-                    # Get the hypothesis for this run (convert to 0-based index for array access)
-                    hypothesis_data = hypotheses_data[csv_row_index - 1]
+                    # Get the hypothesis for this run (already 0-based index)
+                    hypothesis_data = hypotheses_data[csv_row_index]
                     hypothesis_text = hypothesis_data['hypothesis']
                     hypothesis_index = hypothesis_data['index']
                     
@@ -271,13 +288,21 @@ class ExperimentRunner:
                             try:
                                 hypotheses_data = self.hypothesis_manager.load_hypotheses_from_csv(self.config.csv_file)
                                 if hypotheses_data:
-                                    # Get start index (default to 1)
-                                    start_index = getattr(self.config, 'start_index', 1)
-                                    # Calculate the actual CSV row index (1-based)
+                                    # Get start and end indices with proper null handling
+                                    start_index = getattr(self.config, 'start_index', None)
+                                    end_index = getattr(self.config, 'end_index', None)
+                                    
+                                    # Set defaults for null values
+                                    if start_index is None:
+                                        start_index = 0
+                                    if end_index is None:
+                                        end_index = len(hypotheses_data) - 1
+                                    
+                                    # Calculate the actual CSV row index (0-based)
                                     csv_row_index = start_index + run_idx - 1
                                     
-                                    if csv_row_index <= len(hypotheses_data):
-                                        hypothesis_data = hypotheses_data[csv_row_index - 1]
+                                    if csv_row_index <= end_index and csv_row_index < len(hypotheses_data):
+                                        hypothesis_data = hypotheses_data[csv_row_index]
                                         csv_hypothesis_index = hypothesis_data['index']
                                         self.hypothesis_manager.update_csv_status(
                                             self.config.csv_file, 

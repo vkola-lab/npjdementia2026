@@ -36,7 +36,8 @@ class Config:
                           help='Override hypothesis mode from config')
         parser.add_argument('--hypothesis', type=str, help='Direct hypothesis to use when hypothesis-mode is "direct hypothesis"')
         parser.add_argument('--csv-file', type=str, help='CSV file path containing hypotheses when hypothesis-mode is "csv_batch"')
-        parser.add_argument('--start-index', type=int, help='Start processing CSV from this index (1-based) when hypothesis-mode is "csv_batch"')
+        parser.add_argument('--start-index', type=int, help='Start processing CSV from this index (0-based) when hypothesis-mode is "csv_batch"')
+        parser.add_argument('--end-index', type=int, help='End processing CSV at this index (0-based, inclusive) when hypothesis-mode is "csv_batch"')
         parser.add_argument('--dataset-folder', type=str, help='Override dataset folder from config')
         parser.add_argument('--verbose', action='store_true', help='Override verbose setting from config')
         parser.add_argument('--disable-planning-agent', action='store_true', help='Disable the planning agent (overrides config)')
@@ -126,10 +127,16 @@ class Config:
             self.yaml_config['experiment']['csv_file'] = args.csv_file
         
         # Override start index if provided
-        if args.start_index:
+        if args.start_index is not None:
             if 'experiment' not in self.yaml_config:
                 self.yaml_config['experiment'] = {}
             self.yaml_config['experiment']['start_index'] = args.start_index
+        
+        # Override end index if provided
+        if args.end_index is not None:
+            if 'experiment' not in self.yaml_config:
+                self.yaml_config['experiment'] = {}
+            self.yaml_config['experiment']['end_index'] = args.end_index
         
         # Override dataset folder if provided
         if args.dataset_folder:
@@ -170,7 +177,8 @@ class Config:
         self.hypothesis_mode = experiment_config.get('hypothesis_mode', 'generate')
         self.hypothesis = experiment_config.get('hypothesis', None)
         self.csv_file = experiment_config.get('csv_file', None)
-        self.start_index = experiment_config.get('start_index', 1)  # Default to 1 (first row)
+        self.start_index = experiment_config.get('start_index', None)  # Default to None (will be set to 0 in runner)
+        self.end_index = experiment_config.get('end_index', None)  # Default to None (will be set to len-1 in runner)
         self.num_keywords = experiment_config.get('num_keywords', 3)
         self.num_sampling_runs = experiment_config.get('num_sampling_runs', 10)
         self.outer_loop_iterations = experiment_config.get('outer_loop_iterations', 3)
@@ -209,8 +217,12 @@ class Config:
         print(f"   Hypothesis mode: {self.hypothesis_mode}")
         if self.hypothesis_mode == "direct hypothesis" and self.hypothesis:
             print(f"   Direct hypothesis: {self.hypothesis}")
-        if self.hypothesis_mode == "csv_batch" and self.start_index > 1:
-            print(f"   Start index: {self.start_index}")
+        if self.hypothesis_mode == "csv_batch":
+            if (self.start_index is not None and self.start_index > 0) or self.end_index is not None:
+                if self.end_index is not None:
+                    print(f"   Index range: {self.start_index} to {self.end_index}")
+                else:
+                    print(f"   Start index: {self.start_index}")
         print(f"   Keywords file: {self.keywords_file}")
         print(f"   Number of keywords per run: {self.num_keywords}")
         print(f"   Number of sampling runs: {self.num_sampling_runs}")
