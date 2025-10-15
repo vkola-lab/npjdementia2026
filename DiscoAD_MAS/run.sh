@@ -8,7 +8,7 @@
 #$ -l gpu_c=8.0
 #$ -l gpu_type=L40S
 #$ -l h_rt=48:00:00
-#$ -N discoAD
+#$ -N discoAD_with_planning
 #$ -j y
 #$ -m ea
 #$ -o /projectnb/vkolagrp/ketanss/adrd_agent_custom/DiscoADRD/DiscoAD_MAS/analysis/qsub_runs
@@ -24,7 +24,7 @@ HYPOTHESIS="APOE ε4 carriage increases risk for Alzheimer's disease across ethn
 # HYPOTHESIS="Greater years of education are linked to higher dementia incidence"
 CSV_FILE="/projectnb/vkolagrp/ketanss/adrd_agent_custom/DiscoADRD/DiscoAD_MAS/batch.csv"  # Path to CSV file containing hypotheses (only needed for csv_batch mode)
 START_INDEX=25  # Start processing CSV from this index (1-based, default: 1)
-DATASET_FOLDER="/projectnb/vkolagrp/ketanss/adrd_agent_custom/adrd_agent/datasets/NACC"
+DATASET_FOLDER="/projectnb/vkolagrp/ketanss/adrd_agent_custom/DiscoADRD/datasets/NACC"
 
 # Output verbosity control
 VERBOSE=true  # Set to "true" for detailed output, "false" for quiet mode
