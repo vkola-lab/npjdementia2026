@@ -18,7 +18,7 @@
 # ------------------------------------------------------------------------------
 
 # User input configuration - Edit these values for your specific analysis
-HYPOTHESIS_MODE="direct hypothesis"  # Options: "generate", "direct", "direct hypothesis", or "csv_batch"
+HYPOTHESIS_MODE="csv_batch"  # Options: "generate", "direct", "direct hypothesis", or "csv_batch"
 
 # ------------------------------------------------------------------------------
 # System Setup

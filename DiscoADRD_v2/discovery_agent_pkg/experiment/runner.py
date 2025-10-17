@@ -536,7 +536,7 @@ class ExperimentRunner:
         Returns:
             Tuple[str, Optional[int], int]: (status, turns_to_approve, turns_to_autoapprove)
         """
-        approved = "HYPOTHESIS NOT VERIFIED"
+        approved = None  # Start with None to indicate no decision yet
         num_turns_to_approve = None
         num_turns_to_autoapprove = self.config.auto_approve_after_attempts
                 
@@ -547,13 +547,13 @@ class ExperimentRunner:
         elif self.conversation_manager.get_turns() == 0 and self.enhanced_planning_agent is None:
             ui.print_info("📋 Planning Agent is disabled, skipping planning round...", verbose=verbose)
 
-        while not approved:
+        while approved is None:
             try:
                 ui.print_info(f"🔄 Conversation turn {self.conversation_manager.get_turns() + 1}", verbose=verbose)
                 
                 if self.conversation_manager.should_auto_approve():
                     ui.print_warning(f"⚠️ Maximum attempts reached. Results not approved.", verbose=verbose)
-                    approved = False # anyways by default
+                    approved = "HYPOTHESIS NOT VERIFIED"  # Default to not verified when max attempts reached
                     break
 
                 ui.print_info("🧪 Starting Scientist round...", verbose=verbose)
@@ -567,27 +567,33 @@ class ExperimentRunner:
                     ui.print_warning("⚠️ Scientist code execution failed. Running Critic with debugging query...", verbose=verbose)
                     
                     # Run Critic with a specialized debugging query
-                    approved = self.critic_debugging_round(verbose=verbose)
+                    critic_status = self.critic_debugging_round(verbose=verbose)
                 else:
                     ui.print_info("🔍 Starting Critic round...", verbose=verbose)
-                    approved = self.critic_round(verbose=verbose)
+                    critic_status = self.critic_round(verbose=verbose)
 
                 self.conversation_manager.increment_turns()
-                ui.print_info(f"✅ Turn {self.conversation_manager.get_turns()} completed. Status: {approved}", verbose=verbose)
+                ui.print_info(f"✅ Turn {self.conversation_manager.get_turns()} completed. Status: {critic_status}", verbose=verbose)
                 
                 # Check if we should break the loop based on the status
-                if approved == "HYPOTHESIS VERIFIED":
+                if critic_status == "HYPOTHESIS VERIFIED":
+                    approved = critic_status
                     break
-                elif approved == "NOT APPLICABLE":
+                elif critic_status == "NOT APPLICABLE":
                     # For NOT APPLICABLE, we should also break as there's no point continuing
+                    approved = critic_status
                     break
-                # For HYPOTHESIS NOT VERIFIED, continue the loop
+                # For HYPOTHESIS NOT VERIFIED, continue the loop (keep approved = None)
                 
             except Exception as e:
                 ui.print_error(f"Conversation loop error: {str(e)}", "conversation loop", verbose=verbose)
                 ui.print_info("🔄 Attempting to continue with next iteration...", verbose=verbose)
                 # Don't break - try to continue the conversation
                 continue
+        
+        # If no decision was made, default to not verified
+        if approved is None:
+            approved = "HYPOTHESIS NOT VERIFIED"
         
         # If approved, capture the number of turns
         if approved == "HYPOTHESIS VERIFIED":
