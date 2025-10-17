@@ -1,0 +1,43 @@
+# Discovery Agent Configuration File
+# This file contains system settings and defaults for the Discovery Agent
+
+# Model Configuration
+model:
+  name: "Qwen/Qwen3-4B-Instruct-2507"
+  device: "auto"  # auto, cuda, cpu
+  max_tokens: 16384
+
+# Agent Configuration
+agents:
+  max_conversation_length: 7
+  auto_approve_after_attempts: 4
+  code_timeout: 120  # seconds
+  enable_planning_agent: true
+  enable_code_execution: true
+
+# Experiment Configuration
+experiment:
+  hypothesis_mode: "csv_batch"  # generate, direct, direct hypothesis, csv_batch
+  hypothesis: "Humans evolved from apes"
+  csv_file: "/projectnb/vkolagrp/ketanss/adrd_agent_custom/DiscoADRD/DiscoADRD_v2/batch.csv"  # Path to CSV file containing hypotheses (only needed for csv_batch mode)
+  start_index: 2  # Start processing CSV from this index (0-based, default: 0)
+  end_index: 5  # End processing CSV at this index (0-based, inclusive, default: len-1)
+  num_keywords: 3
+  num_sampling_runs: 10
+  outer_loop_iterations: 2
+
+# File Paths
+paths:
+  keywords_file: "adrd_keywords.txt"
+  dataset_folder: "/projectnb/vkolagrp/ketanss/adrd_agent_custom/DiscoADRD/datasets/NACC"  # Path to dataset folder
+  analysis_dir: "analysis"
+  responses_dir: "analysis/responses"
+  results_dir: "analysis/results"
+  qsub_runs_dir: "analysis/qsub_runs"
+  working_dir: "working"
+
+# Output Configuration
+output:
+  verbose: true
+  save_responses: true
+  save_results: true
