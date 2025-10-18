@@ -44,10 +44,9 @@ class ModelClient:
                 trust_remote_code=True
             )
             
-            # Move model to device if needed
-            if self.device != "cuda" or "auto" not in str(self.model.device):
-                print(f"🔄 Moving model to {self.device}...")
-                self.model.to(self.device)
+            # Move model to device in all cases
+            print(f"🔄 Moving model to {self.device}...")
+            self.model.to(self.device)
             
             print("✅ Model loaded successfully")
             logger.info("Model client initialized successfully")
@@ -64,12 +63,14 @@ class ModelClient:
             try:
                 logger.info(f"Generating response (attempt {attempt + 1}/{max_retries})")
                 
-                formatted_msgs = []
-                for message in messages:
-                    formatted_msgs.append({
-                        "role": message["role"],
-                        "content": message["content"]
-                    })
+                # formatted_msgs = []
+                # for message in messages:
+                #     formatted_msgs.append({
+                #         "role": message["role"],
+                #         "content": message["content"]
+                #     })
+
+                formatted_msgs = messages
                 
                 # Apply chat template with error handling
                 try:
@@ -136,7 +137,7 @@ class ModelClient:
                     time.sleep(1)
                     continue
                 else:
-                    raise RuntimeError(f"Generation failed after {max_retries} attempts: {e}") from e
+                    raise RuntimeError(f"Generation failed on {attempt}: {e}") from e 
         
         raise RuntimeError("All generation attempts failed")
 
