@@ -46,6 +46,8 @@ def create_critic(model_client) -> Agent:
         "\nReply with 'HYPOTHESIS VERIFIED' ONLY if: (1) the analysis provides reasonable evidence supporting the hypothesis, (2) the code is correct and functional, AND (3) the results actually align with the stated hypothesis direction. "
         "\nReply with 'HYPOTHESIS NOT VERIFIED' if there are code errors, incorrect results, fundamental methodological flaws, OR if results contradict the hypothesis direction - but always include constructive feedback on how to improve. "
         "\nReply with 'NOT APPLICABLE' if the dataset limitations prevent meaningful hypothesis testing - explain the specific limitations found. "
+        "\nThese data limitations could be in the form of no or too little relevant variables selected or not enough samples in the data that contain the relevant data or data combinations. "
+        "\nIf the hypothesis is NOT APPLICABLE, output 'NOT APPLICABLE' and terminate. "
         "\nRemember: be supportive of reasonable scientific approaches but strict about code correctness, result validity, and hypothesis alignment. Always provide actionable feedback to help improve the work. "
     )
     return Agent(

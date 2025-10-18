@@ -25,7 +25,7 @@ HYPOTHESIS_MODE="csv_batch"  # Options: "generate", "direct", "direct hypothesis
 # ------------------------------------------------------------------------------
 
 # Change to the DiscoADRD_v2 directory
-cd /projectnb/vkolagrp/ketanss/adrd_agent_custom/DiscoADRD/DiscoADRD_v2
+cd /projectnb/vkolagrp/kelzokm/DiscoADRD/DiscoADRD_v2
 
 # nvidia-smi
 module load miniconda
@@ -47,7 +47,9 @@ echo "=========================================="
 
 # Run the discovery agent
 python discover.py \
-    --hypothesis-mode "$HYPOTHESIS_MODE"
+    --hypothesis-mode "direct hypothesis" \
+    --hypothesis "The Sun is blue." \
+
 
 echo "✅ Completed run"
 echo "🎉 All runs completed!"
