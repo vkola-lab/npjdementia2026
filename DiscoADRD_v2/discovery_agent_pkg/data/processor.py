@@ -41,7 +41,6 @@ except ImportError:
             except (ValueError, TypeError):
                 return False
 
-
 def query_llm_for_variable_selection(model_client: ModelClient, hypothesis: str, data_cache: DataCache) -> List[str]:
     """
     Query an LLM to filter columns and return relevant variable names.
@@ -54,7 +53,7 @@ def query_llm_for_variable_selection(model_client: ModelClient, hypothesis: str,
     Returns:
         List[str]: List of selected variable names, or empty list if no relevant variables found
     """
-    ui.print_info(f"🔍 Querying LLM for variable selection...")
+    ui.print_info(f":mag: Querying LLM for variable selection...")
     
     # Get the JSON dictionary from cache
     dictionary = data_cache.get_json_dictionary()
@@ -71,14 +70,20 @@ def query_llm_for_variable_selection(model_client: ModelClient, hypothesis: str,
         
         if has_range and has_categorical:
             var_type = "Mixed (numerical with special codes)"
+            # Get categorical value descriptions (excluding 'range')
+            cat_values = [values[k] for k in values.keys() if k != 'range']
+            var_type_str = f"{var_type}: {', '.join(cat_values)}"
         elif has_range:
-            var_type = "Numerical"
+            var_type_str = "Numerical"
         elif has_categorical:
-            var_type = "Categorical"
+            var_type_str = "Categorical"
+            # Get categorical value descriptions
+            cat_values = list(values.values())
+            var_type_str = f"{var_type_str}: {', '.join(cat_values)}"
         else:
-            var_type = "Unknown"
-        
-        variables_info.append(f"• {var_name}: {description} [{var_type}]")
+            var_type_str = "Unknown"
+
+        variables_info.append(f"• {var_name}: {description} [{var_type_str}]")
     
     variables_text = "\n".join(variables_info)
     
@@ -92,9 +97,11 @@ Available variables:
 
 Please select the most relevant variables for this hypothesis. Focus on:
 1. Variables directly related to the hypothesis
-2. Essential demographic/control variables (age, sex, education)
-3. Key medical/clinical variables
-4. Avoid redundant or highly correlated variables
+2. Essential demographic/control variables (age, sex, race, education, etc.)
+3. Key medical/clinical variables mentioned or implied in the hypothesis
+4. Variables needed to define comparison groups or subgroups
+5. Ensure coverage of all key terms in the hypothesis. If a key term is a subgroup/category, include the variable that holds that category. If a term could belong to multiple parents, include both parents unless metadata clearly indicates one.
+6. Avoid redundant or highly correlated variables only when they provide the same information
 
 Provide your response as a Python list of variable names:
 variable_names = ["VAR1", "VAR2", "VAR3", ...]
@@ -109,11 +116,14 @@ Aim for 10-20 variables maximum for a focused analysis."""
     # Parse the response to extract variable names
     variable_names = []
     
-    # Try to extract from Python list format
+    # Try to extract from Python list format - parsing from the end
     python_list_pattern = r'variable_names\s*=\s*\[(.*?)\]'
-    python_list_match = re.search(python_list_pattern, response, re.DOTALL)
-    
-    if python_list_match:
+    # Find all matches
+    all_matches = list(re.finditer(python_list_pattern, response, re.DOTALL))
+
+    # Take the last match if any exist
+    if all_matches:
+        python_list_match = all_matches[-1]  # Get the last occurrence
         try:
             list_content = python_list_match.group(1)
             # Extract quoted strings
@@ -137,9 +147,8 @@ Aim for 10-20 variables maximum for a focused analysis."""
     # Remove duplicates while preserving order
     variable_names = list(dict.fromkeys(variable_names))
     
-    ui.print_info(f"🎯 Selected {len(variable_names)} variables: {variable_names}")
+    ui.print_info(f":dart: Selected {len(variable_names)} variables: {variable_names}")
     return variable_names
-
 
 def replace_unknown_values_with_nan(df: pd.DataFrame, data_cache: DataCache) -> pd.DataFrame:
     """
