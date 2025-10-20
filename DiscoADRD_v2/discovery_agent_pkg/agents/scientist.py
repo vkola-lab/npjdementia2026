@@ -26,6 +26,7 @@ def create_scientist(model_client) -> Agent:
         "\n\nCRITICAL: Always remove NaN values before performing any statistical tests or analyses. "
         "\nUse .dropna() or .dropna(subset=[column_names]) to remove missing values for the specific variables being analyzed. "
         "\nThis ensures accurate statistical results and prevents errors in calculations. "
+        "\nAdditionally, always check if there are enough cases to make a statistically significant analysis. "
         "\n\nSTATISTICAL ANALYSIS CAPABILITIES: "
         "\nYou have access to comprehensive statistical analysis tools. Use these methods as appropriate: "
         "\n\nDESCRIPTIVE STATISTICS: "
