@@ -79,6 +79,7 @@ class Config:
                 'client_type': 'vllm',
                 'device': 'auto',
                 'max_tokens': 16384,
+                'max_model_len': 32768,
                 'vllm_env': {
                     'VLLM_USE_TRITON_FLASH_ATTN': '1'
                 }
@@ -173,6 +174,7 @@ class Config:
         self.model_name = model_config.get('name', 'Qwen/Qwen3-4B-Instruct-2507')
         self.device = model_config.get('device', 'auto')
         self.max_new_tokens = model_config.get('max_tokens', 8192)
+        self.max_model_len = model_config.get('max_model_len', 32768)  # Default context length
         self.model_client_type = model_config.get('client_type', 'vllm')  # Default to vLLM
         self.vllm_env = model_config.get('vllm_env', {})  # vLLM environment variables
         
@@ -225,6 +227,7 @@ class Config:
         print(f"   Model client: {self.model_client_type}")
         print(f"   Device: {self.device}")
         print(f"   Max tokens: {self.max_new_tokens}")
+        print(f"   Max model length: {self.max_model_len}")
         print(f"   Code timeout: {self.code_timeout}s")
         print(f"   Planning agent: {'enabled' if self.enable_planning_agent else 'disabled'}")
         print(f"   Hypothesis mode: {self.hypothesis_mode}")

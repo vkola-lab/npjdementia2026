@@ -23,7 +23,7 @@ os.environ["VLLM_USE_TRITON_FLASH_ATTN"] = "1"  # Enable Flash Attention for spe
 from vllm import LLM, SamplingParams
 
 # Configuration
-MODEL_NAME = "Qwen/Qwen2.5-32B-Instruct"
+MODEL_NAME = "Qwen/Qwen3-4B-Instruct-2507"
 PROMPT = "Write an essay on the topic of AI and its impact on society in 2000 words."
 MAX_TOKENS = 2000
 TEMPERATURE = 0.7

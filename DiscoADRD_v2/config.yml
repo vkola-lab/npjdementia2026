@@ -7,7 +7,7 @@ model:
   client_type: "vllm"  # vllm, hf (HuggingFace)
   device: "auto"  # auto, cuda, cpu
   max_tokens: 16384
-  max_model_len: 32768  # Maximum context length for vLLM
+  max_model_len: 224848  # Maximum context length for vLLM
   # vLLM Environment Variables
   vllm_env:
     VLLM_USE_TRITON_FLASH_ATTN: "1"  # Enable Flash Attention for speed

@@ -32,11 +32,13 @@ class ModelClient:
             self.model_name = "Qwen/Qwen2.5-32B-Instruct"
             self.device = "cuda" if torch.cuda.is_available() else "cpu"
             self.max_new_tokens = 8192
+            self.max_model_len = 262144
             vllm_env = {"VLLM_USE_TRITON_FLASH_ATTN": "1"}
         else:
             self.model_name = config.model_name
             self.device = config.device if config.device != "auto" else ("cuda" if torch.cuda.is_available() else "cpu")
             self.max_new_tokens = config.max_new_tokens
+            self.max_model_len = config.max_model_len
             vllm_env = getattr(config, 'vllm_env', {"VLLM_USE_TRITON_FLASH_ATTN": "1"})
         
         # Set vLLM environment variables from config
@@ -64,11 +66,15 @@ class ModelClient:
                 model=self.model_name,
                 tensor_parallel_size=tensor_parallel_size,
                 gpu_memory_utilization=0.9,  # Use most of GPU memory
-                max_model_len=60000,  # Reasonable context length
+                max_model_len=self.max_model_len,  # Reasonable context length
                 trust_remote_code=True,
             )
             
             print("✅ vLLM model loaded successfully")
+            
+            # Display model information
+            self._display_model_info()
+            
             logger.info("vLLM client initialized successfully")
             
         except Exception as e:
@@ -77,9 +83,58 @@ class ModelClient:
             logger.error(error_msg)
             raise RuntimeError(error_msg) from e
     
+    def _display_model_info(self):
+        """Display model context length and other relevant information."""
+        try:
+            # Get model config from vLLM engine
+            engine = self.llm.llm_engine
+            model_config = engine.model_config
+            
+            # Try to get max context length from various sources
+            max_length = None
+            
+            # Check vLLM's max_model_len setting
+            if hasattr(engine, 'max_model_len'):
+                max_length = engine.max_model_len
+            
+            # Check model config attributes
+            if max_length is None and hasattr(model_config, 'max_model_len'):
+                max_length = model_config.max_model_len
+            elif max_length is None and hasattr(model_config, 'max_position_embeddings'):
+                max_length = model_config.max_position_embeddings
+            elif max_length is None and hasattr(model_config, 'n_positions'):
+                max_length = model_config.n_positions
+            elif max_length is None and hasattr(model_config, 'max_sequence_length'):
+                max_length = model_config.max_sequence_length
+            
+            # Get tensor parallel info
+            tensor_parallel_size = getattr(engine, 'tensor_parallel_size', 1)
+            available_gpus = torch.cuda.device_count() if torch.cuda.is_available() else 0
+            
+            print(f"📏 Model context length: {max_length if max_length else 'Unknown'}")
+            print(f"🔧 Model name: {self.model_name}")
+            print(f"💾 Device: {self.device}")
+            print(f"🎯 Max new tokens: {self.max_new_tokens}")
+            print(f"🚀 Tensor parallel size: {tensor_parallel_size}")
+            print(f"🖥️ Available GPUs: {available_gpus}")
+            
+            # Show available config attributes for debugging
+            if max_length is None:
+                print("🔍 Available model config attributes:")
+                for attr in dir(model_config):
+                    if not attr.startswith('_') and 'length' in attr.lower():
+                        try:
+                            value = getattr(model_config, attr)
+                            print(f"   - {attr}: {value}")
+                        except:
+                            pass
+                            
+        except Exception as e:
+            print(f"⚠️ Could not determine model context length: {e}")
+    
     def generate(self, messages: List[Dict[str, Any]], max_retries: int = 3) -> str:
         """
-        Generate text response from messages with retry mechanism.
+        Generate text response from messages using vLLM's native chat() method.
         
         Args:
             messages: List of message dictionaries with 'role' and 'content' keys
@@ -88,15 +143,6 @@ class ModelClient:
         Returns:
             Generated text response
         """
-        def format_messages_as_prompt(msgs: List[Dict[str, Any]]) -> str:
-            """Format messages as a simple role-tagged prompt."""
-            transcript = []
-            for m in msgs:
-                role = m.get("role", "user")
-                content = m.get("content", "")
-                transcript.append(f"<{role}>\n{content}\n</{role}>")
-            return "\n\n".join(transcript)
-        
         # Configure sampling parameters
         sampling_params = SamplingParams(
             temperature=0.7,
@@ -105,15 +151,13 @@ class ModelClient:
             max_tokens=self.max_new_tokens,
         )
         
-        prompt = format_messages_as_prompt(messages)
-        
         for attempt in range(max_retries):
             try:
-                logger.info(f"Generating response with vLLM (attempt {attempt + 1}/{max_retries})")
+                logger.info(f"Generating response with vLLM chat() (attempt {attempt + 1}/{max_retries})")
                 start_time = time.time()
                 
-                # Generate using vLLM
-                outputs = self.llm.generate(prompt, sampling_params)
+                # Use vLLM's native chat method
+                outputs = self.llm.chat(messages, sampling_params=sampling_params)
                 
                 generation_time = time.time() - start_time
                 logger.info(f"Generation completed in {generation_time:.2f} seconds")

@@ -50,6 +50,10 @@ class ModelClient:
                 self.model.to(self.device)
             
             print("✅ Model loaded successfully")
+            
+            # Display model context length information
+            self._display_model_info()
+            
             logger.info("Model client initialized successfully")
             
         except Exception as e:
@@ -57,6 +61,49 @@ class ModelClient:
             print(f"❌ {error_msg}")
             logger.error(error_msg)
             raise RuntimeError(error_msg) from e
+    
+    def _display_model_info(self):
+        """Display model context length and other relevant information."""
+        try:
+            # Get model config
+            config = self.model.config
+            
+            # Try to get max position embeddings (most common attribute)
+            max_length = None
+            if hasattr(config, 'max_position_embeddings'):
+                max_length = config.max_position_embeddings
+            elif hasattr(config, 'n_positions'):
+                max_length = config.n_positions
+            elif hasattr(config, 'max_sequence_length'):
+                max_length = config.max_sequence_length
+            elif hasattr(config, 'context_length'):
+                max_length = config.context_length
+            
+            # Try to get from tokenizer if model config doesn't have it
+            if max_length is None:
+                if hasattr(self.tokenizer, 'model_max_length'):
+                    max_length = self.tokenizer.model_max_length
+                elif hasattr(self.tokenizer, 'max_len'):
+                    max_length = self.tokenizer.max_len
+            
+            print(f"📏 Model context length: {max_length if max_length else 'Unknown'}")
+            print(f"🔧 Model name: {self.model_name}")
+            print(f"💾 Device: {self.device}")
+            print(f"🎯 Max new tokens: {self.max_new_tokens}")
+            
+            # Show available config attributes for debugging
+            if max_length is None:
+                print("🔍 Available config attributes:")
+                for attr in dir(config):
+                    if not attr.startswith('_') and 'length' in attr.lower():
+                        try:
+                            value = getattr(config, attr)
+                            print(f"   - {attr}: {value}")
+                        except:
+                            pass
+                            
+        except Exception as e:
+            print(f"⚠️ Could not determine model context length: {e}")
     
     def generate(self, messages: List[Dict[str, Any]], max_retries: int = 3) -> str:
         """Generate text response from messages with retry mechanism."""
@@ -80,6 +127,10 @@ class ModelClient:
                         return_dict=True,
                         return_tensors="pt",
                     ).to(self.model.device)
+                    
+                    # Count tokens in the input
+                    input_token_count = inputs["input_ids"].shape[-1]
+                    print(f"📊 Input contains {input_token_count} tokens")
                 except Exception as e:
                     logger.warning(f"Chat template failed, using simple format: {e}")
                     # Fallback to simple format
@@ -92,6 +143,10 @@ class ModelClient:
                         truncation=True,
                         max_length=min(4096, self.max_new_tokens * 2)  # Allow input to be up to 2x max_new_tokens, capped at 4096
                     ).to(self.model.device)
+                    
+                    # Count tokens in the input (fallback case)
+                    input_token_count = inputs["input_ids"].shape[-1]
+                    print(f"📊 Input contains {input_token_count} tokens")
                 
                 # Generate with timeout handling
                 start_time = time.time()
