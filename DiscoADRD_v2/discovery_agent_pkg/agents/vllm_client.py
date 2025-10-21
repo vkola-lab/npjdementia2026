@@ -39,6 +39,7 @@ class ModelClient:
             self.device = config.device if config.device != "auto" else ("cuda" if torch.cuda.is_available() else "cpu")
             self.max_new_tokens = config.max_new_tokens
             self.max_model_len = config.max_model_len
+            self.seed = getattr(config, 'seed', 42)  # Get seed from config
             vllm_env = getattr(config, 'vllm_env', {"VLLM_USE_TRITON_FLASH_ATTN": "1"})
         
         # Set vLLM environment variables from config
@@ -213,12 +214,10 @@ class ModelClient:
         Returns:
             Generated text response
         """
-        # Configure sampling parameters
+        # Configure sampling parameters for deterministic generation
         sampling_params = SamplingParams(
-            temperature=0.7,
-            top_p=0.9,
-            repetition_penalty=1.1,
             max_tokens=self.max_new_tokens,
+            seed=getattr(self, 'seed', 42),  # Use seed from config, default to 42
         )
         
         for attempt in range(max_retries):

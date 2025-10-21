@@ -176,6 +176,7 @@ class Config:
         self.max_new_tokens = model_config.get('max_tokens', 8192)
         self.max_model_len = model_config.get('max_model_len', 32768)  # Default context length
         self.model_client_type = model_config.get('client_type', 'vllm')  # Default to vLLM
+        self.seed = model_config.get('seed', 42)  # Default seed for deterministic generation
         self.vllm_env = model_config.get('vllm_env', {})  # vLLM environment variables
         
         # Agent settings
@@ -228,6 +229,7 @@ class Config:
         print(f"   Device: {self.device}")
         print(f"   Max tokens: {self.max_new_tokens}")
         print(f"   Max model length: {self.max_model_len}")
+        print(f"   Seed: {self.seed} (deterministic generation)")
         print(f"   Code timeout: {self.code_timeout}s")
         print(f"   Planning agent: {'enabled' if self.enable_planning_agent else 'disabled'}")
         print(f"   Hypothesis mode: {self.hypothesis_mode}")
