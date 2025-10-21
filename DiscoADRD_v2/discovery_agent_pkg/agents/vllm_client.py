@@ -118,6 +118,9 @@ class ModelClient:
             print(f"🚀 Tensor parallel size: {tensor_parallel_size}")
             print(f"🖥️ Available GPUs: {available_gpus}")
             
+            # Display detailed GPU information
+            self._display_gpu_info()
+            
             # Show available config attributes for debugging
             if max_length is None:
                 print("🔍 Available model config attributes:")
@@ -131,6 +134,73 @@ class ModelClient:
                             
         except Exception as e:
             print(f"⚠️ Could not determine model context length: {e}")
+    
+    def _display_gpu_info(self):
+        """Display detailed GPU memory and utilization information."""
+        try:
+            if not torch.cuda.is_available():
+                print("🔍 GPU Info: CUDA not available")
+                return
+            
+            available_gpus = torch.cuda.device_count()
+            print(f"\n🔍 GPU DETAILED INFORMATION:")
+            print(f"  📊 Total GPUs: {available_gpus}")
+            
+            for i in range(available_gpus):
+                # Get GPU properties
+                props = torch.cuda.get_device_properties(i)
+                
+                # Get memory info
+                total_memory = props.total_memory
+                allocated_memory = torch.cuda.memory_allocated(i)
+                cached_memory = torch.cuda.memory_reserved(i)
+                free_memory = total_memory - allocated_memory
+                
+                # Convert to GB
+                total_gb = total_memory / (1024**3)
+                allocated_gb = allocated_memory / (1024**3)
+                cached_gb = cached_memory / (1024**3)
+                free_gb = free_memory / (1024**3)
+                
+                # Calculate utilization percentages
+                allocated_pct = (allocated_memory / total_memory) * 100
+                cached_pct = (cached_memory / total_memory) * 100
+                free_pct = (free_memory / total_memory) * 100
+                
+                print(f"  🎮 GPU {i} ({props.name}):")
+                print(f"    💾 Total Memory: {total_gb:.2f} GB")
+                print(f"    📈 Allocated: {allocated_gb:.2f} GB ({allocated_pct:.1f}%)")
+                print(f"    🗂️  Cached: {cached_gb:.2f} GB ({cached_pct:.1f}%)")
+                print(f"    🆓 Free: {free_gb:.2f} GB ({free_pct:.1f}%)")
+                print(f"    🔧 Compute Capability: {props.major}.{props.minor}")
+                print(f"    🧮 Multiprocessors: {props.multi_processor_count}")
+                print(f"    ⚡ Max Threads per Block: {props.max_threads_per_block}")
+                print(f"    📏 Max Threads per Multiprocessor: {props.max_threads_per_multiprocessor}")
+                
+                # Show current GPU utilization if available
+                try:
+                    import pynvml
+                    pynvml.nvmlInit()
+                    handle = pynvml.nvmlDeviceGetHandleByIndex(i)
+                    utilization = pynvml.nvmlDeviceGetUtilizationRates(handle)
+                    temperature = pynvml.nvmlDeviceGetTemperature(handle, pynvml.NVML_TEMPERATURE_GPU)
+                    power_usage = pynvml.nvmlDeviceGetPowerUsage(handle) / 1000.0  # Convert to watts
+                    power_limit = pynvml.nvmlDeviceGetPowerManagementLimitConstraints(handle)[1] / 1000.0
+                    
+                    print(f"    📊 GPU Utilization: {utilization.gpu}%")
+                    print(f"    🧠 Memory Utilization: {utilization.memory}%")
+                    print(f"    🌡️  Temperature: {temperature}°C")
+                    print(f"    ⚡ Power Usage: {power_usage:.1f}W / {power_limit:.1f}W")
+                    
+                except ImportError:
+                    print(f"    ℹ️  Install pynvml for detailed GPU monitoring")
+                except Exception as e:
+                    print(f"    ⚠️  Could not get GPU utilization: {e}")
+                
+                print()  # Empty line for readability
+                
+        except Exception as e:
+            print(f"⚠️ Could not get GPU information: {e}")
     
     def generate(self, messages: List[Dict[str, Any]], max_retries: int = 3) -> str:
         """
