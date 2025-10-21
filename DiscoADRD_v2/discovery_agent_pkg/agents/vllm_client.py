@@ -41,8 +41,10 @@ class ModelClient:
             self.max_model_len = config.max_model_len
             self.seed = getattr(config, 'seed', 42)  # Get seed from config
             vllm_env = getattr(config, 'vllm_env', {"VLLM_USE_TRITON_FLASH_ATTN": "1"})
-        
-        # Set vLLM environment variables from config
+            self.sampling_params = SamplingParams(
+                max_tokens=self.max_new_tokens,
+                seed=self.seed,
+            )
         for key, value in vllm_env.items():
             os.environ[key] = str(value)
             logger.info(f"Set vLLM environment variable: {key}={value}")
@@ -214,11 +216,7 @@ class ModelClient:
         Returns:
             Generated text response
         """
-        # Configure sampling parameters for deterministic generation
-        sampling_params = SamplingParams(
-            max_tokens=self.max_new_tokens,
-            seed=getattr(self, 'seed', 42),  # Use seed from config, default to 42
-        )
+
         
         for attempt in range(max_retries):
             try:
@@ -226,7 +224,7 @@ class ModelClient:
                 start_time = time.time()
                 
                 # Use vLLM's native chat method
-                outputs = self.llm.chat(messages, sampling_params=sampling_params)
+                outputs = self.llm.chat(messages, sampling_params=self.sampling_params)
                 
                 generation_time = time.time() - start_time
                 logger.info(f"Generation completed in {generation_time:.2f} seconds")

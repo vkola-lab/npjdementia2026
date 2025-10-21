@@ -8,7 +8,7 @@ model:
   device: "auto"  # auto, cuda, cpu
   max_tokens: 16384
   max_model_len: 224848  # Maximum context length for vLLM
-  seed: 42  # Fixed seed for deterministic/reproducible generation
+  seed: 41 # Fixed seed for deterministic/reproducible generation
   # vLLM Environment Variables
   vllm_env:
     VLLM_USE_TRITON_FLASH_ATTN: "1"  # Enable Flash Attention for speed
