@@ -326,6 +326,9 @@ class ExperimentRunner:
         Returns:
             str: Status of hypothesis ("HYPOTHESIS VERIFIED", "HYPOTHESIS NOT VERIFIED", "NOT APPLICABLE")
         """
+        import time
+        start_time = time.time()
+        
         ui.print_progress(idx, len(self.hypothesis_manager.get_hypotheses()), verbose=verbose)
         ui.print_separator(verbose=verbose)
         ui.print_info(f"🔍 Working on hypothesis {idx}: {hypothesis}", verbose=verbose)
@@ -451,6 +454,10 @@ class ExperimentRunner:
         
         ui.print_approval_status(approved, verbose=verbose)
         
+        # Calculate execution time
+        end_time = time.time()
+        execution_time = end_time - start_time
+        
         # Write CSV entry for this hypothesis (only once, after all outer loop iterations are complete)
         # For CSV batch mode, use category as keywords if available
         tracking_keywords = sampled_keywords
@@ -473,7 +480,8 @@ class ExperimentRunner:
             outer_iterations_used=total_outer_iterations,  # This will be the final iteration number
             inner_iterations_used=final_iteration_turns,
             hypothesis_approved=approved,
-            turns_to_approve=num_turns_to_approve
+            turns_to_approve=num_turns_to_approve,
+            execution_time_seconds=execution_time
         )
         
         # Note: CSV batch mode no longer updates the source CSV file to preserve original data
@@ -497,7 +505,14 @@ class ExperimentRunner:
         Returns:
             str: Always returns "NOT APPLICABLE"
         """
+        import time
+        start_time = time.time()
+        
         ui.print_info(f"📝 Marking hypothesis {idx} as not applicable due to no relevant variables...", verbose=verbose)
+        
+        # Calculate execution time (minimal time for this case)
+        end_time = time.time()
+        execution_time = end_time - start_time
         
         # Record in CSV tracking file
         self.file_manager.write_csv_entry(
@@ -508,7 +523,8 @@ class ExperimentRunner:
             outer_iterations_used=0,  # No iterations used
             inner_iterations_used=0,  # No iterations used
             hypothesis_approved="NOT APPLICABLE",
-            turns_to_approve=None
+            turns_to_approve=None,
+            execution_time_seconds=execution_time
         )
         
         # Note: CSV status updates removed to preserve original batch.csv

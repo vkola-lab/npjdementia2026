@@ -132,7 +132,7 @@ class FileManager:
             fieldnames = [
                 'run_number', 'keywords', 'hypothesis_index', 'hypothesis_text', 
                 'hypothesis_approved', 'outer_iterations_used', 'inner_iterations_used', 
-                'turns_to_approve', 'max_outer_iterations', 'max_inner_iterations', 'timestamp'
+                'turns_to_approve', 'max_outer_iterations', 'max_inner_iterations', 'timestamp', 'execution_time_seconds'
             ]
             writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
             writer.writeheader()
@@ -141,7 +141,8 @@ class FileManager:
     
     def write_csv_entry(self, run_number: int, keywords: list, hypothesis_index: int, 
                        hypothesis_text: str, outer_iterations_used: int, inner_iterations_used: int, 
-                       hypothesis_approved: str, turns_to_approve: Optional[int] = None) -> None:
+                       hypothesis_approved: str, turns_to_approve: Optional[int] = None, 
+                       execution_time_seconds: Optional[float] = None) -> None:
         """
         Write an entry to the CSV tracking file for individual hypothesis.
         
@@ -154,6 +155,7 @@ class FileManager:
             inner_iterations_used (int): Number of inner iterations used
             hypothesis_approved (str): Status of hypothesis ("HYPOTHESIS VERIFIED", "HYPOTHESIS NOT VERIFIED", "NOT APPLICABLE")
             turns_to_approve (Optional[int]): Number of turns to approval (if approved)
+            execution_time_seconds (Optional[float]): Time taken to run the hypothesis in seconds
         """
         # Check if CSV file path is initialized
         if self.csv_file_path is None:
@@ -167,7 +169,7 @@ class FileManager:
             fieldnames = [
                 'run_number', 'keywords', 'hypothesis_index', 'hypothesis_text', 
                 'hypothesis_approved', 'outer_iterations_used', 'inner_iterations_used', 
-                'turns_to_approve', 'max_outer_iterations', 'max_inner_iterations', 'timestamp'
+                'turns_to_approve', 'max_outer_iterations', 'max_inner_iterations', 'timestamp', 'execution_time_seconds'
             ]
             writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
             writer.writerow({
@@ -181,7 +183,8 @@ class FileManager:
                 'turns_to_approve': turns_to_approve if hypothesis_approved == "HYPOTHESIS VERIFIED" else None,
                 'max_outer_iterations': self.config.outer_loop_iterations,
                 'max_inner_iterations': self.config.auto_approve_after_attempts,
-                'timestamp': timestamp
+                'timestamp': timestamp,
+                'execution_time_seconds': execution_time_seconds
             })
         
         # Create informative log message

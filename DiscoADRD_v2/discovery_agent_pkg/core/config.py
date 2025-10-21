@@ -76,23 +76,33 @@ class Config:
         return {
             'model': {
                 'name': 'Qwen/Qwen3-4B-Instruct-2507',
+                'client_type': 'vllm',
                 'device': 'auto',
-                'max_tokens': 8192
+                'max_tokens': 16384,
+                'vllm_env': {
+                    'VLLM_USE_TRITON_FLASH_ATTN': '1'
+                }
             },
             'agents': {
-                'max_conversation_length': 6,
-                'auto_approve_after_attempts': 20,
-                'code_timeout': 30,
+                'max_conversation_length': 7,
+                'auto_approve_after_attempts': 4,
+                'code_timeout': 120,
                 'enable_planning_agent': True,
                 'enable_code_execution': True
             },
             'experiment': {
+                'hypothesis_mode': 'csv_batch',
+                'hypothesis': 'Hispanic ethnicity shows attenuated APOE ε4 effect compared with Whites.',
+                'csv_file': '/projectnb/vkolagrp/ketanss/adrd_agent_custom/DiscoADRD/DiscoADRD_v2/batch.csv',
+                'start_index': 0,
+                'end_index': None,
                 'num_keywords': 3,
                 'num_sampling_runs': 10,
-                'outer_loop_iterations': 3
+                'outer_loop_iterations': 2
             },
             'paths': {
                 'keywords_file': 'adrd_keywords.txt',
+                'dataset_folder': '/projectnb/vkolagrp/ketanss/adrd_agent_custom/DiscoADRD/datasets/NACC',
                 'analysis_dir': 'analysis',
                 'responses_dir': 'analysis/responses',
                 'results_dir': 'analysis/results',
@@ -100,7 +110,7 @@ class Config:
                 'working_dir': 'working'
             },
             'output': {
-                'verbose': False,
+                'verbose': True,
                 'save_responses': True,
                 'save_results': True
             }
@@ -163,6 +173,8 @@ class Config:
         self.model_name = model_config.get('name', 'Qwen/Qwen3-4B-Instruct-2507')
         self.device = model_config.get('device', 'auto')
         self.max_new_tokens = model_config.get('max_tokens', 8192)
+        self.model_client_type = model_config.get('client_type', 'vllm')  # Default to vLLM
+        self.vllm_env = model_config.get('vllm_env', {})  # vLLM environment variables
         
         # Agent settings
         agents_config = self.yaml_config.get('agents', {})
@@ -210,6 +222,7 @@ class Config:
         """Print configuration information."""
         print(f"🔧 Configuration loaded:")
         print(f"   Model: {self.model_name}")
+        print(f"   Model client: {self.model_client_type}")
         print(f"   Device: {self.device}")
         print(f"   Max tokens: {self.max_new_tokens}")
         print(f"   Code timeout: {self.code_timeout}s")

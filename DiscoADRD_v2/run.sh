@@ -14,13 +14,6 @@
 #$ -o /projectnb/vkolagrp/ketanss/adrd_agent_custom/DiscoADRD/DiscoADRD_v2/analysis/qsub_runs
 
 # ------------------------------------------------------------------------------
-# Configuration - Edit these values to customize your setup
-# ------------------------------------------------------------------------------
-
-# User input configuration - Edit these values for your specific analysis
-HYPOTHESIS_MODE="csv_batch"  # Options: "generate", "direct", "direct hypothesis", or "csv_batch"
-
-# ------------------------------------------------------------------------------
 # System Setup
 # ------------------------------------------------------------------------------
 
@@ -38,16 +31,14 @@ conda activate llms
 
 echo "🚀 Starting DiscoADRD_v2 Discovery Agent..."
 echo "🔧 Configuration:"
-echo "   Hypothesis mode: $HYPOTHESIS_MODE"
-echo "   (All other settings loaded from config.yml)"
+echo "   All settings loaded from config.yml"
 echo ""
 
 echo "🎯 Running Discovery Agent..."
 echo "=========================================="
 
-# Run the discovery agent
-python discover.py \
-    --hypothesis-mode "$HYPOTHESIS_MODE"
+# Run the discovery agent (all configuration from config.yml)
+python discover.py
 
 echo "✅ Completed run"
 echo "🎉 All runs completed!"

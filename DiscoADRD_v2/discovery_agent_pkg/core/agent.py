@@ -19,7 +19,8 @@ except ImportError:
         return text  # Return text without emoji processing
 
 from .config import config as default_config
-from ..agents.models import ModelClient
+from ..agents.models import ModelClient as HuggingFaceModelClient
+from ..agents.vllm_client import ModelClient as VLLMModelClient
 from ..ui.interface import ui
 from ..experiment.runner import ExperimentRunner
 from ..data.file_manager import FileManager
@@ -39,8 +40,13 @@ class DiscoveryAgentSystem:
         try:
             ui.print_info(f"{emojize('⚙️')} Initializing Discovery Agent...")
             
-            # Initialize model client
-            self.model_client = ModelClient(self.config)
+            # Initialize model client based on configuration
+            if self.config.model_client_type.lower() == 'vllm':
+                ui.print_info(f"{emojize('🚀')} Using vLLM model client")
+                self.model_client = VLLMModelClient(self.config)
+            else:
+                ui.print_info(f"{emojize('🤗')} Using HuggingFace model client")
+                self.model_client = HuggingFaceModelClient(self.config)
             
             # Initialize file manager and setup directories
             self.file_manager = FileManager(self.config)

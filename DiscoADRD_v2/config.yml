@@ -3,9 +3,16 @@
 
 # Model Configuration
 model:
-  name: "Qwen/Qwen3-4B-Instruct-2507" #"Qwen/Qwen3-30B-A3B-Instruct-2507" #
+  name: "Qwen/Qwen3-4B-Instruct-2507" #"Qwen/Qwen3-30B-A3B-Instruct-2507" #"Qwen/Qwen3-4B-Instruct-2507" 
+  client_type: "vllm"  # vllm, hf (HuggingFace)
   device: "auto"  # auto, cuda, cpu
   max_tokens: 16384
+  max_model_len: 32768  # Maximum context length for vLLM
+  # vLLM Environment Variables
+  vllm_env:
+    VLLM_USE_TRITON_FLASH_ATTN: "1"  # Enable Flash Attention for speed
+    # VLLM_ATTENTION_BACKEND: "FLASHINFER"  # Optional: alternative attention backend
+    # VLLM_USE_MODELSCOPE: "false"  # Optional: disable ModelScope
 
 # Agent Configuration
 agents:
@@ -18,7 +25,7 @@ agents:
 # Experiment Configuration
 experiment:
   hypothesis_mode: "csv_batch"  # generate, direct, direct hypothesis, csv_batch
-  hypothesis: "Humans evolved from apes"
+  hypothesis: "Hispanic ethnicity shows attenuated APOE ε4 effect compared with Whites."
   csv_file: "/projectnb/vkolagrp/ketanss/adrd_agent_custom/DiscoADRD/DiscoADRD_v2/batch.csv"  # Path to CSV file containing hypotheses (only needed for csv_batch mode)
   start_index: 0  # Start processing CSV from this index (0-based, default: 0)
   end_index: null  # End processing CSV at this index (0-based, inclusive, default: len-1)
