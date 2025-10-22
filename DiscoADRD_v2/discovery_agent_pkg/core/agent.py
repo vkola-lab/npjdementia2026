@@ -141,18 +141,3 @@ def main_discovery_agent(config=None):
     finally:
         ui.print_info("👋 Discovery Agent session ended.")
         ui.close_log()
-        
-        # Force save session log immediately
-        if hasattr(ui, 'session_log') and ui.session_log and not getattr(ui, 'log_saved', False):
-            try:
-                import os
-                import time
-                responses_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), "analysis", "responses")
-                os.makedirs(responses_dir, exist_ok=True)
-                timestamp = time.strftime("%Y%m%d_%H%M%S")
-                log_file_path = os.path.join(responses_dir, f"session_log_{timestamp}.txt")
-                with open(log_file_path, 'w', encoding='utf-8') as f:
-                    f.write('\n'.join(ui.session_log))
-                print(f"📝 Session log saved to: {log_file_path}")
-            except Exception as e:
-                print(f"❌ Failed to save session log: {str(e)}")

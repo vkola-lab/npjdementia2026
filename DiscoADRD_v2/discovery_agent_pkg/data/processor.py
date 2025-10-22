@@ -649,7 +649,7 @@ class SimplifiedDataProcessor:
                 )
             except ValueError as e:
                 if str(e) == "NO_RELEVANT_VARIABLES":
-                    ui.print_warning("❌ No relevant variables found for this hypothesis. Marking as not verified.")
+                    ui.print_warning("❌ No relevant variables found for this hypothesis. Marking as not applicable.")
                     return {
                         'success': False,
                         'error': 'No relevant variables found',

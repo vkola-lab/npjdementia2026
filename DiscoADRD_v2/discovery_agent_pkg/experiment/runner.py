@@ -335,7 +335,7 @@ class ExperimentRunner:
         
         # Track outer loop iterations
         outer_loop_iterations = self.config.outer_loop_iterations
-        approved = False
+        approved = None
         num_turns_to_approve = None
         num_turns_to_autoapprove = self.config.auto_approve_after_attempts
         previous_conversation_summary = None
@@ -374,7 +374,7 @@ class ExperimentRunner:
                 if not preprocessing_result.get('success', False):
                     # Check if this is a "no relevant variables" case
                     if preprocessing_result.get('no_relevant_variables', False):
-                        ui.print_warning(f"❌ No relevant variables found for hypothesis {idx}. Marking as not verified.", verbose=verbose)
+                        ui.print_warning(f"❌ No relevant variables found for hypothesis {idx}. Marking as not applicable.", verbose=verbose)
                         # Mark hypothesis as not verified and return early
                         return self._mark_hypothesis_not_verified(hypothesis, idx, run_idx, verbose)
                     else:
@@ -451,6 +451,10 @@ class ExperimentRunner:
                     ui.print_info(f"🔄 Will try different approach in iteration {outer_iteration + 1}...", verbose=verbose)
                 else:
                     ui.print_warning(f"⚠️ Hypothesis {idx} NOT VERIFIED after {outer_loop_iterations} iterations", verbose=verbose)
+        
+        # If no decision was made, default to not verified
+        if approved is None:
+            approved = "HYPOTHESIS NOT VERIFIED"
         
         ui.print_approval_status(approved, verbose=verbose)
         

@@ -207,13 +207,15 @@ class UI:
             timestamp = time.strftime("%Y%m%d_%H%M%S")
             self.log_file_path = os.path.join(responses_dir, f"session_log_{timestamp}.txt")
             
-            # Open log file for real-time writing
-            self.log_file = open(self.log_file_path, 'w', encoding='utf-8')
+            # Don't open the file yet - wait until first message is logged
+            self.log_file = None
+            self.log_file_initialized = False
             
         except Exception as e:
             print(f"❌ Failed to initialize real-time logging: {str(e)}")
             self.log_file = None
             self.log_file_path = None
+            self.log_file_initialized = False
     
     def _print_colored(self, text: str, color_code: str, verbose: bool = True) -> None:
         """
@@ -236,7 +238,16 @@ class UI:
         clean_text = remove_ansi_color_codes(text)
         self.session_log.append(clean_text)
         
-        # Write to real-time log file
+        # Write to real-time log file (initialize on first message)
+        if self.log_file_path and not self.log_file_initialized:
+            try:
+                self.log_file = open(self.log_file_path, 'w', encoding='utf-8')
+                self.log_file_initialized = True
+            except Exception as e:
+                # If real-time logging fails, continue without it
+                self.log_file = None
+                self.log_file_path = None
+        
         if self.log_file:
             try:
                 self.log_file.write(clean_text + '\n')
@@ -536,11 +547,11 @@ class UI:
             # Fallback to simple banner
             banner = """
 ╔══════════════════════════════════════════════════════════════════════════════╗
-║                          🔬 Discovery Agent 🔬                              ║
+║                          🔬 Discovery Agent 🔬                               ║
 ║                    AI-Powered Scientific Discovery System                    ║
 ║                                                                              ║
-║  Multi-Agent System: Scientist • Critic • Planning Agent                    ║
-║  Hypothesis-Driven Research • Data Analysis • Statistical Testing           ║
+║  Multi-Agent System: Scientist • Critic • Planning Agent                     ║
+║  Hypothesis-Driven Research • Data Analysis • Statistical Testing            ║
 ╚══════════════════════════════════════════════════════════════════════════════╝
             """
             self._print_colored(banner.strip(), self.palette.banner, verbose)
@@ -553,31 +564,35 @@ class UI:
             return
         
         try:
-            # Close real-time log file if it exists
-            if self.log_file:
+            # Close real-time log file if it exists and was initialized
+            if self.log_file and self.log_file_initialized:
                 self.log_file.close()
                 self.log_file = None
                 if self.log_file_path:
-                    print(f"📝 Real-time session log saved to: {self.log_file_path}")
+                    print(f"📝 Session log saved to: {self.log_file_path}")
+                    self.log_saved = True
+                    return
             
-            # If no real-time log file was created, create one from session log
-            elif self.session_log:
+            # If no real-time log file was created or initialized, create one from session log
+            if self.session_log:
                 import os
                 import time
                 
-                # Create log file path directly
-                responses_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), "analysis", "responses")
-                os.makedirs(responses_dir, exist_ok=True)
-                timestamp = time.strftime("%Y%m%d_%H%M%S")
-                log_file_path = os.path.join(responses_dir, f"session_log_{timestamp}.txt")
+                # Use existing log file path if available, otherwise create new one
+                if self.log_file_path and not self.log_file_initialized:
+                    log_file_path = self.log_file_path
+                else:
+                    responses_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), "analysis", "responses")
+                    os.makedirs(responses_dir, exist_ok=True)
+                    timestamp = time.strftime("%Y%m%d_%H%M%S")
+                    log_file_path = os.path.join(responses_dir, f"session_log_{timestamp}.txt")
                 
                 # Save the session log
                 with open(log_file_path, 'w', encoding='utf-8') as f:
                     f.write('\n'.join(self.session_log))
                 
                 print(f"📝 Session log saved to: {log_file_path}")
-            
-            self.log_saved = True
+                self.log_saved = True
             
         except Exception as e:
             print(f"❌ Failed to save session log: {str(e)}")

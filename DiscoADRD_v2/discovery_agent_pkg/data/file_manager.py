@@ -65,6 +65,10 @@ class FileManager:
         if hasattr(self.config, 'auto_approve_after_attempts'):
             config_parts.append(f"auto_{self.config.auto_approve_after_attempts}")
         
+        # Seed for reproducibility
+        if hasattr(self.config, 'seed'):
+            config_parts.append(f"seed_{self.config.seed}")
+        
         # Join config parts
         config_str = "_".join(config_parts)
         
