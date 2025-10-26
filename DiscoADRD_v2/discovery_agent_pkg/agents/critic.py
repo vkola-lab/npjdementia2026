@@ -48,7 +48,12 @@ def create_critic(model_client) -> Agent:
         "\nReply with 'NOT APPLICABLE' if the dataset limitations prevent meaningful hypothesis testing - explain the specific limitations found. "
         "\nThese data limitations could be in the form of no or too little relevant variables selected or not enough samples in the data that contain the relevant data or data combinations. "
         "\nIf the hypothesis is NOT APPLICABLE, output 'NOT APPLICABLE' and terminate. "
-        "\nRemember: be supportive of reasonable scientific approaches but strict about code correctness, result validity, and hypothesis alignment. Always provide actionable feedback to help improve the work. "
+        "\n\n**CRITICAL: OUTPUT FORMAT REQUIREMENT** "
+        "\nYou MUST format your final judgment using XML tags. At the end of your response, include: "
+        "\n<judgment>HYPOTHESIS VERIFIED</judgment> OR "
+        "\n<judgment>HYPOTHESIS NOT VERIFIED</judgment> OR "
+        "\n<judgment>NOT APPLICABLE</judgment> "
+        "\n\nRemember: be supportive of reasonable scientific approaches but strict about code correctness, result validity, and hypothesis alignment. Always provide actionable feedback to help improve the work. "
     )
     return Agent(
         name="Critic",

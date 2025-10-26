@@ -23,6 +23,7 @@ from ..data.cache import DataCache
 from .hypothesis import HypothesisManager
 from ..data.file_manager import FileManager
 from ..execution.utils import execute_code_from_response
+from ..utils.xml_parser import parse_critic_judgment
 
 
 class ExperimentRunner:
@@ -177,8 +178,8 @@ class ExperimentRunner:
                         sampled_keywords = []  # No keywords needed for direct hypothesis
                 else:
                     ui.print_info(f"🎲 Sampling Run {run_idx}/{num_runs}", verbose=verbose)
-                    # Sample keywords
-                    sampled_keywords = self.hypothesis_manager.sample_keywords(keywords, self.config.num_keywords)
+                    # Sample keywords with seed for deterministic results
+                    sampled_keywords = self.hypothesis_manager.sample_keywords(keywords, self.config.num_keywords, seed=self.config.seed)
                     ui.print_info(f"🎯 Sampled keywords: {', '.join(sampled_keywords)}", verbose=verbose)
                 
                 # Create hypothesis from sampled keywords (for non-direct modes)
@@ -333,6 +334,9 @@ class ExperimentRunner:
         ui.print_separator(verbose=verbose)
         ui.print_info(f"🔍 Working on hypothesis {idx}: {hypothesis}", verbose=verbose)
         
+        # Start JSON logging for this hypothesis
+        ui.start_hypothesis_logging(idx, hypothesis, sampled_keywords)
+        
         # Track outer loop iterations
         outer_loop_iterations = self.config.outer_loop_iterations
         approved = None
@@ -346,6 +350,9 @@ class ExperimentRunner:
         for outer_iteration in range(1, outer_loop_iterations + 1):
             ui.print_separator(verbose=verbose)
             ui.print_info(f"🔄 OUTER LOOP ITERATION {outer_iteration}/{outer_loop_iterations}", verbose=verbose)
+            
+            # Start JSON logging for this outer iteration
+            ui.start_outer_iteration_logging(outer_iteration)
             
             # Reset conversation for each outer loop iteration
             self.conversation_manager.reset_conversation()
@@ -432,6 +439,9 @@ class ExperimentRunner:
                 result_display = "❌ NOT VERIFIED"
             ui.print_info(f"📊 Iteration {outer_iteration} result: {result_display}", verbose=verbose)
             
+            # End JSON logging for this outer iteration
+            ui.end_outer_iteration_logging(iteration_approved)
+            
             if iteration_approved == "HYPOTHESIS VERIFIED":
                 # If approved, we're done with this hypothesis
                 approved = iteration_approved
@@ -457,6 +467,9 @@ class ExperimentRunner:
             approved = "HYPOTHESIS NOT VERIFIED"
         
         ui.print_approval_status(approved, verbose=verbose)
+        
+        # End JSON logging for this hypothesis
+        ui.end_hypothesis_logging(approved)
         
         # Calculate execution time
         end_time = time.time()
@@ -658,6 +671,9 @@ class ExperimentRunner:
             if not response or not response.strip():
                 raise ValueError(f"Empty response from {agent_name}")
             
+            # Get current turn count for JSON logging
+            current_turn = conversation_manager.get_turns() + 1
+            
             # Execute code if present (except for critic agents)
             code_output = ""
             should_execute_code = "```python" in response and agent_name not in ["Critic", "Planning Agent"]
@@ -742,8 +758,37 @@ class ExperimentRunner:
             # Log and display response
             ui.print_agent_response(agent_name, response, code_output)
             
+            # Log to JSON for ALL agent responses
+            if should_execute_code and execution_result is not None:
+                if isinstance(execution_result, str):
+                    # String error case
+                    ui.log_agent_turn(current_turn, agent_name, response, 
+                                    code_execution_success=False, 
+                                    code_output="", 
+                                    code_error=execution_result, 
+                                    code_traceback="")
+                elif isinstance(execution_result, dict):
+                    # Dictionary result case
+                    ui.log_agent_turn(current_turn, agent_name, response, 
+                                    code_execution_success=execution_result.get("success", False), 
+                                    code_output=execution_result.get("output", ""), 
+                                    code_error=execution_result.get("error", ""), 
+                                    code_traceback="")
+                else:
+                    # Fallback for other execution result types
+                    ui.log_agent_turn(current_turn, agent_name, response)
+            else:
+                # No code execution
+                ui.log_agent_turn(current_turn, agent_name, response)
+            
             # Return approval status if requested
             if return_approval and approval_keyword:
+                # First try to parse XML judgment (for critic responses)
+                xml_judgment = parse_critic_judgment(response)
+                if xml_judgment:
+                    return xml_judgment
+                
+                # Fallback to keyword matching for backward compatibility
                 if approval_keyword in response:
                     return "HYPOTHESIS VERIFIED"
                 elif "NOT APPLICABLE" in response:
@@ -848,7 +893,12 @@ class ExperimentRunner:
             self.conversation_manager.add_agent_response("Critic", response, "")
             ui.print_agent_response("Critic", response, "")
             
-            # Always return HYPOTHESIS NOT VERIFIED for debugging rounds - code needs to be fixed first
+            # Parse XML judgment from the response
+            xml_judgment = parse_critic_judgment(response)
+            if xml_judgment:
+                return xml_judgment
+            
+            # Fallback: Always return HYPOTHESIS NOT VERIFIED for debugging rounds - code needs to be fixed first
             return "HYPOTHESIS NOT VERIFIED"
             
         except Exception as e:

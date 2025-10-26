@@ -47,13 +47,14 @@ class HypothesisManager:
             ui.print_error(f"Error loading keywords file: {str(e)}", "keywords_loading")
             return []
     
-    def sample_keywords(self, keywords: List[str], num_keywords: int) -> List[str]:
+    def sample_keywords(self, keywords: List[str], num_keywords: int, seed: int = None) -> List[str]:
         """
-        Sample a random subset of keywords.
+        Sample a random subset of keywords using a seeded random state.
         
         Args:
             keywords (List[str]): Available keywords
             num_keywords (int): Number of keywords to sample
+            seed (int, optional): Random seed for deterministic sampling
         
         Returns:
             List[str]: Sampled keywords
@@ -61,7 +62,14 @@ class HypothesisManager:
         if num_keywords >= len(keywords):
             return keywords.copy()
         
-        return random.sample(keywords, num_keywords)
+        # Use seeded random state for deterministic sampling
+        if seed is not None:
+            # Create a new random state with the given seed
+            rng = random.Random(seed)
+            return rng.sample(keywords, num_keywords)
+        else:
+            # Fall back to global random state (non-deterministic)
+            return random.sample(keywords, num_keywords)
     
     def generate_hypotheses_from_keywords(self, sampled_keywords: List[str], 
                                         dataset_dictionary: Optional[Dict[str, str]] = None,

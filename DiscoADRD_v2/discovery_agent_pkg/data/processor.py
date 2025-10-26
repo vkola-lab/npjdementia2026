@@ -528,24 +528,33 @@ def simplified_data_preprocessing(model_client: ModelClient, hypothesis: str, da
         raise ImportError("pandas is required for data preprocessing operations. Please install pandas.")
     
     ui.print_info(f"🚀 Starting simplified data preprocessing...")
+    ui.log_system_event("INFO", "Starting simplified data preprocessing...", "preprocessing")
     ui.print_info(f"🔬 Hypothesis: {hypothesis}")
+    ui.log_system_event("INFO", f"Hypothesis: {hypothesis}", "preprocessing")
     
     # Step 1: Get the original CSV data from cache
     ui.print_info(f"📖 Getting original CSV data from cache...")
+    ui.log_preprocessing_step(1, "Data Loading", "Getting original CSV data from cache", "started")
     df = data_cache.get_original_csv_data()
     ui.print_info(f"📊 Original data shape: {df.shape[0]} rows, {df.shape[1]} columns")
+    ui.log_preprocessing_step(1, "Data Loading", f"Original data shape: {df.shape[0]} rows, {df.shape[1]} columns", "completed")
     
     # Step 2: Query LLM to filter columns
     ui.print_info(f"🤖 Step 1: Querying LLM for variable selection...")
+    ui.log_preprocessing_step(2, "Variable Selection", "Querying LLM for variable selection", "started")
     selected_variables = query_llm_for_variable_selection(model_client, hypothesis, data_cache)
     
     # Check if no relevant variables were found
     if not selected_variables:
         ui.print_warning("❌ No relevant variables found for this hypothesis. Cannot proceed with analysis.")
+        ui.log_preprocessing_step(2, "Variable Selection", "No relevant variables found", "failed")
         # Return a special indicator that no variables were found
         raise ValueError("NO_RELEVANT_VARIABLES")
     
+    ui.log_preprocessing_step(2, "Variable Selection", f"Selected {len(selected_variables)} variables", "completed")
+    
     # Filter dataframe to only include selected variables
+    ui.log_preprocessing_step(3, "Data Filtering", "Filtering dataframe to selected variables", "started")
     available_columns = []
     missing_columns = []
     

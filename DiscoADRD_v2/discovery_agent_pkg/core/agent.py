@@ -21,7 +21,7 @@ except ImportError:
 from .config import config as default_config
 from ..agents.models import ModelClient as HuggingFaceModelClient
 from ..agents.vllm_client import ModelClient as VLLMModelClient
-from ..ui.interface import ui
+from ..ui.interface import ui, initialize_ui_with_config
 from ..experiment.runner import ExperimentRunner
 from ..data.file_manager import FileManager
 
@@ -36,6 +36,9 @@ class DiscoveryAgentSystem:
         """Initialize the Discovery Agent with all components."""
         # Use provided config or fall back to default
         self.config = config if config is not None else default_config
+        
+        # Initialize UI with config for JSON logging
+        initialize_ui_with_config(self.config)
         
         try:
             ui.print_info(f"{emojize('⚙️')} Initializing Discovery Agent...")
@@ -109,8 +112,10 @@ def main_discovery_agent(config=None):
         
         # Initialize and run agent with better error handling
         ui.print_info("🔧 Initializing Discovery Agent System...")
+        ui.log_system_event("INFO", "Initializing Discovery Agent System...", "system")
         agent = DiscoveryAgentSystem(config)
         ui.print_info("🚀 Starting Discovery Agent...")
+        ui.log_system_event("INFO", "Starting Discovery Agent...", "system")
         agent.run()
         
     except KeyboardInterrupt:

@@ -16,6 +16,7 @@ try:
     from .colors import Colors, Styling, default_palette, ColorTheme
     from .progress import ProgressTracker, ProgressDisplay, StatusDisplay, ExperimentProgress
     from .formatting import TableFormatter, ReportFormatter, BannerFormatter, CodeFormatter, StatusFormatter
+    from .json_logger import get_json_logger, initialize_json_logger, save_json_log, CodeExecutionResult
     ENHANCED_UI_AVAILABLE = True
 except ImportError:
     # Fallback to basic functionality
@@ -154,11 +155,12 @@ def remove_ansi_color_codes(text: str) -> str:
 class UI:
     """Enhanced user interface for the Discovery Agent."""
     
-    def __init__(self, theme: ColorTheme = ColorTheme.DEFAULT):
+    def __init__(self, theme: ColorTheme = ColorTheme.DEFAULT, config=None):
         """Initialize the enhanced UI."""
         self.session_log = []
         self.colors_enabled = sys.stdout.isatty()  # Enable colors if terminal supports it
         self.enhanced_ui_available = ENHANCED_UI_AVAILABLE
+        self.config = config
         
         # Initialize palette correctly based on availability
         if self.enhanced_ui_available:
@@ -187,6 +189,10 @@ class UI:
         self.log_saved = False
         self.log_file = None
         self.log_file_path = None
+        
+        # Initialize JSON logger
+        if ENHANCED_UI_AVAILABLE:
+            initialize_json_logger(config)
         
         # Initialize real-time logging
         self._init_realtime_logging()
@@ -594,8 +600,104 @@ class UI:
                 print(f"📝 Session log saved to: {log_file_path}")
                 self.log_saved = True
             
+            # Also save JSON log if available (final save to ensure completion)
+            if ENHANCED_UI_AVAILABLE:
+                try:
+                    # Use real-time save to update the existing file rather than create a new one
+                    json_log_path = self.save_json_log_realtime()
+                    if json_log_path:
+                        print(f"📊 JSON log updated: {json_log_path}")
+                except Exception as e:
+                    print(f"⚠️ Failed to save JSON log: {str(e)}")
+            
         except Exception as e:
             print(f"❌ Failed to save session log: {str(e)}")
+    
+    # ==================== JSON LOGGING METHODS ====================
+    
+    def start_hypothesis_logging(self, hypothesis_index: int, hypothesis_text: str, keywords: List[str]):
+        """Start logging a new hypothesis."""
+        if ENHANCED_UI_AVAILABLE:
+            json_logger = get_json_logger()
+            json_logger.start_hypothesis(hypothesis_index, hypothesis_text, keywords)
+    
+    def start_outer_iteration_logging(self, iteration: int):
+        """Start logging a new outer iteration."""
+        if ENHANCED_UI_AVAILABLE:
+            json_logger = get_json_logger()
+            json_logger.start_outer_iteration(iteration)
+    
+    def log_agent_turn(self, turn: int, agent: str, response: str, 
+                      code_execution_success: bool = None, 
+                      code_output: str = "", 
+                      code_error: str = "", 
+                      code_traceback: str = ""):
+        """Log an agent turn with optional code execution results."""
+        if ENHANCED_UI_AVAILABLE:
+            json_logger = get_json_logger()
+            
+            # Create code execution result if provided
+            code_execution = None
+            if code_execution_success is not None:
+                code_execution = CodeExecutionResult(
+                    success=code_execution_success,
+                    output=code_output,
+                    error=code_error,
+                    traceback=code_traceback
+                )
+            
+            json_logger.add_turn(turn, agent, response, code_execution)
+            
+            # Save JSON log in real-time after each turn
+            try:
+                self.save_json_log_realtime()
+            except Exception as e:
+                # Don't fail the main process if JSON logging fails
+                pass
+    
+    def end_outer_iteration_logging(self, final_status: str):
+        """End logging the current outer iteration."""
+        if ENHANCED_UI_AVAILABLE:
+            json_logger = get_json_logger()
+            json_logger.end_outer_iteration(final_status)
+    
+    def end_hypothesis_logging(self, final_status: str):
+        """End logging the current hypothesis."""
+        if ENHANCED_UI_AVAILABLE:
+            json_logger = get_json_logger()
+            json_logger.end_hypothesis(final_status)
+    
+    def log_system_event(self, level: str, message: str, category: Optional[str] = None):
+        """Log a system event to JSON."""
+        if ENHANCED_UI_AVAILABLE:
+            json_logger = get_json_logger()
+            json_logger.add_system_log(level, message, category)
+    
+    def log_preprocessing_step(self, step_number: int, step_name: str, description: str, 
+                             status: str, details: Optional[str] = None):
+        """Log a data preprocessing step to JSON."""
+        if ENHANCED_UI_AVAILABLE:
+            json_logger = get_json_logger()
+            json_logger.add_preprocessing_step(step_number, step_name, description, status, details)
+    
+    def save_json_log(self, file_path: Optional[str] = None) -> str:
+        """Save the JSON log to a file."""
+        if ENHANCED_UI_AVAILABLE:
+            return save_json_log(file_path)
+        else:
+            raise RuntimeError("JSON logging not available")
+    
+    def save_json_log_realtime(self) -> str:
+        """Save the JSON log in real-time (updates existing file)."""
+        if ENHANCED_UI_AVAILABLE:
+            try:
+                json_logger = get_json_logger()
+                return json_logger.save_log_realtime()
+            except Exception as e:
+                print(f"⚠️ Failed to save JSON log in real-time: {str(e)}")
+                return None
+        else:
+            raise RuntimeError("JSON logging not available")
     
     # ==================== NEW PRODUCTION-LEVEL METHODS ====================
     
@@ -833,5 +935,11 @@ class UI:
         print()
 
 
-# Create a global UI instance
+# Create a global UI instance (will be reinitialized with config in main agent)
 ui = UI()
+
+
+def initialize_ui_with_config(config):
+    """Initialize the global UI instance with configuration."""
+    global ui
+    ui = UI(config=config)

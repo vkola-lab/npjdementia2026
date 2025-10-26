@@ -8,7 +8,7 @@ model:
   device: "auto"  # auto, cuda, cpu
   max_tokens: 16384
   max_model_len: 224848  # Maximum context length for vLLM
-  seed: 44 # Fixed seed for deterministic/reproducible generation
+  seed: 42 # Fixed seed for deterministic/reproducible generation
   # vLLM Environment Variables
   vllm_env:
     VLLM_USE_TRITON_FLASH_ATTN: "1"  # Enable Flash Attention for speed
@@ -18,18 +18,18 @@ model:
 # Agent Configuration
 agents:
   max_conversation_length: 7
-  auto_approve_after_attempts: 4
+  auto_approve_after_attempts: 3
   code_timeout: 120  # seconds
   enable_planning_agent: true
   enable_code_execution: true
 
 # Experiment Configuration
 experiment:
-  hypothesis_mode: "direct hypothesis"  # generate, direct, direct hypothesis, csv_batch
-  hypothesis: "Age is inversely correlated with dementia incidence"
+  hypothesis_mode: "csv_batch"  # generate, direct, direct hypothesis, csv_batch
+  hypothesis: "Positive family history increases risk of AD independent of APOE."
   csv_file: "/projectnb/vkolagrp/ketanss/adrd_agent_custom/DiscoADRD/DiscoADRD_v2/batch.csv"  # Path to CSV file containing hypotheses (only needed for csv_batch mode)
   start_index: 0  # Start processing CSV from this index (0-based, default: 0)
-  end_index: null  # End processing CSV at this index (0-based, inclusive, default: len-1)
+  end_index: 15  # End processing CSV at this index (0-based, inclusive, default: len-1)
   num_keywords: 3
   num_sampling_runs: 10
   outer_loop_iterations: 2
