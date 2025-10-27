@@ -38,7 +38,7 @@ echo "🎯 Running Discovery Agent..."
 echo "=========================================="
 
 # Run the discovery agent (all configuration from config.yml)
-python discover.py
+python discover.py 
 
 echo "✅ Completed run"
 echo "🎉 All runs completed!"

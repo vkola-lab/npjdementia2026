@@ -8,7 +8,7 @@ model:
   device: "auto"  # auto, cuda, cpu
   max_tokens: 16384
   max_model_len: 224848  # Maximum context length for vLLM
-  seed: 42 # Fixed seed for deterministic/reproducible generation
+  seed: 43 # Fixed seed for deterministic/reproducible generation
   # vLLM Environment Variables
   vllm_env:
     VLLM_USE_TRITON_FLASH_ATTN: "1"  # Enable Flash Attention for speed
@@ -30,7 +30,7 @@ experiment:
   csv_file: "/projectnb/vkolagrp/ketanss/adrd_agent_custom/DiscoADRD/DiscoADRD_v2/batch.csv"  # Path to CSV file containing hypotheses (only needed for csv_batch mode)
   start_index: 0  # Start processing CSV from this index (0-based, default: 0)
   end_index: null  # End processing CSV at this index (0-based, inclusive, default: len-1)
-  sample_size: 100  # Number of rows to sample from the dataset CSV (N)
+  sample_size: 10000  # Number of rows to sample from the dataset CSV (N)
   num_keywords: 3
   num_sampling_runs: 10
   outer_loop_iterations: 2
@@ -43,7 +43,7 @@ paths:
   responses_dir: "analysis/responses"
   results_dir: "analysis/results"
   qsub_runs_dir: "analysis/qsub_runs"
-  working_dir: "working"
+  working_dir: "working_10000"
 
 # Output Configuration
 output:

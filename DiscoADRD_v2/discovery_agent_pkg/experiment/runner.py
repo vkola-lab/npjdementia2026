@@ -38,13 +38,13 @@ class ExperimentRunner:
         self.data_cache = DataCache()
         
         # Initialize all components
-        self.data_processor = SimplifiedDataProcessor(model_client, self.data_cache)
+        self.data_processor = SimplifiedDataProcessor(model_client, self.data_cache, config)
         self.hypothesis_manager = HypothesisManager(model_client)
         # Use provided file manager or create a new one
         self.file_manager = file_manager if file_manager is not None else FileManager(config)
         
         # Initialize agents
-        self.scientist = create_scientist(model_client)
+        self.scientist = create_scientist(model_client, config)
         self.critic = create_critic(model_client)
         
         # Initialize planning agent only if enabled in config (default: enabled)

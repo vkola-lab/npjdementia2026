@@ -513,7 +513,7 @@ def save_processed_data(df: pd.DataFrame, output_path: str) -> None:
 
 def simplified_data_preprocessing(model_client: ModelClient, hypothesis: str, data_cache: DataCache, 
                                  sample_size: int = None, seed: int = None, 
-                                 output_path: str = "working/processed_dataset.csv") -> pd.DataFrame:
+                                 output_path: str = None) -> pd.DataFrame:
     """
     Main function to perform simplified data preprocessing.
     
@@ -533,6 +533,10 @@ def simplified_data_preprocessing(model_client: ModelClient, hypothesis: str, da
     ui.log_system_event("INFO", "Starting simplified data preprocessing...", "preprocessing")
     ui.print_info(f"🔬 Hypothesis: {hypothesis}")
     ui.log_system_event("INFO", f"Hypothesis: {hypothesis}", "preprocessing")
+    
+    # Set default output path if not provided
+    if output_path is None:
+        output_path = "working/processed_dataset.csv"
     
     # Step 1: Get the original CSV data from cache (with optional sampling)
     ui.print_info(f"📖 Getting original CSV data from cache...")
@@ -623,10 +627,11 @@ def simplified_data_preprocessing(model_client: ModelClient, hypothesis: str, da
 class SimplifiedDataProcessor:
     """Simplified data processor that maintains compatibility with the current pipeline."""
     
-    def __init__(self, model_client: ModelClient, data_cache: Optional[DataCache] = None):
+    def __init__(self, model_client: ModelClient, data_cache: Optional[DataCache] = None, config=None):
         """Initialize with model client and optional data cache."""
         self.model_client = model_client
         self.data_cache = data_cache
+        self.config = config
     
     def run_simplified_preprocessing(self, hypothesis: str, dataset_folder: str = None, 
                                    previous_iteration_context: str = None, 
@@ -658,7 +663,8 @@ class SimplifiedDataProcessor:
                 }
             
             # Run the simplified preprocessing using cached data
-            output_path = "working/processed_dataset.csv"
+            working_dir = self.config.working_dir if self.config else "working"
+            output_path = f"{working_dir}/processed_dataset.csv"
             try:
                 processed_df = simplified_data_preprocessing(
                     model_client=self.model_client,

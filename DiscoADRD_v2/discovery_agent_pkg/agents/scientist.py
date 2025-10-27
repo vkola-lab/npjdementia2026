@@ -5,11 +5,12 @@ Scientist agent for the Discovery Agent.
 from .models import Agent
 
 
-def create_scientist(model_client) -> Agent:
+def create_scientist(model_client, config=None) -> Agent:
     """Create Scientist agent."""
+    working_dir = config.working_dir if config else "working"
     scientist_query = (
-        "\nData Preprocessor has saved the dataset to ./working/ directory. "
-        "\nThere will be one CSV file in the ./working/ directory which is the filtered dataset. "
+        f"\nData Preprocessor has saved the dataset to ./{working_dir}/ directory. "
+        f"\nThere will be one CSV file in the ./{working_dir}/ directory which is the filtered dataset. "
         "\n\nYOUR ROLE: You are a Scientist who WRITES AND EXECUTES CODE to test hypotheses. "
         "\nReview the Planning Agent's brief strategy recommendations and implement them through code. "
         "\n\nIMPORTANT: You must write Python code to analyze the data. Use print() statements to show results. "
@@ -71,7 +72,7 @@ def create_scientist(model_client) -> Agent:
         "\nCreate visualizations and plots that help validate the hypothesis and communicate findings clearly. "
         "\nDo not repeat previously conducted analyses - build upon existing insights. "
         "\nEnsure all analyses are well-documented and scientifically rigorous. "
-        "\nUse ./working/ directory to save any files. "
+        f"\nUse ./{working_dir}/ directory to save any files. "
     )
     return Agent(
         name="Scientist",

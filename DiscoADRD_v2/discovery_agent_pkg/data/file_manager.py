@@ -69,6 +69,10 @@ class FileManager:
         if hasattr(self.config, 'seed'):
             config_parts.append(f"seed_{self.config.seed}")
         
+        # Sample size for dataset sampling
+        if hasattr(self.config, 'sample_size') and self.config.sample_size is not None:
+            config_parts.append(f"sample_{self.config.sample_size}")
+        
         # Join config parts
         config_str = "_".join(config_parts)
         
@@ -88,7 +92,7 @@ class FileManager:
         Args:
             recreate (bool): Whether to recreate the directory after cleanup
         """
-        working_dir = Path("working")
+        working_dir = Path(self.config.working_dir)
         
         if recreate:
             # Delete and recreate the entire directory (for initialization)
