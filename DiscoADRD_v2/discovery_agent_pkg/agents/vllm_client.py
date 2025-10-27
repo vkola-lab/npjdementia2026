@@ -43,7 +43,7 @@ class ModelClient:
             vllm_env = getattr(config, 'vllm_env', {"VLLM_USE_TRITON_FLASH_ATTN": "1"})
             self.sampling_params = SamplingParams(
                 max_tokens=self.max_new_tokens,
-                seed=self.seed,
+                seed=self.seed
             )
         for key, value in vllm_env.items():
             os.environ[key] = str(value)

@@ -101,31 +101,50 @@ class ExperimentRunner:
                 ui.print_error("❌ No hypotheses found in CSV file.", "initialization")
                 return None, None, None, 0, 0
             
-            # Get start and end indices with proper null handling
-            start_index = getattr(self.config, 'start_index', None)
-            end_index = getattr(self.config, 'end_index', None)
+            # Get sample_size for dataset sampling (not hypothesis sampling)
+            sample_size = getattr(self.config, 'sample_size', None)
             
-            # Set defaults for null values
-            if start_index is None:
-                start_index = 0
-            if end_index is None:
-                end_index = len(hypotheses_data) - 1
+            if sample_size is not None:
+                ui.print_info(f"📊 Dataset sampling enabled with sample_size: {sample_size}", verbose=verbose)
+                # Store sample_size for use in data preprocessing
+                self.dataset_sample_size = sample_size
+            else:
+                ui.print_info(f"📊 Using full dataset (no sampling)", verbose=verbose)
+                self.dataset_sample_size = None
             
-            # Validate start index
-            if start_index < 0 or start_index >= len(hypotheses_data):
-                ui.print_error(f"❌ Start index {start_index} is invalid. Must be between 0 and {len(hypotheses_data)-1}.", "initialization")
-                return None, None, None, 0, 0
+            # Determine number of runs based on hypotheses (not affected by dataset sampling)
+            if self.config.start_index is not None or self.config.end_index is not None:
+                # Use start_index and end_index mode for sequential processing
+                start_index = getattr(self.config, 'start_index', None)
+                end_index = getattr(self.config, 'end_index', None)
+                
+                # Set defaults for null values
+                if start_index is None:
+                    start_index = 0
+                if end_index is None:
+                    end_index = len(hypotheses_data) - 1
+                
+                # Validate start index
+                if start_index < 0 or start_index >= len(hypotheses_data):
+                    ui.print_error(f"❌ Start index {start_index} is invalid. Must be between 0 and {len(hypotheses_data)-1}.", "initialization")
+                    return None, None, None, 0, 0
+                
+                # Validate end index
+                if end_index < start_index or end_index >= len(hypotheses_data):
+                    ui.print_error(f"❌ End index {end_index} is invalid. Must be between {start_index} and {len(hypotheses_data)-1} (inclusive).", "initialization")
+                    return None, None, None, 0, 0
+                
+                # Calculate available range size
+                available_range_size = end_index - start_index + 1
+                num_runs = available_range_size
+                ui.print_info(f"📚 Found {len(hypotheses_data)} hypotheses in CSV file, processing range {start_index} to {end_index} ({num_runs} runs)", verbose=verbose)
+                self.sampled_csv_indices = None  # No sampling
+            else:
+                # Use all hypotheses if no start/end index specified
+                num_runs = len(hypotheses_data)
+                ui.print_info(f"📚 Found {len(hypotheses_data)} hypotheses in CSV file, processing all hypotheses ({num_runs} runs)", verbose=verbose)
+                self.sampled_csv_indices = None  # No sampling
             
-            # Validate end index
-            if end_index < start_index or end_index >= len(hypotheses_data):
-                ui.print_error(f"❌ End index {end_index} is invalid. Must be between {start_index} and {len(hypotheses_data)-1} (inclusive).", "initialization")
-                return None, None, None, 0, 0
-            
-            # Calculate number of runs in the range
-            num_runs = end_index - start_index + 1
-            
-            # Show range information
-            ui.print_info(f"📚 Found {len(hypotheses_data)} hypotheses in CSV file, processing range {start_index} to {end_index} ({num_runs} runs)", verbose=verbose)
             return None, num_runs, verbose, 0, 0
         
         # Load ADRD keywords for generate/direct modes
@@ -237,23 +256,32 @@ class ExperimentRunner:
                         ui.print_error(f"❌ No hypotheses found in CSV file.", "csv_batch")
                         continue
                     
-                    # Get start and end indices with proper null handling
-                    start_index = getattr(self.config, 'start_index', None)
-                    end_index = getattr(self.config, 'end_index', None)
-                    
-                    # Set defaults for null values
-                    if start_index is None:
-                        start_index = 0
-                    if end_index is None:
-                        end_index = len(hypotheses_data) - 1
-                    
-                    # Calculate the actual CSV row index (0-based)
-                    csv_row_index = start_index + run_idx - 1
-                    
-                    # Check if we have enough data and within range
-                    if csv_row_index > end_index or csv_row_index >= len(hypotheses_data):
-                        ui.print_error(f"❌ No hypothesis found for run {run_idx} (CSV row {csv_row_index}) in CSV file. Range is {start_index} to {end_index}.", "csv_batch")
-                        continue
+                    # Determine which hypothesis to use for this run
+                    if hasattr(self, 'sampled_csv_indices') and self.sampled_csv_indices is not None:
+                        # Use pre-sampled indices (sample_size mode)
+                        csv_row_index = self.sampled_csv_indices[run_idx - 1] if run_idx <= len(self.sampled_csv_indices) else None
+                        
+                        # Check if we have enough data
+                        if csv_row_index is None or csv_row_index >= len(hypotheses_data):
+                            ui.print_error(f"❌ No hypothesis found for run {run_idx} (CSV row {csv_row_index}) in CSV file.", "csv_batch")
+                            continue
+                    else:
+                        # Original sequential behavior using start_index and end_index
+                        start_index = getattr(self.config, 'start_index', None)
+                        end_index = getattr(self.config, 'end_index', None)
+                        
+                        # Set defaults for null values
+                        if start_index is None:
+                            start_index = 0
+                        if end_index is None:
+                            end_index = len(hypotheses_data) - 1
+                        
+                        csv_row_index = start_index + run_idx - 1
+                        
+                        # Check if we have enough data and within range
+                        if csv_row_index > end_index or csv_row_index >= len(hypotheses_data):
+                            ui.print_error(f"❌ No hypothesis found for run {run_idx} (CSV row {csv_row_index}) in CSV file. Range is {start_index} to {end_index}.", "csv_batch")
+                            continue
                     
                     # Get the hypothesis for this run (already 0-based index)
                     hypothesis_data = hypotheses_data[csv_row_index]
@@ -376,7 +404,8 @@ class ExperimentRunner:
             try:
                 # Run preprocessing using cached data
                 preprocessing_result = self.data_processor.run_simplified_preprocessing(
-                    hypothesis, None, previous_conversation_summary, self.conversation_manager, previously_used_variables
+                    hypothesis, None, previous_conversation_summary, self.conversation_manager, 
+                    previously_used_variables, self.dataset_sample_size, self.config.seed
                 )
                 if not preprocessing_result.get('success', False):
                     # Check if this is a "no relevant variables" case
@@ -599,8 +628,14 @@ class ExperimentRunner:
                 if not scientist_success:
                     ui.print_warning("⚠️ Scientist code execution failed. Running Critic with debugging query...", verbose=verbose)
                     
-                    # Run Critic with a specialized debugging query
-                    critic_status = self.critic_debugging_round(verbose=verbose)
+                    # Enable debugging mode for Critic
+                    self.critic.set_debugging_mode(True)
+                    
+                    # Run Critic in debugging mode
+                    critic_status = self.critic_round(verbose=verbose)
+                    
+                    # Disable debugging mode for next iteration
+                    self.critic.set_debugging_mode(False)
                 else:
                     ui.print_info("🔍 Starting Critic round...", verbose=verbose)
                     critic_status = self.critic_round(verbose=verbose)
@@ -616,6 +651,10 @@ class ExperimentRunner:
                     # For NOT APPLICABLE, we should also break as there's no point continuing
                     approved = critic_status
                     break
+                elif critic_status is None or critic_status == "":
+                    # For debugging mode (no judgment provided), continue the loop
+                    ui.print_info("🔄 Debugging guidance provided. Continuing conversation...", verbose=verbose)
+                    continue
                 # For HYPOTHESIS NOT VERIFIED, continue the loop (keep approved = None)
                 
             except Exception as e:
@@ -845,74 +884,6 @@ class ExperimentRunner:
             approval_keyword="HYPOTHESIS VERIFIED",
             verbose=verbose
         )
-    
-    def critic_debugging_round(self, verbose: bool = True) -> str:
-        """Handle Critic debugging round when code execution fails."""
-        ui.print_loading("Critic is analyzing the code failure...")
-        
-        try:
-            # Create a specialized debugging query for the Critic
-            debugging_query = (
-                "CODE EXECUTION FAILED - DEBUGGING MODE\n\n"
-                "The Scientist's code failed to execute properly. As a Critic, please analyze the failure and provide specific guidance.\n\n"
-                "Your task is to:\n"
-                "1. Identify the likely cause of the code execution failure\n"
-                "2. Provide specific, actionable feedback to help the Scientist fix the code\n"
-                "3. Suggest improvements for code robustness and error handling\n"
-                "4. Guide the Scientist toward a working solution\n\n"
-                "Focus on:\n"
-                "- Syntax and import errors\n"
-                "- Data access and file path issues\n"
-                "- Logic errors and assumptions\n"
-                "- Code complexity and simplification opportunities\n"
-                "- Best practices for error handling\n\n"
-                "Provide constructive, specific feedback that will help the Scientist succeed in the next iteration.\n"
-                "Do not approve the hypothesis - the code must work first."
-            )
-            
-            # Add the debugging query to conversation
-            self.conversation_manager.add_user_input(debugging_query)
-            
-            # Generate Critic response with debugging focus
-            start_time = time.time()
-            ui.print_info("🔄 Generating Critic debugging response...")
-            response = self.critic.generate(
-                self.conversation_manager.get_conversation_history()
-            )
-            generation_time = time.time() - start_time
-            ui.print_info(f"⏱️ Response generated in {generation_time:.2f} seconds")
-            
-            if not response or not response.strip():
-                raise ValueError("Empty response from Critic")
-            
-            # Remove the debugging query from conversation history (clean up)
-            if self.conversation_manager.messages and self.conversation_manager.messages[-1]["role"] == "user":
-                self.conversation_manager.messages.pop()
-            
-            # Add the response to conversation (no code execution needed)
-            self.conversation_manager.add_agent_response("Critic", response, "")
-            ui.print_agent_response("Critic", response, "")
-            
-            # Parse XML judgment from the response
-            xml_judgment = parse_critic_judgment(response)
-            if xml_judgment:
-                return xml_judgment
-            
-            # Fallback: Always return HYPOTHESIS NOT VERIFIED for debugging rounds - code needs to be fixed first
-            return "HYPOTHESIS NOT VERIFIED"
-            
-        except Exception as e:
-            ui.print_error(f"Critic debugging round error: {str(e)}", "critic_debugging", verbose=verbose)
-            # Fallback to manual message if Critic fails
-            fallback_message = (
-                "CODE EXECUTION FAILED\n\n"
-                "The Scientist's code failed to execute. Please review the error message and fix the code issues before proceeding.\n"
-                "Common issues include syntax errors, missing imports, data access problems, or logic errors.\n"
-                "Please provide corrected code in the next iteration."
-            )
-            self.conversation_manager.add_agent_response("Critic", fallback_message, "")
-            ui.print_agent_response("Critic", fallback_message, "")
-            return "HYPOTHESIS NOT VERIFIED"
     
     def planning_agent_round(self, hypothesis: str = None, filtered_csv_statistics: Dict[str, Any] = None, verbose: bool = True) -> None:
         """Handle Enhanced Planning Agent round."""

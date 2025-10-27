@@ -38,6 +38,7 @@ class Config:
         parser.add_argument('--csv-file', type=str, help='CSV file path containing hypotheses when hypothesis-mode is "csv_batch"')
         parser.add_argument('--start-index', type=int, help='Start processing CSV from this index (0-based) when hypothesis-mode is "csv_batch"')
         parser.add_argument('--end-index', type=int, help='End processing CSV at this index (0-based, inclusive) when hypothesis-mode is "csv_batch"')
+        parser.add_argument('--sample-size', type=int, help='Number of rows to sample from the dataset CSV (N)')
         parser.add_argument('--dataset-folder', type=str, help='Override dataset folder from config')
         parser.add_argument('--verbose', action='store_true', help='Override verbose setting from config')
         parser.add_argument('--disable-planning-agent', action='store_true', help='Disable the planning agent (overrides config)')
@@ -97,6 +98,7 @@ class Config:
                 'csv_file': '/projectnb/vkolagrp/ketanss/adrd_agent_custom/DiscoADRD/DiscoADRD_v2/batch.csv',
                 'start_index': 0,
                 'end_index': None,
+                'sample_size': 10,  # Number of rows to sample from dataset
                 'num_keywords': 3,
                 'num_sampling_runs': 10,
                 'outer_loop_iterations': 2
@@ -149,6 +151,12 @@ class Config:
                 self.yaml_config['experiment'] = {}
             self.yaml_config['experiment']['end_index'] = args.end_index
         
+        # Override sample size if provided
+        if args.sample_size is not None:
+            if 'experiment' not in self.yaml_config:
+                self.yaml_config['experiment'] = {}
+            self.yaml_config['experiment']['sample_size'] = args.sample_size
+        
         # Override dataset folder if provided
         if args.dataset_folder:
             if 'paths' not in self.yaml_config:
@@ -194,6 +202,7 @@ class Config:
         self.csv_file = experiment_config.get('csv_file', None)
         self.start_index = experiment_config.get('start_index', None)  # Default to None (will be set to 0 in runner)
         self.end_index = experiment_config.get('end_index', None)  # Default to None (will be set to len-1 in runner)
+        self.sample_size = experiment_config.get('sample_size', None)  # Number of hypotheses to sample from CSV batch
         self.num_keywords = experiment_config.get('num_keywords', 3)
         self.num_sampling_runs = experiment_config.get('num_sampling_runs', 10)
         self.outer_loop_iterations = experiment_config.get('outer_loop_iterations', 3)
@@ -241,6 +250,8 @@ class Config:
                     print(f"   Index range: {self.start_index} to {self.end_index}")
                 else:
                     print(f"   Start index: {self.start_index}")
+        if self.sample_size is not None:
+            print(f"   Dataset sample size: {self.sample_size} rows")
         print(f"   Keywords file: {self.keywords_file}")
         print(f"   Number of keywords per run: {self.num_keywords}")
         print(f"   Number of sampling runs: {self.num_sampling_runs}")

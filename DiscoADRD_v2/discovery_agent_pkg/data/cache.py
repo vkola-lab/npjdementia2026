@@ -476,3 +476,34 @@ class DataCache:
                 'numeric_stats': {},
                 'categorical_stats': {}
             }
+    
+    def sample_dataset_rows(self, sample_size: int, seed: int = None) -> pd.DataFrame:
+        """
+        Sample a subset of rows from the original dataset.
+        
+        Args:
+            sample_size (int): Number of rows to sample
+            seed (int): Random seed for reproducible sampling
+        
+        Returns:
+            pd.DataFrame: Sampled dataset
+        """
+        if not self._is_initialized or self._original_csv_data is None:
+            raise ValueError("Data cache not initialized or no original data available")
+        
+        if sample_size <= 0:
+            raise ValueError("Sample size must be positive")
+        
+        df = self._original_csv_data
+        total_rows = len(df)
+        
+        if sample_size >= total_rows:
+            ui.print_info(f"📊 Sample size ({sample_size}) >= total rows ({total_rows}), using full dataset")
+            return df.copy()
+        
+        # Sample rows
+        sampled_df = df.sample(n=sample_size, random_state=seed).copy()
+        
+        ui.print_info(f"📊 Sampled {len(sampled_df)} rows from {total_rows} total rows")
+        
+        return sampled_df

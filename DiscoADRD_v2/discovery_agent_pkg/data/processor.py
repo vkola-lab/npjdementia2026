@@ -511,7 +511,9 @@ def save_processed_data(df: pd.DataFrame, output_path: str) -> None:
     ui.print_info(f"📊 Final data shape: {df.shape[0]} rows, {df.shape[1]} columns")
 
 
-def simplified_data_preprocessing(model_client: ModelClient, hypothesis: str, data_cache: DataCache, output_path: str = "working/processed_dataset.csv") -> pd.DataFrame:
+def simplified_data_preprocessing(model_client: ModelClient, hypothesis: str, data_cache: DataCache, 
+                                 sample_size: int = None, seed: int = None, 
+                                 output_path: str = "working/processed_dataset.csv") -> pd.DataFrame:
     """
     Main function to perform simplified data preprocessing.
     
@@ -532,12 +534,19 @@ def simplified_data_preprocessing(model_client: ModelClient, hypothesis: str, da
     ui.print_info(f"🔬 Hypothesis: {hypothesis}")
     ui.log_system_event("INFO", f"Hypothesis: {hypothesis}", "preprocessing")
     
-    # Step 1: Get the original CSV data from cache
+    # Step 1: Get the original CSV data from cache (with optional sampling)
     ui.print_info(f"📖 Getting original CSV data from cache...")
     ui.log_preprocessing_step(1, "Data Loading", "Getting original CSV data from cache", "started")
-    df = data_cache.get_original_csv_data()
-    ui.print_info(f"📊 Original data shape: {df.shape[0]} rows, {df.shape[1]} columns")
-    ui.log_preprocessing_step(1, "Data Loading", f"Original data shape: {df.shape[0]} rows, {df.shape[1]} columns", "completed")
+    
+    if sample_size is not None:
+        ui.print_info(f"📊 Sampling {sample_size} rows from dataset...")
+        df = data_cache.sample_dataset_rows(sample_size, seed)
+        ui.log_preprocessing_step(1, "Data Loading", f"Sampled {sample_size} rows from dataset", "completed")
+    else:
+        df = data_cache.get_original_csv_data()
+        ui.log_preprocessing_step(1, "Data Loading", f"Original data shape: {df.shape[0]} rows, {df.shape[1]} columns", "completed")
+    
+    ui.print_info(f"📊 Working data shape: {df.shape[0]} rows, {df.shape[1]} columns")
     
     # Step 2: Query LLM to filter columns
     ui.print_info(f"🤖 Step 1: Querying LLM for variable selection...")
@@ -622,7 +631,8 @@ class SimplifiedDataProcessor:
     def run_simplified_preprocessing(self, hypothesis: str, dataset_folder: str = None, 
                                    previous_iteration_context: str = None, 
                                    conversation_manager=None, 
-                                   previously_used_variables: List[str] = None):
+                                   previously_used_variables: List[str] = None,
+                                   sample_size: int = None, seed: int = None):
         """
         Run simplified preprocessing that maintains the same interface as the original.
         
@@ -654,6 +664,8 @@ class SimplifiedDataProcessor:
                     model_client=self.model_client,
                     hypothesis=hypothesis,
                     data_cache=self.data_cache,
+                    sample_size=sample_size,
+                    seed=seed,
                     output_path=output_path
                 )
             except ValueError as e:
