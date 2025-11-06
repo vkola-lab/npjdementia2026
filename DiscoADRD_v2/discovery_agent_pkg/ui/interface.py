@@ -161,6 +161,17 @@ class UI:
         self.colors_enabled = sys.stdout.isatty()  # Enable colors if terminal supports it
         self.enhanced_ui_available = ENHANCED_UI_AVAILABLE
         self.config = config
+        # Initialize FileManager for filename generation (lazy import to avoid import errors)
+        try:
+            # Try relative import first (works when loaded as part of package)
+            try:
+                from ..data.file_manager import FileManager
+            except (ImportError, ValueError):
+                # Fallback to absolute import (works when loaded via importlib)
+                from discovery_agent_pkg.data.file_manager import FileManager
+            self.file_manager = FileManager(config) if config else None
+        except ImportError:
+            self.file_manager = None
         
         # Initialize palette correctly based on availability
         if self.enhanced_ui_available:
@@ -210,8 +221,15 @@ class UI:
             # Create log file path
             responses_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), "analysis", "responses")
             os.makedirs(responses_dir, exist_ok=True)
-            timestamp = time.strftime("%Y%m%d_%H%M%S")
-            self.log_file_path = os.path.join(responses_dir, f"session_log_{timestamp}.txt")
+            
+            # Use FileManager to generate filename with config variables if available
+            if self.file_manager:
+                log_filename = self.file_manager.generate_filename_with_config("session_log", ".txt")
+            else:
+                # Fallback to simple timestamp if no config available
+                timestamp = time.strftime("%Y%m%d_%H%M%S")
+                log_filename = f"session_log_{timestamp}.txt"
+            self.log_file_path = os.path.join(responses_dir, log_filename)
             
             # Don't open the file yet - wait until first message is logged
             self.log_file = None
@@ -590,8 +608,14 @@ class UI:
                 else:
                     responses_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), "analysis", "responses")
                     os.makedirs(responses_dir, exist_ok=True)
-                    timestamp = time.strftime("%Y%m%d_%H%M%S")
-                    log_file_path = os.path.join(responses_dir, f"session_log_{timestamp}.txt")
+                    # Use FileManager to generate filename with config variables if available
+                    if self.file_manager:
+                        log_filename = self.file_manager.generate_filename_with_config("session_log", ".txt")
+                    else:
+                        # Fallback to simple timestamp if no config available
+                        timestamp = time.strftime("%Y%m%d_%H%M%S")
+                        log_filename = f"session_log_{timestamp}.txt"
+                    log_file_path = os.path.join(responses_dir, log_filename)
                 
                 # Save the session log
                 with open(log_file_path, 'w', encoding='utf-8') as f:

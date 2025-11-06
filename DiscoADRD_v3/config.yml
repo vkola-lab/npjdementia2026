@@ -1,0 +1,52 @@
+# Discovery Agent Configuration File
+# This file contains system settings and defaults for the Discovery Agent
+
+# Model Configuration
+model:
+  name: "Qwen/Qwen3-4B-Instruct-2507" #"Qwen/Qwen3-30B-A3B-Instruct-2507" #"Qwen/Qwen3-4B-Instruct-2507" 
+  client_type: "vllm"  # vllm, hf (HuggingFace)
+  device: "auto"  # auto, cuda, cpu
+  max_tokens: 16384
+  max_model_len: 224848  # Maximum context length for vLLM
+  seed: 45 # Fixed seed for deterministic/reproducible generation
+  # vLLM Environment Variables
+  vllm_env:
+    VLLM_USE_TRITON_FLASH_ATTN: "1"  # Enable Flash Attention for speed
+    # VLLM_ATTENTION_BACKEND: "FLASHINFER"  # Optional: alternative attention backend
+    # VLLM_USE_MODELSCOPE: "false"  # Optional: disable ModelScope
+
+# Agent Configuration
+agents:
+  max_conversation_length: 7
+  auto_approve_after_attempts: 3
+  code_timeout: 120  # seconds
+  enable_planning_agent: false
+  enable_code_execution: true
+
+# Experiment Configuration
+experiment:
+  hypothesis_mode: "csv_batch"  # generate, direct, direct hypothesis, csv_batch
+  hypothesis: "Higher age is associated with increased dementia incidence."
+  csv_file: "/projectnb/vkolagrp/ketanss/adrd_agent_custom/DiscoADRD/DiscoADRD_v3/batch.csv"  # Path to CSV file containing hypotheses (only needed for csv_batch mode)
+  start_index: 0  # Start processing CSV from this index (0-based, default: 0)
+  end_index: null  # End processing CSV at this index (0-based, inclusive, default: len-1)
+  sample_size: null  # Number of rows to sample from the dataset CSV (N)
+  num_keywords: 3
+  num_sampling_runs: 10
+  outer_loop_iterations: 2
+
+# File Paths
+paths:
+  keywords_file: "adrd_keywords.txt"
+  dataset_folder: "/projectnb/vkolagrp/ketanss/adrd_agent_custom/DiscoADRD/datasets/NACC"  # Path to dataset folder
+  analysis_dir: "analysis"
+  responses_dir: "analysis/responses"
+  results_dir: "analysis/results"
+  qsub_runs_dir: "analysis/qsub_runs"
+  working_dir: "working_45"
+
+# Output Configuration
+output:
+  verbose: true
+  save_responses: true
+  save_results: true

@@ -142,11 +142,24 @@ class JSONLogger:
     def __init__(self, config=None):
         """Initialize the JSON logger."""
         self.config = config
+        # Initialize FileManager for filename generation (lazy import to avoid import errors)
+        try:
+            # Try relative import first (works when loaded as part of package)
+            try:
+                from ..data.file_manager import FileManager
+            except (ImportError, ValueError):
+                # Fallback to absolute import (works when loaded via importlib)
+                from discovery_agent_pkg.data.file_manager import FileManager
+            self.file_manager = FileManager(config) if config else None
+        except ImportError:
+            self.file_manager = None
         self.log_data = None
         self.current_hypothesis = None
         self.current_outer_iteration = None
         self.current_turn = None
         self.start_time = None
+        # Store the generated filename for consistent use
+        self.log_filename = None
         
         # Initialize log structure
         self._initialize_log()
@@ -154,6 +167,26 @@ class JSONLogger:
     def _initialize_log(self):
         """Initialize the log structure."""
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        
+        # Generate filename with config variables if FileManager is available
+        if self.file_manager:
+            self.log_filename = self.file_manager.generate_filename_with_config("session_log", ".json")
+            # Extract timestamp from generated filename for consistency
+            # The filename format is: session_log_{config_str}_{timestamp}.json
+            # Timestamp is always in format YYYYMMDD_HHMMSS at the end before .json
+            filename_no_ext = self.log_filename.replace(".json", "")
+            # Find the last two parts that match timestamp format (YYYYMMDD_HHMMSS)
+            parts = filename_no_ext.split("_")
+            if len(parts) >= 2:
+                # Check if last two parts form a valid timestamp
+                last_part = parts[-1]
+                second_last = parts[-2]
+                if len(second_last) == 8 and second_last.isdigit() and len(last_part) == 6 and last_part.isdigit():
+                    timestamp = f"{second_last}_{last_part}"
+            # If timestamp extraction failed, keep the original timestamp
+        else:
+            # Fallback to simple timestamp if no config available
+            self.log_filename = f"session_log_{timestamp}.json"
         
         # Extract config information
         config_dict = {}
@@ -339,8 +372,12 @@ class JSONLogger:
         # Create default file path
         responses_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), "analysis", "responses")
         os.makedirs(responses_dir, exist_ok=True)
-        timestamp = self.log_data.experiment_metadata.timestamp
-        file_path = os.path.join(responses_dir, f"session_log_{timestamp}.json")
+        # Use stored filename if available, otherwise fall back to timestamp-based name
+        if self.log_filename:
+            file_path = os.path.join(responses_dir, self.log_filename)
+        else:
+            timestamp = self.log_data.experiment_metadata.timestamp
+            file_path = os.path.join(responses_dir, f"session_log_{timestamp}.json")
         
         # Convert dataclass to dict for JSON serialization
         log_dict = asdict(self.log_data)
@@ -353,8 +390,12 @@ class JSONLogger:
         try:
             # Create default file path
             responses_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), "analysis", "responses")
-            timestamp = self.log_data.experiment_metadata.timestamp
-            file_path = os.path.join(responses_dir, f"session_log_{timestamp}.json")
+            # Use stored filename if available, otherwise fall back to timestamp-based name
+            if self.log_filename:
+                file_path = os.path.join(responses_dir, self.log_filename)
+            else:
+                timestamp = self.log_data.experiment_metadata.timestamp
+                file_path = os.path.join(responses_dir, f"session_log_{timestamp}.json")
             
             if os.path.exists(file_path):
                 with open(file_path, 'r', encoding='utf-8') as f:
@@ -385,8 +426,12 @@ class JSONLogger:
             # Create default file path
             responses_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), "analysis", "responses")
             os.makedirs(responses_dir, exist_ok=True)
-            timestamp = self.log_data.experiment_metadata.timestamp
-            file_path = os.path.join(responses_dir, f"session_log_{timestamp}.json")
+            # Use stored filename if available, otherwise fall back to timestamp-based name
+            if self.log_filename:
+                file_path = os.path.join(responses_dir, self.log_filename)
+            else:
+                timestamp = self.log_data.experiment_metadata.timestamp
+                file_path = os.path.join(responses_dir, f"session_log_{timestamp}.json")
         
         # Convert dataclass to dict for JSON serialization
         log_dict = asdict(self.log_data)
@@ -401,8 +446,12 @@ class JSONLogger:
         # Create default file path
         responses_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), "analysis", "responses")
         os.makedirs(responses_dir, exist_ok=True)
-        timestamp = self.log_data.experiment_metadata.timestamp
-        file_path = os.path.join(responses_dir, f"session_log_{timestamp}.json")
+        # Use stored filename if available, otherwise fall back to timestamp-based name
+        if self.log_filename:
+            file_path = os.path.join(responses_dir, self.log_filename)
+        else:
+            timestamp = self.log_data.experiment_metadata.timestamp
+            file_path = os.path.join(responses_dir, f"session_log_{timestamp}.json")
         
         # Convert dataclass to dict for JSON serialization
         log_dict = asdict(self.log_data)
