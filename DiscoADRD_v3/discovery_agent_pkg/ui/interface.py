@@ -9,6 +9,7 @@ import os
 import sys
 import time
 import re
+import io
 from typing import List, Optional, Dict, Any
 from datetime import datetime
 # Try to import enhanced UI components, fall back to basic functionality if not available
@@ -200,15 +201,13 @@ class UI:
         self.log_saved = False
         self.log_file = None
         self.log_file_path = None
-        self.log_base_filename = None
-        self.run_folder_path = None
         
-        # Initialize real-time logging first (creates run folder and base filename)
-        self._init_realtime_logging()
-        
-        # Initialize JSON logger (will use the same run folder and base filename)
+        # Initialize JSON logger
         if ENHANCED_UI_AVAILABLE:
-            initialize_json_logger(config, self.log_base_filename, self.run_folder_path)
+            initialize_json_logger(config)
+        
+        # Initialize real-time logging
+        self._init_realtime_logging()
         
         # Register cleanup function to save log on exit
         import atexit
@@ -220,32 +219,18 @@ class UI:
             import os
             import time
             
-            # Create responses directory
+            # Create log file path
             responses_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), "analysis", "responses")
             os.makedirs(responses_dir, exist_ok=True)
             
-            # Generate run folder name and base filename (without extension)
+            # Use FileManager to generate filename with config variables if available
             if self.file_manager:
-                run_folder_name = self.file_manager.generate_run_folder_name("session_log", include_timestamp=True)
-                # Extract base filename from folder name (folder name is the base filename)
-                base_filename = run_folder_name
+                log_filename = self.file_manager.generate_filename_with_config("session_log", ".txt")
             else:
                 # Fallback to simple timestamp if no config available
                 timestamp = time.strftime("%Y%m%d_%H%M%S")
-                run_folder_name = f"session_log_{timestamp}"
-                base_filename = run_folder_name
-            
-            # Create run folder
-            run_folder_path = os.path.join(responses_dir, run_folder_name)
-            os.makedirs(run_folder_path, exist_ok=True)
-            
-            # Store base filename (without extension) for use by both .txt and .json files
-            self.log_base_filename = base_filename
-            self.run_folder_path = run_folder_path
-            
-            # Create full path for .txt file
-            log_filename = f"{base_filename}.txt"
-            self.log_file_path = os.path.join(run_folder_path, log_filename)
+                log_filename = f"session_log_{timestamp}.txt"
+            self.log_file_path = os.path.join(responses_dir, log_filename)
             
             # Don't open the file yet - wait until first message is logged
             self.log_file = None
@@ -256,8 +241,6 @@ class UI:
             self.log_file = None
             self.log_file_path = None
             self.log_file_initialized = False
-            self.log_base_filename = None
-            self.run_folder_path = None
     
     def _print_colored(self, text: str, color_code: str, verbose: bool = True) -> None:
         """
@@ -283,14 +266,10 @@ class UI:
         # Write to real-time log file (initialize on first message)
         if self.log_file_path and not self.log_file_initialized:
             try:
-                # Ensure the directory exists before opening the file
-                import os
-                os.makedirs(os.path.dirname(self.log_file_path), exist_ok=True)
                 self.log_file = open(self.log_file_path, 'w', encoding='utf-8')
                 self.log_file_initialized = True
             except Exception as e:
                 # If real-time logging fails, continue without it
-                print(f"⚠️ Warning: Could not initialize log file: {str(e)}")
                 self.log_file = None
                 self.log_file_path = None
         
@@ -299,15 +278,8 @@ class UI:
                 self.log_file.write(clean_text + '\n')
                 self.log_file.flush()  # Ensure immediate write
             except Exception as e:
-                # If real-time logging fails, try to recover
-                print(f"⚠️ Warning: Could not write to log file: {str(e)}")
-                try:
-                    if self.log_file:
-                        self.log_file.close()
-                except:
-                    pass
-                self.log_file = None
-                self.log_file_initialized = False
+                # If real-time logging fails, continue without it
+                pass
     
     def print_info(self, message: str, verbose: bool = True) -> None:
         """
@@ -619,25 +591,12 @@ class UI:
         try:
             # Close real-time log file if it exists and was initialized
             if self.log_file and self.log_file_initialized:
-                try:
-                    self.log_file.flush()  # Ensure all data is written
-                    self.log_file.close()
-                except Exception as e:
-                    print(f"⚠️ Warning: Error closing log file: {str(e)}")
-                finally:
-                    self.log_file = None
-                    self.log_file_initialized = False
-                
-                # Verify file exists and has content
+                self.log_file.close()
+                self.log_file = None
                 if self.log_file_path:
-                    import os
-                    if os.path.exists(self.log_file_path) and os.path.getsize(self.log_file_path) > 0:
-                        print(f"📝 Session log saved to: {self.log_file_path}")
-                        self.log_saved = True
-                        return
-                    else:
-                        # File doesn't exist or is empty, fall through to create from session_log
-                        print(f"⚠️ Warning: Log file was not properly saved, creating from session log")
+                    print(f"📝 Session log saved to: {self.log_file_path}")
+                    self.log_saved = True
+                    return
             
             # If no real-time log file was created or initialized, create one from session log
             if self.session_log:
@@ -647,29 +606,17 @@ class UI:
                 # Use existing log file path if available, otherwise create new one
                 if self.log_file_path and not self.log_file_initialized:
                     log_file_path = self.log_file_path
-                elif self.run_folder_path and self.log_base_filename:
-                    # Use the run folder and base filename
-                    log_file_path = os.path.join(self.run_folder_path, f"{self.log_base_filename}.txt")
                 else:
-                    # Fallback: create run folder and base filename
                     responses_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), "analysis", "responses")
                     os.makedirs(responses_dir, exist_ok=True)
-                    # Use FileManager to generate run folder name and base filename
+                    # Use FileManager to generate filename with config variables if available
                     if self.file_manager:
-                        run_folder_name = self.file_manager.generate_run_folder_name("session_log", include_timestamp=True)
-                        run_folder_path = os.path.join(responses_dir, run_folder_name)
-                        os.makedirs(run_folder_path, exist_ok=True)
-                        log_file_path = os.path.join(run_folder_path, f"{run_folder_name}.txt")
+                        log_filename = self.file_manager.generate_filename_with_config("session_log", ".txt")
                     else:
                         # Fallback to simple timestamp if no config available
                         timestamp = time.strftime("%Y%m%d_%H%M%S")
-                        run_folder_name = f"session_log_{timestamp}"
-                        run_folder_path = os.path.join(responses_dir, run_folder_name)
-                        os.makedirs(run_folder_path, exist_ok=True)
-                        log_file_path = os.path.join(run_folder_path, f"{run_folder_name}.txt")
-                
-                # Ensure the directory exists before saving
-                os.makedirs(os.path.dirname(log_file_path), exist_ok=True)
+                        log_filename = f"session_log_{timestamp}.txt"
+                    log_file_path = os.path.join(responses_dir, log_filename)
                 
                 # Save the session log
                 with open(log_file_path, 'w', encoding='utf-8') as f:

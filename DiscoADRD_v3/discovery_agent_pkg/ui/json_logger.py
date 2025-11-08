@@ -139,13 +139,11 @@ class ExperimentLog:
 class JSONLogger:
     """JSON-based structured logger for the Discovery Agent."""
     
-    def __init__(self, config=None, base_filename=None, run_folder_path=None):
+    def __init__(self, config=None):
         """Initialize the JSON logger.
         
         Args:
             config: Configuration object
-            base_filename: Base filename (without extension) to use for consistency with .txt log
-            run_folder_path: Path to the run folder where both .txt and .json files should be stored
         """
         self.config = config
         # Initialize FileManager for filename generation (lazy import to avoid import errors)
@@ -166,8 +164,6 @@ class JSONLogger:
         self.start_time = None
         # Store the generated filename for consistent use
         self.log_filename = None
-        self.base_filename = base_filename  # Store base filename (without extension)
-        self.run_folder_path = run_folder_path  # Store run folder path
         
         # Initialize log structure
         self._initialize_log()
@@ -176,15 +172,9 @@ class JSONLogger:
         """Initialize the log structure."""
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
         
-        # Use provided base filename and run folder if available (from UI initialization)
-        # This ensures both .txt and .json files use the same name and are in the same folder
-        if self.base_filename and self.run_folder_path:
-            # Use the same base filename as the .txt log file
-            self.log_filename = f"{self.base_filename}.json"
-        elif self.file_manager:
-            # Generate run folder name and base filename
-            run_folder_name = self.file_manager.generate_run_folder_name("session_log", include_timestamp=True)
-            self.log_filename = f"{run_folder_name}.json"
+        # Use FileManager to generate filename with config variables if available
+        if self.file_manager:
+            self.log_filename = self.file_manager.generate_filename_with_config("session_log", ".json")
         else:
             # Fallback to simple timestamp if no config available
             self.log_filename = f"session_log_{timestamp}.json"
@@ -424,21 +414,15 @@ class JSONLogger:
     def save_log(self, file_path: Optional[str] = None) -> str:
         """Save the log to a JSON file."""
         if file_path is None:
-            # Use run folder path if available, otherwise use responses directory
-            if self.run_folder_path:
-                # Ensure the run folder exists
-                os.makedirs(self.run_folder_path, exist_ok=True)
-                file_path = os.path.join(self.run_folder_path, self.log_filename)
+            # Create default file path
+            responses_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), "analysis", "responses")
+            os.makedirs(responses_dir, exist_ok=True)
+            # Use stored filename if available, otherwise fall back to timestamp-based name
+            if self.log_filename:
+                file_path = os.path.join(responses_dir, self.log_filename)
             else:
-                # Fallback to responses directory
-                responses_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), "analysis", "responses")
-                os.makedirs(responses_dir, exist_ok=True)
-                # Use stored filename if available, otherwise fall back to timestamp-based name
-                if self.log_filename:
-                    file_path = os.path.join(responses_dir, self.log_filename)
-                else:
-                    timestamp = self.log_data.experiment_metadata.timestamp
-                    file_path = os.path.join(responses_dir, f"session_log_{timestamp}.json")
+                timestamp = self.log_data.experiment_metadata.timestamp
+                file_path = os.path.join(responses_dir, f"session_log_{timestamp}.json")
         
         # Convert dataclass to dict for JSON serialization
         log_dict = asdict(self.log_data)
@@ -450,21 +434,15 @@ class JSONLogger:
     
     def save_log_realtime(self) -> str:
         """Save the log to a JSON file in real-time (updates existing file)."""
-        # Use run folder path if available, otherwise use responses directory
-        if self.run_folder_path:
-            # Ensure the run folder exists
-            os.makedirs(self.run_folder_path, exist_ok=True)
-            file_path = os.path.join(self.run_folder_path, self.log_filename)
+        # Create default file path
+        responses_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), "analysis", "responses")
+        os.makedirs(responses_dir, exist_ok=True)
+        # Use stored filename if available, otherwise fall back to timestamp-based name
+        if self.log_filename:
+            file_path = os.path.join(responses_dir, self.log_filename)
         else:
-            # Fallback to responses directory
-            responses_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), "analysis", "responses")
-            os.makedirs(responses_dir, exist_ok=True)
-            # Use stored filename if available, otherwise fall back to timestamp-based name
-            if self.log_filename:
-                file_path = os.path.join(responses_dir, self.log_filename)
-            else:
-                timestamp = self.log_data.experiment_metadata.timestamp
-                file_path = os.path.join(responses_dir, f"session_log_{timestamp}.json")
+            timestamp = self.log_data.experiment_metadata.timestamp
+            file_path = os.path.join(responses_dir, f"session_log_{timestamp}.json")
         
         # Convert dataclass to dict for JSON serialization
         log_dict = asdict(self.log_data)
@@ -499,16 +477,14 @@ def get_json_logger() -> JSONLogger:
     return json_logger
 
 
-def initialize_json_logger(config=None, base_filename=None, run_folder_path=None):
+def initialize_json_logger(config=None):
     """Initialize the global JSON logger with config.
     
     Args:
         config: Configuration object
-        base_filename: Base filename (without extension) to use for consistency with .txt log
-        run_folder_path: Path to the run folder where both .txt and .json files should be stored
     """
     global json_logger
-    json_logger = JSONLogger(config, base_filename, run_folder_path)
+    json_logger = JSONLogger(config)
 
 
 def save_json_log(file_path: Optional[str] = None) -> str:
