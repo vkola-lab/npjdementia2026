@@ -304,7 +304,7 @@ class ExperimentRunner:
                 for idx, hypothesis in enumerate(hypotheses, 1):
                     try:
                         status = self.process_hypothesis(hypothesis, idx, run_idx, sampled_keywords, verbose)
-                        if status == "HYPOTHESIS VERIFIED":
+                        if status == "NULL REJECTED":
                             run_approved_count += 1
                     except Exception as e:
                         # Handle unhandled exceptions in hypothesis processing
@@ -353,7 +353,7 @@ class ExperimentRunner:
             verbose (bool): Whether to use verbose output
         
         Returns:
-            str: Status of hypothesis ("HYPOTHESIS VERIFIED", "HYPOTHESIS NOT VERIFIED", "NOT APPLICABLE")
+            str: Status of hypothesis ("NULL REJECTED", "NULL NOT REJECTED", "NOT TESTABLE")
         """
         import time
         start_time = time.time()
@@ -410,7 +410,7 @@ class ExperimentRunner:
                 if not preprocessing_result.get('success', False):
                     # Check if this is a "no relevant variables" case
                     if preprocessing_result.get('no_relevant_variables', False):
-                        ui.print_warning(f"❌ No relevant variables found for hypothesis {idx}. Marking as not applicable.", verbose=verbose)
+                        ui.print_warning(f"❌ No relevant variables found for hypothesis {idx}. Marking as not testable.", verbose=verbose)
                         # Mark hypothesis as not verified and return early
                         return self._mark_hypothesis_not_verified(hypothesis, idx, run_idx, verbose)
                     else:
@@ -457,30 +457,30 @@ class ExperimentRunner:
             
             # Track this iteration
             total_outer_iterations = outer_iteration
-            final_iteration_turns = iteration_turns_to_approve if iteration_approved == "HYPOTHESIS VERIFIED" else iteration_turns_to_autoapprove
+            final_iteration_turns = iteration_turns_to_approve if iteration_approved == "NULL REJECTED" else iteration_turns_to_autoapprove
             
             # Display iteration result
-            if iteration_approved == "HYPOTHESIS VERIFIED":
-                result_display = "✅ VERIFIED"
-            elif iteration_approved == "NOT APPLICABLE":
-                result_display = "⚠️ NOT APPLICABLE"
+            if iteration_approved == "NULL REJECTED":
+                result_display = "✅ NULL REJECTED"
+            elif iteration_approved == "NOT TESTABLE":
+                result_display = "⚠️ NOT TESTABLE"
             else:
-                result_display = "❌ NOT VERIFIED"
+                result_display = "❌ NULL NOT REJECTED"
             ui.print_info(f"📊 Iteration {outer_iteration} result: {result_display}", verbose=verbose)
             
             # End JSON logging for this outer iteration
             ui.end_outer_iteration_logging(iteration_approved)
             
-            if iteration_approved == "HYPOTHESIS VERIFIED":
-                # If approved, we're done with this hypothesis
+            if iteration_approved == "NULL REJECTED":
+                # If null rejected, we're done with this hypothesis
                 approved = iteration_approved
                 num_turns_to_approve = iteration_turns_to_approve
-                ui.print_success(f"🎉 Hypothesis {idx} VERIFIED in iteration {outer_iteration}!", verbose=verbose)
+                ui.print_success(f"🎉 Hypothesis {idx} NULL REJECTED in iteration {outer_iteration}!", verbose=verbose)
                 break
-            elif iteration_approved == "NOT APPLICABLE":
-                # If not applicable, we're done with this hypothesis
+            elif iteration_approved == "NOT TESTABLE":
+                # If not testable, we're done with this hypothesis
                 approved = iteration_approved
-                ui.print_warning(f"⚠️ Hypothesis {idx} NOT APPLICABLE in iteration {outer_iteration}!", verbose=verbose)
+                ui.print_warning(f"⚠️ Hypothesis {idx} NOT TESTABLE in iteration {outer_iteration}!", verbose=verbose)
                 break
             else:
                 # If not approved, create summary for next iteration
@@ -489,11 +489,11 @@ class ExperimentRunner:
                     previous_conversation_summary = self.conversation_manager.create_outer_loop_summary()
                     ui.print_info(f"🔄 Will try different approach in iteration {outer_iteration + 1}...", verbose=verbose)
                 else:
-                    ui.print_warning(f"⚠️ Hypothesis {idx} NOT VERIFIED after {outer_loop_iterations} iterations", verbose=verbose)
+                    ui.print_warning(f"⚠️ Hypothesis {idx} NULL NOT REJECTED after {outer_loop_iterations} iterations", verbose=verbose)
         
-        # If no decision was made, default to not verified
+        # If no decision was made, default to null not rejected
         if approved is None:
-            approved = "HYPOTHESIS NOT VERIFIED"
+            approved = "NULL NOT REJECTED"
         
         ui.print_approval_status(approved, verbose=verbose)
         
@@ -549,12 +549,12 @@ class ExperimentRunner:
             verbose (bool): Whether to print verbose output
             
         Returns:
-            str: Always returns "NOT APPLICABLE"
+            str: Always returns "NOT TESTABLE"
         """
         import time
         start_time = time.time()
         
-        ui.print_info(f"📝 Marking hypothesis {idx} as not applicable due to no relevant variables...", verbose=verbose)
+        ui.print_info(f"📝 Marking hypothesis {idx} as not testable due to no relevant variables...", verbose=verbose)
         
         # Calculate execution time (minimal time for this case)
         end_time = time.time()
@@ -568,7 +568,7 @@ class ExperimentRunner:
             hypothesis_text=hypothesis,
             outer_iterations_used=0,  # No iterations used
             inner_iterations_used=0,  # No iterations used
-            hypothesis_approved="NOT APPLICABLE",
+            hypothesis_approved="NOT TESTABLE",
             turns_to_approve=None,
             execution_time_seconds=execution_time
         )
@@ -576,10 +576,10 @@ class ExperimentRunner:
         # Note: CSV status updates removed to preserve original batch.csv
         
         # Clean up working directory
-        ui.print_info(f"🧹 Cleaning up working directory after marking hypothesis {idx} as not applicable...", verbose=verbose)
+        ui.print_info(f"🧹 Cleaning up working directory after marking hypothesis {idx} as not testable...", verbose=verbose)
         self.file_manager.cleanup_working_directory(recreate=False)
         
-        return "NOT APPLICABLE"
+        return "NOT TESTABLE"
     
     def run_conversation_until_approved(self, verbose: bool, hypothesis: str = None, 
                                       filtered_csv_statistics: Dict[str, Any] = None, 
@@ -615,7 +615,7 @@ class ExperimentRunner:
                 
                 if self.conversation_manager.should_auto_approve():
                     ui.print_warning(f"⚠️ Maximum attempts reached. Results not approved.", verbose=verbose)
-                    approved = "HYPOTHESIS NOT VERIFIED"  # Default to not verified when max attempts reached
+                    approved = "NULL NOT REJECTED"  # Default to null not rejected when max attempts reached
                     break
 
                 ui.print_info("🧪 Starting Scientist round...", verbose=verbose)
@@ -644,18 +644,18 @@ class ExperimentRunner:
                 ui.print_info(f"✅ Turn {self.conversation_manager.get_turns()} completed. Status: {critic_status}", verbose=verbose)
                 
                 # Check if we should break the loop based on the status
-                if critic_status == "HYPOTHESIS VERIFIED":
+                if critic_status == "NULL REJECTED":
                     approved = critic_status
                     break
-                elif critic_status == "NOT APPLICABLE":
-                    # For NOT APPLICABLE, we should also break as there's no point continuing
+                elif critic_status == "NOT TESTABLE":
+                    # For NOT TESTABLE, we should also break as there's no point continuing
                     approved = critic_status
                     break
                 elif critic_status is None or critic_status == "":
-                    # For debugging mode (no judgment provided), continue the loop
+                    # For debugging mode (no verdict provided), continue the loop
                     ui.print_info("🔄 Debugging guidance provided. Continuing conversation...", verbose=verbose)
                     continue
-                # For HYPOTHESIS NOT VERIFIED, continue the loop (keep approved = None)
+                # For NULL NOT REJECTED, continue the loop (keep approved = None)
                 
             except Exception as e:
                 ui.print_error(f"Conversation loop error: {str(e)}", "conversation loop", verbose=verbose)
@@ -663,12 +663,12 @@ class ExperimentRunner:
                 # Don't break - try to continue the conversation
                 continue
         
-        # If no decision was made, default to not verified
+        # If no decision was made, default to null not rejected
         if approved is None:
-            approved = "HYPOTHESIS NOT VERIFIED"
+            approved = "NULL NOT REJECTED"
         
-        # If approved, capture the number of turns
-        if approved == "HYPOTHESIS VERIFIED":
+        # If null rejected, capture the number of turns
+        if approved == "NULL REJECTED":
             num_turns_to_approve = self.conversation_manager.get_turns()
 
         return approved, num_turns_to_approve, num_turns_to_autoapprove
@@ -822,18 +822,18 @@ class ExperimentRunner:
             
             # Return approval status if requested
             if return_approval and approval_keyword:
-                # First try to parse XML judgment (for critic responses)
+                # First try to parse XML verdict (for critic responses)
                 xml_judgment = parse_critic_judgment(response)
                 if xml_judgment:
                     return xml_judgment
                 
                 # Fallback to keyword matching for backward compatibility
                 if approval_keyword in response:
-                    return "HYPOTHESIS VERIFIED"
-                elif "NOT APPLICABLE" in response:
-                    return "NOT APPLICABLE"
+                    return "NULL REJECTED"
+                elif "NOT TESTABLE" in response or "NOT APPLICABLE" in response:  # Support legacy
+                    return "NOT TESTABLE"
                 else:
-                    return "HYPOTHESIS NOT VERIFIED"
+                    return "NULL NOT REJECTED"
             
             # Return success status if requested
             if return_success:
@@ -881,7 +881,7 @@ class ExperimentRunner:
             agent_name="Critic",
             conversation_manager=self.conversation_manager,
             return_approval=True,
-            approval_keyword="HYPOTHESIS VERIFIED",
+            approval_keyword="NULL REJECTED",
             verbose=verbose
         )
     

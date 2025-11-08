@@ -139,8 +139,14 @@ class ExperimentLog:
 class JSONLogger:
     """JSON-based structured logger for the Discovery Agent."""
     
-    def __init__(self, config=None):
-        """Initialize the JSON logger."""
+    def __init__(self, config=None, base_filename=None, run_folder_path=None):
+        """Initialize the JSON logger.
+        
+        Args:
+            config: Configuration object
+            base_filename: Base filename (without extension) to use for consistency with .txt log
+            run_folder_path: Path to the run folder where both .txt and .json files should be stored
+        """
         self.config = config
         # Initialize FileManager for filename generation (lazy import to avoid import errors)
         try:
@@ -160,6 +166,8 @@ class JSONLogger:
         self.start_time = None
         # Store the generated filename for consistent use
         self.log_filename = None
+        self.base_filename = base_filename  # Store base filename (without extension)
+        self.run_folder_path = run_folder_path  # Store run folder path
         
         # Initialize log structure
         self._initialize_log()
@@ -168,22 +176,15 @@ class JSONLogger:
         """Initialize the log structure."""
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
         
-        # Generate filename with config variables if FileManager is available
-        if self.file_manager:
-            self.log_filename = self.file_manager.generate_filename_with_config("session_log", ".json")
-            # Extract timestamp from generated filename for consistency
-            # The filename format is: session_log_{config_str}_{timestamp}.json
-            # Timestamp is always in format YYYYMMDD_HHMMSS at the end before .json
-            filename_no_ext = self.log_filename.replace(".json", "")
-            # Find the last two parts that match timestamp format (YYYYMMDD_HHMMSS)
-            parts = filename_no_ext.split("_")
-            if len(parts) >= 2:
-                # Check if last two parts form a valid timestamp
-                last_part = parts[-1]
-                second_last = parts[-2]
-                if len(second_last) == 8 and second_last.isdigit() and len(last_part) == 6 and last_part.isdigit():
-                    timestamp = f"{second_last}_{last_part}"
-            # If timestamp extraction failed, keep the original timestamp
+        # Use provided base filename and run folder if available (from UI initialization)
+        # This ensures both .txt and .json files use the same name and are in the same folder
+        if self.base_filename and self.run_folder_path:
+            # Use the same base filename as the .txt log file
+            self.log_filename = f"{self.base_filename}.json"
+        elif self.file_manager:
+            # Generate run folder name and base filename
+            run_folder_name = self.file_manager.generate_run_folder_name("session_log", include_timestamp=True)
+            self.log_filename = f"{run_folder_name}.json"
         else:
             # Fallback to simple timestamp if no config available
             self.log_filename = f"session_log_{timestamp}.json"
@@ -351,9 +352,9 @@ class JSONLogger:
             
             # Update experiment summary
             self.log_data.experiment_summary.total_hypotheses += 1
-            if final_status == "HYPOTHESIS VERIFIED":
+            if final_status == "NULL REJECTED":
                 self.log_data.experiment_summary.verified_hypotheses += 1
-            elif final_status == "NOT APPLICABLE":
+            elif final_status == "NOT TESTABLE":
                 self.log_data.experiment_summary.not_applicable_hypotheses += 1
             else:
                 self.log_data.experiment_summary.not_verified_hypotheses += 1
@@ -423,15 +424,21 @@ class JSONLogger:
     def save_log(self, file_path: Optional[str] = None) -> str:
         """Save the log to a JSON file."""
         if file_path is None:
-            # Create default file path
-            responses_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), "analysis", "responses")
-            os.makedirs(responses_dir, exist_ok=True)
-            # Use stored filename if available, otherwise fall back to timestamp-based name
-            if self.log_filename:
-                file_path = os.path.join(responses_dir, self.log_filename)
+            # Use run folder path if available, otherwise use responses directory
+            if self.run_folder_path:
+                # Ensure the run folder exists
+                os.makedirs(self.run_folder_path, exist_ok=True)
+                file_path = os.path.join(self.run_folder_path, self.log_filename)
             else:
-                timestamp = self.log_data.experiment_metadata.timestamp
-                file_path = os.path.join(responses_dir, f"session_log_{timestamp}.json")
+                # Fallback to responses directory
+                responses_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), "analysis", "responses")
+                os.makedirs(responses_dir, exist_ok=True)
+                # Use stored filename if available, otherwise fall back to timestamp-based name
+                if self.log_filename:
+                    file_path = os.path.join(responses_dir, self.log_filename)
+                else:
+                    timestamp = self.log_data.experiment_metadata.timestamp
+                    file_path = os.path.join(responses_dir, f"session_log_{timestamp}.json")
         
         # Convert dataclass to dict for JSON serialization
         log_dict = asdict(self.log_data)
@@ -443,15 +450,21 @@ class JSONLogger:
     
     def save_log_realtime(self) -> str:
         """Save the log to a JSON file in real-time (updates existing file)."""
-        # Create default file path
-        responses_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), "analysis", "responses")
-        os.makedirs(responses_dir, exist_ok=True)
-        # Use stored filename if available, otherwise fall back to timestamp-based name
-        if self.log_filename:
-            file_path = os.path.join(responses_dir, self.log_filename)
+        # Use run folder path if available, otherwise use responses directory
+        if self.run_folder_path:
+            # Ensure the run folder exists
+            os.makedirs(self.run_folder_path, exist_ok=True)
+            file_path = os.path.join(self.run_folder_path, self.log_filename)
         else:
-            timestamp = self.log_data.experiment_metadata.timestamp
-            file_path = os.path.join(responses_dir, f"session_log_{timestamp}.json")
+            # Fallback to responses directory
+            responses_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), "analysis", "responses")
+            os.makedirs(responses_dir, exist_ok=True)
+            # Use stored filename if available, otherwise fall back to timestamp-based name
+            if self.log_filename:
+                file_path = os.path.join(responses_dir, self.log_filename)
+            else:
+                timestamp = self.log_data.experiment_metadata.timestamp
+                file_path = os.path.join(responses_dir, f"session_log_{timestamp}.json")
         
         # Convert dataclass to dict for JSON serialization
         log_dict = asdict(self.log_data)
@@ -486,10 +499,16 @@ def get_json_logger() -> JSONLogger:
     return json_logger
 
 
-def initialize_json_logger(config=None):
-    """Initialize the global JSON logger with config."""
+def initialize_json_logger(config=None, base_filename=None, run_folder_path=None):
+    """Initialize the global JSON logger with config.
+    
+    Args:
+        config: Configuration object
+        base_filename: Base filename (without extension) to use for consistency with .txt log
+        run_folder_path: Path to the run folder where both .txt and .json files should be stored
+    """
     global json_logger
-    json_logger = JSONLogger(config)
+    json_logger = JSONLogger(config, base_filename, run_folder_path)
 
 
 def save_json_log(file_path: Optional[str] = None) -> str:

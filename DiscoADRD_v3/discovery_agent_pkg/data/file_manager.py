@@ -26,19 +26,13 @@ class FileManager:
         self.config = config if config is not None else default_config
         self.csv_file_path = None
     
-    def generate_filename_with_config(self, base_name: str, extension: str = "", include_timestamp: bool = True) -> str:
+    def _get_config_string(self) -> str:
         """
-        Generate a filename that includes important config variables.
-        
-        Args:
-            base_name (str): Base name for the file
-            extension (str): File extension (e.g., '.csv', '.json')
-            include_timestamp (bool): Whether to include timestamp in filename
+        Get the config string used in filenames.
         
         Returns:
-            str: Generated filename with config variables
+            str: Config string with important config variables
         """
-        # Get important config variables
         config_parts = []
         
         # Model name (shortened)
@@ -74,7 +68,44 @@ class FileManager:
             config_parts.append(f"sample_{self.config.sample_size}")
         
         # Join config parts
-        config_str = "_".join(config_parts)
+        return "_".join(config_parts)
+    
+    def generate_run_folder_name(self, base_name: str = "session_log", include_timestamp: bool = True) -> str:
+        """
+        Generate a run folder name that includes important config variables.
+        This folder will contain both session_log.txt and session_log.json with matching names.
+        
+        Args:
+            base_name (str): Base name for the run folder
+            include_timestamp (bool): Whether to include timestamp in folder name
+        
+        Returns:
+            str: Generated folder name with config variables
+        """
+        config_str = self._get_config_string()
+        
+        # Add timestamp if requested
+        if include_timestamp:
+            timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+            folder_name = f"{base_name}_{config_str}_{timestamp}"
+        else:
+            folder_name = f"{base_name}_{config_str}"
+        
+        return folder_name
+    
+    def generate_filename_with_config(self, base_name: str, extension: str = "", include_timestamp: bool = True) -> str:
+        """
+        Generate a filename that includes important config variables.
+        
+        Args:
+            base_name (str): Base name for the file
+            extension (str): File extension (e.g., '.csv', '.json')
+            include_timestamp (bool): Whether to include timestamp in filename
+        
+        Returns:
+            str: Generated filename with config variables
+        """
+        config_str = self._get_config_string()
         
         # Add timestamp if requested
         if include_timestamp:
@@ -161,7 +192,7 @@ class FileManager:
             hypothesis_text (str): The hypothesis text
             outer_iterations_used (int): Number of outer iterations used
             inner_iterations_used (int): Number of inner iterations used
-            hypothesis_approved (str): Status of hypothesis ("HYPOTHESIS VERIFIED", "HYPOTHESIS NOT VERIFIED", "NOT APPLICABLE")
+            hypothesis_approved (str): Status of hypothesis ("NULL REJECTED", "NULL NOT REJECTED", "NOT TESTABLE")
             turns_to_approve (Optional[int]): Number of turns to approval (if approved)
             execution_time_seconds (Optional[float]): Time taken to run the hypothesis in seconds
         """
@@ -188,7 +219,7 @@ class FileManager:
                 'hypothesis_approved': hypothesis_approved,
                 'outer_iterations_used': outer_iterations_used,
                 'inner_iterations_used': inner_iterations_used,
-                'turns_to_approve': turns_to_approve if hypothesis_approved == "HYPOTHESIS VERIFIED" else None,
+                'turns_to_approve': turns_to_approve if hypothesis_approved == "NULL REJECTED" else None,
                 'max_outer_iterations': self.config.outer_loop_iterations,
                 'max_inner_iterations': self.config.auto_approve_after_attempts,
                 'timestamp': timestamp,
@@ -196,11 +227,11 @@ class FileManager:
             })
         
         # Create informative log message
-        if hypothesis_approved == "HYPOTHESIS VERIFIED" and turns_to_approve is not None:
+        if hypothesis_approved == "NULL REJECTED" and turns_to_approve is not None:
             log_msg = f"Approved after {outer_iterations_used} outer iterations, {inner_iterations_used} turns in final iteration"
-        elif hypothesis_approved == "NOT APPLICABLE":
+        elif hypothesis_approved == "NOT TESTABLE":
             log_msg = f"Not applicable after {outer_iterations_used} outer iterations, {inner_iterations_used} turns in final iteration"
-        elif hypothesis_approved == "HYPOTHESIS NOT VERIFIED":
+        elif hypothesis_approved == "NULL NOT REJECTED":
             log_msg = f"Not approved after {outer_iterations_used} outer iterations, {inner_iterations_used} turns in final iteration"
         else:
             log_msg = f"Status: {hypothesis_approved}"
