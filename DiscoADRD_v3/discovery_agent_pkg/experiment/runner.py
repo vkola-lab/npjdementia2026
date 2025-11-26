@@ -85,6 +85,16 @@ class ExperimentRunner:
                 return None, None, None, 0, 0
             
             ui.print_info(f"🎯 Using direct hypothesis mode with provided hypothesis", verbose=verbose)
+            
+            # Get sample_size for dataset sampling (not hypothesis sampling)
+            sample_size = getattr(self.config, 'sample_size', None)
+            if sample_size is not None:
+                ui.print_info(f"📊 Dataset sampling enabled with sample_size: {sample_size}", verbose=verbose)
+                self.dataset_sample_size = sample_size
+            else:
+                ui.print_info(f"📊 Using full dataset (no sampling)", verbose=verbose)
+                self.dataset_sample_size = None
+            
             # For direct hypothesis, we only need 1 run
             return None, 1, verbose, 0, 0
         
@@ -154,6 +164,15 @@ class ExperimentRunner:
             return None, None, None, 0, 0
         
         ui.print_info(f"📚 Loaded {len(keywords)} ADRD keywords", verbose=verbose)
+        
+        # Get sample_size for dataset sampling (not hypothesis sampling)
+        sample_size = getattr(self.config, 'sample_size', None)
+        if sample_size is not None:
+            ui.print_info(f"📊 Dataset sampling enabled with sample_size: {sample_size}", verbose=verbose)
+            self.dataset_sample_size = sample_size
+        else:
+            ui.print_info(f"📊 Using full dataset (no sampling)", verbose=verbose)
+            self.dataset_sample_size = None
         
         # Get number of sampling runs from config or use default
         num_runs = getattr(self.config, 'num_sampling_runs', 10)
