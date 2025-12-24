@@ -7,8 +7,8 @@
 #$ -l gpus=1
 #$ -l gpu_c=8.0
 #$ -l gpu_type=L40S
-#$ -l h_rt=48:00:00
-#$ -N wo_plan_45
+#$ -l h_rt=12:00:00
+#$ -N wo_plan_42
 #$ -j y
 #$ -m ea
 #$ -o /projectnb/vkolagrp/ketanss/adrd_agent_custom/DiscoADRD/DiscoADRD_v3/analysis/qsub_runs

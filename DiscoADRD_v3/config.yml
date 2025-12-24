@@ -30,7 +30,7 @@ experiment:
   csv_file: "/projectnb/vkolagrp/ketanss/adrd_agent_custom/DiscoADRD/DiscoADRD_v3/batch.csv"  # Path to CSV file containing hypotheses (only needed for csv_batch mode)
   start_index: 0  # Start processing CSV from this index (0-based, default: 0)
   end_index: null  # End processing CSV at this index (0-based, inclusive, default: len-1)
-  sample_size: null  # Number of rows to sample from the dataset CSV (N)
+  sample_size: 10000  # Number of rows to sample from the dataset CSV (N)
   num_keywords: 3
   num_sampling_runs: 10
   outer_loop_iterations: 2
