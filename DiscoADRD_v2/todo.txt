@@ -1,1 +1,0 @@
-# if there is an error in code, critic APPROVAL checks can be skipped

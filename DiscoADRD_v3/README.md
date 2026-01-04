@@ -107,7 +107,7 @@ Test a single, specific hypothesis:
 python discover.py \
     --hypothesis-mode "direct hypothesis" \
     --hypothesis "Greater years of education are linked to lower dementia incidence (cognitive reserve)." \
-    --dataset-folder "/path/to/NACC/datasets"
+    --dataset-folder "/path/to/your/NACC/datasets"
 ```
 
 #### 2. CSV Batch Mode
@@ -115,8 +115,8 @@ Process multiple hypotheses from a CSV file:
 ```bash
 python discover.py \
     --hypothesis-mode "csv_batch" \
-    --csv-file "sample_hypotheses.csv" \
-    --dataset-folder "/path/to/NACC/datasets"
+    --csv-file "batch.csv" \
+    --dataset-folder "/path/to/your/NACC/datasets"
 ```
 
 #### 3. Generate Mode
@@ -124,7 +124,7 @@ Generate hypotheses based on keyword sampling:
 ```bash
 python discover.py \
     --hypothesis-mode "generate" \
-    --dataset-folder "/path/to/NACC/datasets" \
+    --dataset-folder "/path/to/your/NACC/datasets" \
     --num-keywords 3 \
     --num-sampling-runs 10
 ```
@@ -134,7 +134,7 @@ Use direct input without hypothesis generation:
 ```bash
 python discover.py \
     --hypothesis-mode "direct" \
-    --dataset-folder "/path/to/NACC/datasets"
+    --dataset-folder "/path/to/your/NACC/datasets"
 ```
 
 ### Configuration Options
@@ -145,7 +145,7 @@ The system supports extensive configuration through command line arguments and Y
 python discover.py \
     --hypothesis-mode "direct hypothesis" \
     --hypothesis "Your hypothesis here" \
-    --dataset-folder "/path/to/NACC/datasets" \
+    --dataset-folder "/path/to/your/NACC/datasets" \
     --verbose \
     --disable-planning-agent
 ```
@@ -155,7 +155,7 @@ python discover.py \
 - **`--hypothesis-mode`**: Choose from "generate", "direct", "direct hypothesis", or "csv_batch"
 - **`--hypothesis`**: Direct hypothesis text (required for "direct hypothesis" mode)
 - **`--csv-file`**: Path to CSV file with hypotheses (required for "csv_batch" mode)
-- **`--dataset-folder`**: Path to NACC dataset folder
+- **`--dataset-folder`**: Path to your NACC dataset folder
 - **`--verbose`**: Enable detailed output logging
 - **`--disable-planning-agent`**: Disable the enhanced planning agent
 - **`--config`**: Path to custom YAML configuration file
@@ -517,10 +517,10 @@ This system is specifically designed for:
 
 ## 📚 Additional Resources
 
-- **Sample Data**: Use `sample_hypotheses.csv` as a template for batch processing
-- **Keywords**: Customize `adrd_keywords.txt` for domain-specific research
+- **Sample Data**: Use `batch.csv` as a template for batch processing
+- **Keywords**: Customize `adrd_keywords.txt` for domain-specific research (if available)
 - **Configuration**: Modify `config.yml` for system-wide settings
-- **HPC Scripts**: Use `run.sh` for cluster deployment
+- **HPC Scripts**: Use `run.sh` for cluster deployment (update paths before use)
 
 ## 🔄 Version History
 

@@ -86,8 +86,8 @@ from discovery_agent_pkg import DiscoveryAgentSystem, Config
 
 # Create configuration
 config = Config()
-config.dataset_folder = "/path/to/your/dataset"
-config.model_name = "your-model-name"
+config.dataset_folder = "/path/to/your/NACC/dataset"
+config.model_name = "Qwen/Qwen3-4B-Instruct-2507"
 
 # Initialize and run the discovery agent
 agent = DiscoveryAgentSystem(config)
@@ -97,7 +97,7 @@ agent.run()
 ### Command Line Usage
 
 ```bash
-python -m discovery_agent_pkg.main --dataset-folder /path/to/dataset --model-name your-model --verbose
+python discover.py --dataset-folder /path/to/your/NACC/dataset --model-name Qwen/Qwen3-4B-Instruct-2507 --verbose
 ```
 
 ### Advanced Usage
@@ -109,8 +109,8 @@ from discovery_agent_pkg.experiment.runner import ExperimentRunner
 
 # Custom configuration
 config = Config()
-config.dataset_folder = "/path/to/dataset"
-config.model_name = "microsoft/DialoGPT-medium"
+config.dataset_folder = "/path/to/your/NACC/dataset"
+config.model_name = "Qwen/Qwen3-4B-Instruct-2507"
 config.verbose = True
 config.auto_approve_after_attempts = 5
 
@@ -126,14 +126,19 @@ agent.run()
 
 The system supports various configuration options:
 
-- **`dataset_folder`**: Path to folder containing CSV and JSON files
-- **`model_name`**: HuggingFace model name to use
+- **`dataset_folder`**: Path to folder containing NACC CSV and JSON files
+- **`model_name`**: HuggingFace model name to use (default: "Qwen/Qwen3-4B-Instruct-2507")
 - **`verbose`**: Enable verbose output
 - **`auto_approve_after_attempts`**: Number of attempts before auto-approval
 - **`outer_loop_iterations`**: Number of outer loop iterations
-- **`hypothesis_mode`**: Mode for hypothesis generation ("generate", "direct", "direct hypothesis")
+- **`hypothesis_mode`**: Mode for hypothesis generation ("generate", "direct", "direct hypothesis", "csv_batch")
 - **`num_keywords`**: Number of keywords to sample
 - **`num_sampling_runs`**: Number of sampling runs to perform
+- **`csv_file`**: Path to CSV file for batch processing mode
+- **`enable_planning_agent`**: Enable/disable the planning agent
+- **`enable_code_execution`**: Enable/disable code execution
+
+See `config.yml` in the parent directory for a complete list of configuration options.
 
 ## Key Features
 
@@ -148,11 +153,20 @@ The system supports various configuration options:
 
 ## Dependencies
 
-- Python 3.7+
+- Python 3.8+
 - HuggingFace Transformers
+- PyTorch
+- vLLM (optional, for vLLM backend)
 - Pandas
 - NumPy
-- Other dependencies as specified in requirements
+- SciPy
+- scikit-learn
+- Matplotlib
+- Seaborn
+- PyYAML
+- tqdm
+
+See the main README for installation instructions.
 
 ## Development
 

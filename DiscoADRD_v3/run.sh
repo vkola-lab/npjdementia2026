@@ -11,14 +11,15 @@
 #$ -N wo_plan_42
 #$ -j y
 #$ -m ea
-#$ -o /projectnb/vkolagrp/ketanss/adrd_agent_custom/DiscoADRD/DiscoADRD_v3/analysis/qsub_runs
+#$ -o analysis/qsub_runs  # Output directory for job logs (relative to working directory)
 
 # ------------------------------------------------------------------------------
 # System Setup
 # ------------------------------------------------------------------------------
 
 # Change to the DiscoADRD_v3 directory
-cd /projectnb/vkolagrp/ketanss/adrd_agent_custom/DiscoADRD/DiscoADRD_v3
+# Update this path to match your installation directory
+cd "$(dirname "$0")"  # Automatically change to script directory
 
 # nvidia-smi
 module load miniconda

@@ -1,4 +1,5 @@
-cd /projectnb/vkolagrp/ketanss/adrd_agent_custom/DiscoADRD/vLLM
+# Change to the vLLM directory
+cd "$(dirname "$0")"  # Automatically change to script directory
 module load miniconda
 module load cuda
 conda activate llms

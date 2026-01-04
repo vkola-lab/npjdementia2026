@@ -95,7 +95,7 @@ class Config:
             'experiment': {
                 'hypothesis_mode': 'csv_batch',
                 'hypothesis': 'Hispanic ethnicity shows attenuated APOE ε4 effect compared with Whites.',
-                'csv_file': '/projectnb/vkolagrp/ketanss/adrd_agent_custom/DiscoADRD/DiscoADRD_v3/batch.csv',
+                'csv_file': 'batch.csv',  # Path to CSV file (relative or absolute)
                 'start_index': 0,
                 'end_index': None,
                 'sample_size': 10,  # Number of rows to sample from dataset
@@ -105,7 +105,7 @@ class Config:
             },
             'paths': {
                 'keywords_file': 'adrd_keywords.txt',
-                'dataset_folder': '/projectnb/vkolagrp/ketanss/adrd_agent_custom/DiscoADRD/datasets/NACC',
+                'dataset_folder': '/path/to/your/NACC/datasets',  # Path to your NACC dataset folder
                 'analysis_dir': 'analysis',
                 'responses_dir': 'analysis/responses',
                 'results_dir': 'analysis/results',

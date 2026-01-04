@@ -17,7 +17,9 @@ import gc
 import subprocess
 import threading
 
-os.environ["HF_HOME"] = "/projectnb/vkolagrp/ketanss/.cache"
+# Set HuggingFace cache directory (optional - defaults to ~/.cache/huggingface)
+# Uncomment and update the path below if you want to use a custom cache location
+# os.environ["HF_HOME"] = "/path/to/your/huggingface/cache"
 # Essential vLLM optimizations for speed and memory
 os.environ["VLLM_USE_TRITON_FLASH_ATTN"] = "1"  # Enable Flash Attention for speed
 from vllm import LLM, SamplingParams
