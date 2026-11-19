@@ -1,6 +1,4 @@
-# DiscoADRD
-
-**DiscoADRD** (Discovery Agent for Alzheimer's Disease and Related Dementias) is an AI-powered multi-agent scientific discovery system designed for analyzing NACC (National Alzheimer's Coordinating Center) datasets and generating research insights through automated hypothesis testing and statistical analysis.
+## Agentic AI for automated hypothesis testing in Alzheimer’s disease and related dementias
 
 ## 🎯 Overview
 
